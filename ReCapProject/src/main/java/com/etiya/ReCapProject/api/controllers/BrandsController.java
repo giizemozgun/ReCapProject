@@ -11,6 +11,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.etiya.ReCapProject.business.abstracts.BrandService;
+import com.etiya.ReCapProject.core.utilities.results.DataResult;
+import com.etiya.ReCapProject.core.utilities.results.Result;
 import com.etiya.ReCapProject.entities.concretes.Brand;
 
 @RestController
@@ -26,30 +28,30 @@ public class BrandsController {
 	}
 	
 	@PostMapping("/add")
-	public void add(@RequestBody Brand brand) {
+	public Result add(@RequestBody Brand brand) {
 		
-	 this.brandService.add(brand);
+	return this.brandService.add(brand);
 	}
 	
 	@GetMapping("/getall")
-	public List<Brand> getAll(){
+	public DataResult<List<Brand>> getAll(){
 		
 		return this.brandService.getAll();
 	}
 	
 	@GetMapping("/getById")
-	public Brand getById(int brandId){
+	public DataResult<Brand> getById(int brandId){
 		return this.brandService.getById(brandId);
 	}
 	
 	@PostMapping("/update")
-	public void update(@RequestBody Brand brand) {
-		this.brandService.update(brand);
+	public Result update(@RequestBody Brand brand) {
+		return this.brandService.update(brand);
 	}
 	
 	@PutMapping("/delete")
-	public void delete(@RequestBody Brand brand) {
-		this.brandService.delete(brand);
+	public Result delete(@RequestBody Brand brand) {
+		return this.brandService.delete(brand);
 	}
 	
 }

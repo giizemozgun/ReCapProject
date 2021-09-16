@@ -2,17 +2,19 @@ package com.etiya.ReCapProject.business.abstracts;
 
 import java.util.List;
 
+import com.etiya.ReCapProject.core.utilities.results.DataResult;
+import com.etiya.ReCapProject.core.utilities.results.Result;
 import com.etiya.ReCapProject.entities.concretes.Car;
 import com.etiya.ReCapProject.entities.dtos.CarDetailDto;
 
 public interface CarService {
 	
-	List<Car> getAll();
-	Car getById(int carId);
-	void add(Car car);
-	void delete(Car car);
-	void update(Car car);
+	DataResult<List<Car>> getAll();
+	DataResult<Car> getById(int carId);
+	Result add(Car car);
+	Result delete(Car car);
+	Result update(Car car);
 	
-	List<CarDetailDto> getCarDetails();
+	DataResult<List<CarDetailDto>> getCarDetails();
 
 }

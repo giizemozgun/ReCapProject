@@ -6,6 +6,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.etiya.ReCapProject.business.abstracts.ColorService;
+import com.etiya.ReCapProject.core.utilities.results.DataResult;
+import com.etiya.ReCapProject.core.utilities.results.Result;
+import com.etiya.ReCapProject.core.utilities.results.SuccessDataResult;
+import com.etiya.ReCapProject.core.utilities.results.SuccessResult;
 import com.etiya.ReCapProject.dataAccess.abstracts.ColorDao;
 import com.etiya.ReCapProject.entities.concretes.Color;
 
@@ -20,32 +24,34 @@ public class ColorManager implements ColorService{
 	}
 
 	@Override
-	public List<Color> getAll() {
+	public DataResult<List<Color>> getAll() {
 		
-		return this.colorDao.findAll();
+		return new SuccessDataResult<List<Color>>(this.colorDao.findAll());
 	}
 
 	@Override
-	public Color getById(int colorId) {
-		return this.colorDao.getById(colorId);
+	public DataResult<Color> getById(int colorId) {
+		return new SuccessDataResult<Color>(this.colorDao.getById(colorId));
 	}
 
 	@Override
-	public void add(Color color) {
+	public Result add(Color color) {
 		this.colorDao.save(color);
+		return new SuccessResult("Renk eklendi");
 		
 	}
 
 	@Override
-	public void delete(Color color) {
+	public Result delete(Color color) {
 		this.colorDao.delete(color);
+		return new SuccessResult("Renk silindi");
 		
 	}
 
 	@Override
-	public void update(Color color) {
+	public Result update(Color color) {
 		this.colorDao.save(color);
-		
+		return new SuccessResult("Renk güncellendi");
 	}
 	
 }
