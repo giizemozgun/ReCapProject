@@ -33,18 +33,17 @@ public class Rental {
 	@Column(name="id")
 	private int id;
 	
-	
-	@ManyToOne
-	@JoinColumn(name = "customer_id")
-	private Customer customer;
-	
-	
 	@Column(name="rent_date")
 	private Date rentDate;
 	
 	@Column(name="return_date")
 	@Nullable
 	private Date returnDate;
+	
+	
+	@ManyToOne
+	@JoinColumn(name = "customer_id")
+	private Customer customer;
 	
 	@ManyToOne
 	@JoinColumn(name = "car_id")

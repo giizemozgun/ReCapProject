@@ -2,6 +2,8 @@ package com.etiya.ReCapProject.api.controllers;
 
 import java.util.List;
 
+import javax.validation.Valid;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -14,6 +16,9 @@ import com.etiya.ReCapProject.business.abstracts.RentalService;
 import com.etiya.ReCapProject.core.utilities.results.DataResult;
 import com.etiya.ReCapProject.core.utilities.results.Result;
 import com.etiya.ReCapProject.entities.concretes.Rental;
+import com.etiya.ReCapProject.entities.requests.CreateRentalRequest;
+import com.etiya.ReCapProject.entities.requests.DeleteRentalRequest;
+import com.etiya.ReCapProject.entities.requests.UpdateRentalRequest;
 
 @RestController
 @RequestMapping("/api/rentals")
@@ -28,9 +33,9 @@ public class RentalsController {
 	}
 	
 	@PostMapping("/add")
-	public Result add(@RequestBody Rental rental) {
+	public Result add(@Valid @RequestBody CreateRentalRequest createRentalRequest) {
 		
-	return this.rentalService.add(rental);
+	return this.rentalService.add(createRentalRequest);
 	}
 	
 	@GetMapping("/getall")
@@ -45,13 +50,13 @@ public class RentalsController {
 	}
 	
 	@PostMapping("/update")
-	public Result update(@RequestBody Rental rental) {
-		return this.rentalService.update(rental);
+	public Result update(@Valid @RequestBody UpdateRentalRequest updateRentalRequest) {
+		return this.rentalService.update(updateRentalRequest);
 	}
 	
 	@PutMapping("/delete")
-	public Result delete(@RequestBody Rental rental) {
-		return this.rentalService.delete(rental);
+	public Result delete(@Valid @RequestBody DeleteRentalRequest deleteRentalRequest) {
+		return this.rentalService.delete(deleteRentalRequest);
 	}
 	
 }

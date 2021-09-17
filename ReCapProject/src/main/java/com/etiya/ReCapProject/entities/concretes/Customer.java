@@ -12,7 +12,6 @@ import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
 
-import com.etiya.ReCapProject.core.entities.User;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
@@ -27,14 +26,11 @@ import lombok.NoArgsConstructor;
 @Table(name="customers")
 @JsonIgnoreProperties({"hibernateLazyInitializer","handler"})
 public class Customer {
+	
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	@Column(name="id")
-	private int id;;
-	
-	@OneToOne(mappedBy="customer")
-	private User user;
-	
+	private int id;
 	
 	@Column(name="company_name")
 	private String companyName;
@@ -43,5 +39,7 @@ public class Customer {
 	@JsonIgnore
 	private List<Rental> rentals;
 	
-
+	@OneToOne(mappedBy="customer")
+	private ApplicationUser aplicationUser;
+	
 }

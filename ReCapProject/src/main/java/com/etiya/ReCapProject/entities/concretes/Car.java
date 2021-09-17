@@ -24,7 +24,7 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @Entity
 @Table(name="cars")
-@JsonIgnoreProperties({"hibernateLazyInitializer","handler","rental"})
+@JsonIgnoreProperties({"hibernateLazyInitializer","handler","rentals"})
 public class Car {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -33,14 +33,6 @@ public class Car {
 	
 	@Column(name="car_name")
 	private String carName;
-
-	@ManyToOne
-	@JoinColumn(name = "brand_id")
-	private Brand brand;
-	
-	@ManyToOne
-	@JoinColumn(name = "color_id")
-	private Color color;
 
 	@Column(name="model_years")
 	private int modelYear;
@@ -55,6 +47,13 @@ public class Car {
 	@JsonIgnore
 	private List<Rental> rentals;
 	
+	@ManyToOne
+	@JoinColumn(name = "brand_id")
+	private Brand brand;
+	
+	@ManyToOne
+	@JoinColumn(name = "color_id")
+	private Color color;
 }
 
 

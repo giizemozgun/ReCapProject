@@ -2,6 +2,8 @@ package com.etiya.ReCapProject.api.controllers;
 
 import java.util.List;
 
+import javax.validation.Valid;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -14,6 +16,9 @@ import com.etiya.ReCapProject.business.abstracts.CustomerService;
 import com.etiya.ReCapProject.core.utilities.results.DataResult;
 import com.etiya.ReCapProject.core.utilities.results.Result;
 import com.etiya.ReCapProject.entities.concretes.Customer;
+import com.etiya.ReCapProject.entities.requests.CreateCustomerRequest;
+import com.etiya.ReCapProject.entities.requests.DeleteCustomerRequest;
+import com.etiya.ReCapProject.entities.requests.UpdateCustomerRequest;
 
 @RestController
 @RequestMapping("/api/customers")
@@ -28,9 +33,9 @@ public class CustomersController {
 	}
 	
 	@PostMapping("/add")
-	public Result add(@RequestBody Customer customer) {
+	public Result add(@Valid @RequestBody CreateCustomerRequest createCustomerRequest) {
 		
-	return this.customerService.add(customer);
+	return this.customerService.add(createCustomerRequest);
 	}
 	
 	@GetMapping("/getall")
@@ -45,13 +50,13 @@ public class CustomersController {
 	}
 	
 	@PostMapping("/update")
-	public Result update(@RequestBody Customer customer) {
-		return this.customerService.update(customer);
+	public Result update(@Valid @RequestBody UpdateCustomerRequest updateCustomerRequest) {
+		return this.customerService.update(updateCustomerRequest);
 	}
 	
 	@PutMapping("/delete")
-	public Result delete(@RequestBody Customer customer) {
-		return this.customerService.delete(customer);
+	public Result delete(@Valid @RequestBody DeleteCustomerRequest deleteCustomerRequest) {
+		return this.customerService.delete(deleteCustomerRequest);
 	}
 	
 }
