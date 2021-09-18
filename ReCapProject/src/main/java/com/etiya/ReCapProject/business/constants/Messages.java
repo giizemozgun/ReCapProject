@@ -16,5 +16,7 @@ public class Messages {
     public static final String USER = "Kullanıcı";
     public static final String ERROR = "Hata";
     public static final String NOT_DELİVERED = "Araç kiralanamaz. Henüz teslim edilmedi.";
+    public static final String Limit = "Limiti aştınız.";
+    public static final String Success = "Başarılı";
     
 }

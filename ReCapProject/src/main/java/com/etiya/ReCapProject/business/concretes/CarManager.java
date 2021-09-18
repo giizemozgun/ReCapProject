@@ -2,6 +2,7 @@ package com.etiya.ReCapProject.business.concretes;
 
 import java.util.List;
 
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -14,6 +15,7 @@ import com.etiya.ReCapProject.core.utilities.results.SuccessResult;
 import com.etiya.ReCapProject.dataAccess.abstracts.CarDao;
 import com.etiya.ReCapProject.entities.concretes.Brand;
 import com.etiya.ReCapProject.entities.concretes.Car;
+
 import com.etiya.ReCapProject.entities.concretes.Color;
 import com.etiya.ReCapProject.entities.dtos.CarDetailDto;
 import com.etiya.ReCapProject.entities.requests.CreateCarRequest;
@@ -47,8 +49,6 @@ public class CarManager implements CarService {
 		brand.setBrandId(createCarRequest.getBrandId());
 		Color color = new Color();
 		color.setColorId(createCarRequest.getColorId());	
-		
-		
 		
 		Car car = new Car();
 		car.setCarName(createCarRequest.getCarName());
@@ -102,5 +102,7 @@ public class CarManager implements CarService {
 	public DataResult<List<CarDetailDto>> getCarDetails() {
 		return new SuccessDataResult<List<CarDetailDto>>(this.carDao.getCarWithBrandAndColorDetails());
 	}
+	
+	
 	
 }

@@ -54,6 +54,9 @@ public class Car {
 	@ManyToOne
 	@JoinColumn(name = "color_id")
 	private Color color;
+	
+	@OneToMany(mappedBy = "car")
+	private List<CarImage> carImages;
 }
 
 

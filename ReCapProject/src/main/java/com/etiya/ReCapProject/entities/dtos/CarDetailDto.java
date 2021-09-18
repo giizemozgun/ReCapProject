@@ -13,4 +13,6 @@ private String brandName;
 private String colorName;
 private double dailyPrice;
 
+
+
 }
