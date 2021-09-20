@@ -1,9 +1,11 @@
 package com.etiya.ReCapProject.dataAccess.abstracts;
 
+
 import java.util.List;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
+
 
 import com.etiya.ReCapProject.entities.concretes.Car;
 import com.etiya.ReCapProject.entities.dtos.CarDetailDto;
@@ -18,6 +20,13 @@ public interface CarDao extends JpaRepository<Car, Integer> {
 			+ " From Car c Inner Join c.brand b"
 			+ " Inner Join c.color co")  
 	List<CarDetailDto> getCarWithBrandAndColorDetails();
+	
+	List<Car> getByBrand_BrandId(int branId);
+	
+	List<Car> getByColor_ColorId(int colorId);
+	
+	
+
 	
 	
 

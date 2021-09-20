@@ -15,7 +15,6 @@ import com.etiya.ReCapProject.core.utilities.results.SuccessResult;
 import com.etiya.ReCapProject.dataAccess.abstracts.CarDao;
 import com.etiya.ReCapProject.entities.concretes.Brand;
 import com.etiya.ReCapProject.entities.concretes.Car;
-
 import com.etiya.ReCapProject.entities.concretes.Color;
 import com.etiya.ReCapProject.entities.dtos.CarDetailDto;
 import com.etiya.ReCapProject.entities.requests.CreateCarRequest;
@@ -25,6 +24,7 @@ import com.etiya.ReCapProject.entities.requests.UpdateCarRequest;
 @Service
 public class CarManager implements CarService {
 	private CarDao carDao;
+	
 
 	@Autowired
 	public CarManager(CarDao carDao) {
@@ -102,6 +102,20 @@ public class CarManager implements CarService {
 	public DataResult<List<CarDetailDto>> getCarDetails() {
 		return new SuccessDataResult<List<CarDetailDto>>(this.carDao.getCarWithBrandAndColorDetails());
 	}
+
+	@Override
+	public DataResult<List<Car>> getByBrandId(int branId) {
+		
+		return new SuccessDataResult<List<Car>>(this.carDao.getByBrand_BrandId(branId));
+	}
+
+	@Override
+	public DataResult<List<Car>> getByColorId(int colorId) {
+		
+		return new SuccessDataResult<List<Car>>(this.carDao.getByColor_ColorId(colorId));
+	}
+
+
 	
 	
 	

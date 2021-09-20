@@ -19,5 +19,10 @@ public interface CarService {
 	Result update(UpdateCarRequest updateCarRequest);
 	
 	DataResult<List<CarDetailDto>> getCarDetails();
+	
+	DataResult<List<Car>> getByBrandId(int branId);
+	
+	DataResult<List<Car>> getByColorId(int colorId);
+	
 
 }

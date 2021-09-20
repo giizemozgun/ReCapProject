@@ -114,7 +114,7 @@ public class CarImageManager implements CarImageService{
 		if (this.carImageDao.getByCar_CarId(carId).size() >= limit) {
 			return new ErrorResult(Messages.Limit);
 		}
-		return new SuccessResult(Messages.Success);
+		return new SuccessResult();
 	}
 	
 	private List<CarImage> ifCarImageIsNullAddLogo(int carId) {
