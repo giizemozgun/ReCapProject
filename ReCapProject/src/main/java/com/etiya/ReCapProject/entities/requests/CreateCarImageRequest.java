@@ -18,6 +18,9 @@ public class CreateCarImageRequest {
 	@NotNull
 	private int carId;
 	
+	@NotNull
+	private String imagePath;
+	
 	
 	
 	

@@ -12,5 +12,4 @@ public interface CarImageDao extends JpaRepository<CarImage, Integer>{
 	
 	
 	
-	
 }

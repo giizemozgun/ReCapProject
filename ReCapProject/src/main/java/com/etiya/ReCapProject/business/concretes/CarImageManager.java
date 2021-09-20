@@ -1,6 +1,7 @@
 package com.etiya.ReCapProject.business.concretes;
 
 import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
@@ -11,7 +12,6 @@ import com.etiya.ReCapProject.business.abstracts.CarImageService;
 import com.etiya.ReCapProject.business.constants.Messages;
 import com.etiya.ReCapProject.core.business.BusinessRules;
 import com.etiya.ReCapProject.core.utilities.results.DataResult;
-import com.etiya.ReCapProject.core.utilities.results.ErrorDataResult;
 import com.etiya.ReCapProject.core.utilities.results.ErrorResult;
 import com.etiya.ReCapProject.core.utilities.results.Result;
 import com.etiya.ReCapProject.core.utilities.results.SuccessDataResult;
@@ -59,6 +59,7 @@ public class CarImageManager implements CarImageService{
 		car.setCarId(createCarImageRequest.getCarId());
 		
 		LocalDate date = LocalDate.now();
+		
 		String imagePath = UUID.randomUUID().toString();
 		
 		
@@ -66,7 +67,7 @@ public class CarImageManager implements CarImageService{
 		carImage.setCar(car);
 		carImage.setDate(date);
 		carImage.setImagePath("carImages/" + imagePath + ".jpg");
-		
+		//carImage.setImagePath(createCarImageRequest.getImagePath());		
 		
 		this.carImageDao.save(carImage);
 		return new SuccessResult(Messages.ADD) ;
@@ -105,13 +106,8 @@ public class CarImageManager implements CarImageService{
 	
 	@Override
 	public DataResult<List<CarImage>> getByCarId(int carId) {
-		var result = BusinessRules.run(ifCarImageIsNullAddLogo(carId));
+		return new SuccessDataResult<List<CarImage>>(this.ifCarImageIsNullAddLogo(carId));
 
-		if (result != null) {
-			return result;
-		}
-		
-		return new SuccessDataResult<List<CarImage>>(this.carImageDao.getByCar_CarId(carId));
 	}
 
 	private Result checkIfCarImageLimitExceeded(int carId, int limit) {
@@ -121,7 +117,7 @@ public class CarImageManager implements CarImageService{
 		return new SuccessResult(Messages.Success);
 	}
 	
-	private DataResult<List<CarImage>> ifCarImageIsNullAddLogo(int carId) {
+	private List<CarImage> ifCarImageIsNullAddLogo(int carId) {
 		if (this.carImageDao.getByCar_CarId(carId).isEmpty()) {
 						
 		Car car = new Car();
@@ -133,9 +129,13 @@ public class CarImageManager implements CarImageService{
 		carImage.setCar(car);
 		carImage.setImagePath(imagePath);
 		
-		this.carImageDao.save(carImage);
+		List<CarImage> carImages=new ArrayList<CarImage>();
+		carImages.add(carImage);
+		
+		return carImages;
+		
 		}
-		return new SuccessDataResult<List<CarImage>>(this.carImageDao.getByCar_CarId(carId));
+		return new ArrayList<CarImage>(this.carImageDao.getByCar_CarId(carId));
 		
 	}
 }
