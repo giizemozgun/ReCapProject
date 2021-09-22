@@ -4,6 +4,8 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.etiya.ReCapProject.business.abstracts.CarService;
+import com.etiya.ReCapProject.business.abstracts.FindexPointService;
 import com.etiya.ReCapProject.business.abstracts.RentalService;
 import com.etiya.ReCapProject.business.constants.Messages;
 import com.etiya.ReCapProject.core.business.BusinessRules;
@@ -12,9 +14,13 @@ import com.etiya.ReCapProject.core.utilities.results.ErrorResult;
 import com.etiya.ReCapProject.core.utilities.results.Result;
 import com.etiya.ReCapProject.core.utilities.results.SuccessDataResult;
 import com.etiya.ReCapProject.core.utilities.results.SuccessResult;
+import com.etiya.ReCapProject.dataAccess.abstracts.CorporateCustomerDao;
+import com.etiya.ReCapProject.dataAccess.abstracts.IndividualCustomerDao;
 import com.etiya.ReCapProject.dataAccess.abstracts.RentalDao;
 import com.etiya.ReCapProject.entities.concretes.Car;
+import com.etiya.ReCapProject.entities.concretes.CorporateCustomer;
 import com.etiya.ReCapProject.entities.concretes.Customer;
+import com.etiya.ReCapProject.entities.concretes.IndividualCustomer;
 import com.etiya.ReCapProject.entities.concretes.Rental;
 import com.etiya.ReCapProject.entities.requests.CreateRentalRequest;
 import com.etiya.ReCapProject.entities.requests.DeleteRentalRequest;
@@ -24,11 +30,24 @@ import com.etiya.ReCapProject.entities.requests.UpdateRentalRequest;
 public class RentalManager implements RentalService {
 
 	private RentalDao rentalDao;
+	
+	private FindexPointService findexPointService;
+	
+	private CarService carService;
+	
+	private IndividualCustomerDao individualCustomerDao;
+	
+	private CorporateCustomerDao corporateCustomerDao;
 
 	@Autowired
-	public RentalManager(RentalDao rentalDao) {
+	public RentalManager(RentalDao rentalDao, FindexPointService findexPointService, CarService carService,
+			IndividualCustomerDao individualCustomerDao, CorporateCustomerDao corporateCustomerDao) {
 		super();
 		this.rentalDao = rentalDao;
+		this.findexPointService = findexPointService;
+		this.carService = carService;
+		this.corporateCustomerDao = corporateCustomerDao;
+		this.individualCustomerDao = individualCustomerDao;
 	}
 
 	@Override
@@ -41,8 +60,10 @@ public class RentalManager implements RentalService {
 		return new SuccessDataResult<Rental>(this.rentalDao.getById(rentalId));
 	}
 
-	@Override
-	public Result add(CreateRentalRequest createRentalRequest) {
+	public Result addForIndividualCustomer(CreateRentalRequest createRentalRequest) {
+		
+		
+		
 		Car car=new Car();
 		car.setCarId(createRentalRequest.getCarId());
 		car.setCarName(createRentalRequest.getCarName());
@@ -56,7 +77,37 @@ public class RentalManager implements RentalService {
 		rental.setCar(car);
 		rental.setCustomer(customer);
 		
-		var result = BusinessRules.run(checkReturn(rental.getCar().getCarId()));
+		var result = BusinessRules.run(checkReturn(rental.getCar().getCarId()), 
+				checkFindexPointForIndividualCustomer(this.individualCustomerDao.getById(createRentalRequest.getCustomerId()),
+						createRentalRequest.getCarId()));
+
+		if (result != null) {
+			return result;
+		}
+		
+		this.rentalDao.save(rental);
+		return new SuccessResult(Messages.RENTAL + " " +  Messages.ADD);
+		
+	}
+	@Override
+	public Result addForCorporateCustomer(CreateRentalRequest createRentalRequest) {
+			
+		Car car=new Car();
+		car.setCarId(createRentalRequest.getCarId());
+		car.setCarName(createRentalRequest.getCarName());
+		
+		Customer customer=new Customer();
+		customer.setId(createRentalRequest.getCustomerId());
+		
+		Rental rental=new Rental();
+		rental.setRentDate(createRentalRequest.getRentDate());
+		rental.setReturnDate(createRentalRequest.getReturnDate());
+		rental.setCar(car);
+		rental.setCustomer(customer);
+		
+		var result = BusinessRules.run(checkReturn(rental.getCar().getCarId()), 
+				checkFindexPointForCorporateCustomer(this.corporateCustomerDao.getById(createRentalRequest.getCustomerId()),
+						createRentalRequest.getCarId()));
 
 		if (result != null) {
 			return result;
@@ -71,7 +122,6 @@ public class RentalManager implements RentalService {
 	public Result delete(DeleteRentalRequest deleteRentalRequest) {
 		Car car=new Car();
 		car.setCarId(deleteRentalRequest.getCarId());
-		car.setCarName(deleteRentalRequest.getCarName());
 
 		Rental rental=new Rental();
 		rental.setId(deleteRentalRequest.getId());
@@ -108,4 +158,34 @@ public class RentalManager implements RentalService {
 		return new SuccessResult();
 
 	}
+	
+	private Result checkFindexPointForIndividualCustomer(IndividualCustomer individualCustomer,int carId) {  
+		
+	var findexScoreResult=this.findexPointService.getIndividualCustomerFindexPoint(individualCustomer.getIdentityNumber()); 
+	
+	var minFindexScoreForCar=this.carService.getById(carId).getData().getMinFindexScore();
+	
+	if (findexScoreResult <= minFindexScoreForCar) {
+		
+		return new ErrorResult(Messages.CustomerCreditScoreNotEnoughtToRentCar);         
+		}                  
+	return new SuccessResult();     
+	}
+	
+	
+	private Result checkFindexPointForCorporateCustomer(CorporateCustomer corporateCustomer,int carId) {  
+		
+		var findexScoreResult=this.findexPointService.getCorporateCustomerFindexPoint(corporateCustomer.getTaxNumber()); 
+		
+		var minFindexScoreForCar=this.carService.getById(carId).getData().getMinFindexScore();
+		
+		if (findexScoreResult <= minFindexScoreForCar) {             
+			return new ErrorResult(Messages.CustomerCreditScoreNotEnoughtToRentCar);         
+			}                  
+		return new SuccessResult();     
+		}
+		
+	
+	
+	
 }

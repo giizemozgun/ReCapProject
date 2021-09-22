@@ -24,5 +24,5 @@ public interface CarService {
 	
 	DataResult<List<Car>> getByColorId(int colorId);
 	
-
+	
 }

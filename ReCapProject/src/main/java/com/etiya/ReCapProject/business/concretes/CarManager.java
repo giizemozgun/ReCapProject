@@ -69,7 +69,6 @@ public class CarManager implements CarService {
 		
 		Car car = new Car();
 		car.setCarId(deleteCarRequest.getCarId());
-		car.setCarName(deleteCarRequest.getCarName());	
 		
 		this.carDao.delete(car);
 		 return new SuccessResult(Messages.CAR + " " + Messages.DELETE);

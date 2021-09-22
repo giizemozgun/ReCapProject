@@ -41,8 +41,7 @@ public class UserManager implements UserService {
 	public Result add(CreateUserRequest createUserRequest) {
 		
 		ApplicationUser user = new ApplicationUser();
-		user.setFirstName(createUserRequest.getFirstName());
-		user.setLastName(createUserRequest.getLastName());
+		
 		user.setEmail(createUserRequest.getEmail());
 		user.setPassword(createUserRequest.getPassword());
 		
@@ -55,7 +54,6 @@ public class UserManager implements UserService {
 		
 		ApplicationUser user = new ApplicationUser();
 		user.setId(deleteUserRequest.getId());
-		user.setFirstName(deleteUserRequest.getFirstName());
 		
 		this.userDao.delete(user);
 		return new SuccessResult(Messages.USER + " " + Messages.DELETE);
@@ -66,8 +64,7 @@ public class UserManager implements UserService {
 		
 		ApplicationUser user = new ApplicationUser();
 		user.setId(updateUserRequest.getId());
-		user.setFirstName(updateUserRequest.getFirstName());
-		user.setLastName(updateUserRequest.getLastName());
+		
 		user.setEmail(updateUserRequest.getEmail());
 		user.setPassword(updateUserRequest.getPassword());
 		

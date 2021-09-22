@@ -51,7 +51,6 @@ public class BrandManager implements BrandService{
 	public Result delete(DeleteBrandRequest deleteBrandrequest) {
 		
 		Brand brand = new Brand();
-		brand.setBrandName(deleteBrandrequest.getBrandName());
 		brand.setBrandId(deleteBrandrequest.getBrandId());
 		
 		this.brandDao.delete(brand);

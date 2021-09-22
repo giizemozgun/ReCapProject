@@ -17,7 +17,6 @@ public class DeleteRentalRequest {
 	
 	private int carId;
 	
-	private String carName;
 	
 	
 }	

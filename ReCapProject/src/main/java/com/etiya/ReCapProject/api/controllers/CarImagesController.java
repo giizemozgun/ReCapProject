@@ -1,5 +1,6 @@
 package com.etiya.ReCapProject.api.controllers;
 
+import java.io.IOException;
 import java.util.List;
 
 import javax.validation.Valid;
@@ -10,7 +11,9 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.multipart.MultipartFile;
 
 import com.etiya.ReCapProject.business.abstracts.CarImageService;
 import com.etiya.ReCapProject.core.utilities.results.DataResult;
@@ -31,11 +34,13 @@ public class CarImagesController {
 		super();
 		this.carImageService = carImageService;
 	}
-	
 	@PostMapping("/add")
-	public Result add(@Valid @RequestBody CreateCarImageRequest createCarImageRequest) {
+	public Result add(@RequestParam("carId") int carId, MultipartFile file) throws IOException {
 		
-	return this.carImageService.add(createCarImageRequest);
+		CreateCarImageRequest creataCarImageRequest = new CreateCarImageRequest();
+		creataCarImageRequest.setCarId(carId);
+		creataCarImageRequest.setFile(file);
+		return this.carImageService.add(creataCarImageRequest);
 	}
 	
 	@GetMapping("/getall")
@@ -50,8 +55,9 @@ public class CarImagesController {
 	}
 	
 	@PostMapping("/update")
-	public Result update(@Valid @RequestBody UpdateCarImageRequest updateCarImageRequest) {
-		return this.carImageService.update(updateCarImageRequest);
+	public Result update(@Valid UpdateCarImageRequest carImage, MultipartFile file) throws IOException {
+		carImage.setFile(file);
+		return this.carImageService.update(carImage);
 	}
 	
 	@PutMapping("/delete")

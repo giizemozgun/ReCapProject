@@ -13,7 +13,8 @@ public interface RentalService {
 	
 	DataResult<List<Rental>> getAll();
 	DataResult<Rental> getById(int rentalId);
-	Result add(CreateRentalRequest createRentalRequest);
+	Result addForIndividualCustomer(CreateRentalRequest createRentalRequest);
+	Result addForCorporateCustomer(CreateRentalRequest createRentalRequest);
 	Result delete(DeleteRentalRequest deleteRentalRequest);
 	Result update(UpdateRentalRequest updateRentalRequest);
 	

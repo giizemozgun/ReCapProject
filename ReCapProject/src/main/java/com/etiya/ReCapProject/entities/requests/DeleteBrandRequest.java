@@ -13,5 +13,4 @@ public class DeleteBrandRequest {
 	
 	private int brandId;
 	
-	private String brandName;
 }

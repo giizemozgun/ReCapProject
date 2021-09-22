@@ -43,6 +43,10 @@ public class Car {
 	@Column(name="description")
 	private String description;
 	
+	@Column(name="min_findex_score")
+	private int minFindexScore;
+	
+	
 	@OneToMany(mappedBy = "car")
 	@JsonIgnore
 	private List<Rental> rentals;

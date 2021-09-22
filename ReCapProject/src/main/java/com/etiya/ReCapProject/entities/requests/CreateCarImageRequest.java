@@ -2,6 +2,11 @@ package com.etiya.ReCapProject.entities.requests;
 
 
 
+import javax.validation.constraints.NotBlank;
+
+import org.springframework.web.multipart.MultipartFile;
+
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.sun.istack.NotNull;
 
 import lombok.AllArgsConstructor;
@@ -21,7 +26,10 @@ public class CreateCarImageRequest {
 	@NotNull
 	private String imagePath;
 	
-	
+	@NotNull
+	@NotBlank
+	@JsonIgnore
+	private MultipartFile file;
 	
 	
 	

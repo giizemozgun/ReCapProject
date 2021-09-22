@@ -41,4 +41,7 @@ public class CreateCarRequest {
 	@NotNull
 	private String description;
 	
+	@NotNull
+	private int minFindexScore;
+	
 }

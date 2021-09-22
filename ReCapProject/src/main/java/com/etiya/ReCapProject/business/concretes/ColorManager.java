@@ -54,7 +54,6 @@ public class ColorManager implements ColorService{
 		
 		Color color = new Color();
 		color.setColorId(deleteColorRequest.getColorId());
-		color.setColorName(deleteColorRequest.getColorName());	
 		
 		this.colorDao.delete(color);
 		return new SuccessResult(Messages.COLOR + " " + Messages.DELETE);
