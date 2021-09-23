@@ -1,9 +1,5 @@
 package com.etiya.ReCapProject.business.concretes;
 
-import java.text.SimpleDateFormat;
-import java.time.YearMonth;
-import java.time.ZoneId;
-import java.sql.Date;
 import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -96,7 +92,7 @@ public class CreditCardManager implements CreditCardService {
 		        "(?<diners>3(?:0[0-5]|[68][0-9])?[0-9]{11})|" +
 		        "(?<jcb>(?:2131|1800|35[0-9]{3})[0-9]{11}))$";
 		 
-		Pattern pattern = Pattern.compile(regex, Pattern.CASE_INSENSITIVE);
+		Pattern pattern = Pattern.compile(regex);
 		Matcher matcher = pattern.matcher(creditCardNumber);
 
 		if (!matcher.matches()) {
@@ -108,7 +104,7 @@ public class CreditCardManager implements CreditCardService {
 	private Result checkCreditCardCvv(String cvv) {
 		String regex = "^[0-9]{3,3}$";
 		
-		Pattern pattern = Pattern.compile(regex, Pattern.CASE_INSENSITIVE);
+		Pattern pattern = Pattern.compile(regex);
 		
 		Matcher matcher = pattern.matcher(cvv);
 
@@ -120,7 +116,7 @@ public class CreditCardManager implements CreditCardService {
 	private Result checkCreditCardExpiryDate(String expiryDate) {
 		String regex = "^(0[1-9]|1[0-2])/?(([0-9]{4}|[0-9]{2})$)";
 		
-		Pattern pattern = Pattern.compile(regex, Pattern.CASE_INSENSITIVE);
+		Pattern pattern = Pattern.compile(regex);
 		
 		Matcher matcher = pattern.matcher(expiryDate);
 		
