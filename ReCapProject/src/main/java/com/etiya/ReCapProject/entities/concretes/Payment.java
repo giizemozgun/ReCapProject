@@ -1,7 +1,6 @@
 package com.etiya.ReCapProject.entities.concretes;
 
 
-import java.util.List;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -10,11 +9,8 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
-import javax.persistence.OneToMany;
 import javax.persistence.Table;
-import javax.validation.constraints.Size;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
 import lombok.AllArgsConstructor;
@@ -25,36 +21,20 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 @Entity
-@Table(name="credit_card")
+@Table(name="payment")
 @JsonIgnoreProperties({"hibernateLazyInitializer","handler"})
-public class CreditCard {
+public class Payment {
 	
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	@Column(name="credit_card_id")
-	private int creditCardId;
-	
-	@Column(name="name")
-	private String name;
-	
-	@Column(name="card_number")
-	private String cardNumber;
-	
-	@Size(min=3, max=3)
-	@Column(name="expiry_date")
-	private String expiryDate;
-	
-	@Column(name="cvv")
-	private String cvv;
+	@Column(name="payment_id")
+	private int paymentId;
 	
 	@ManyToOne
-	@JsonIgnore
-	@JoinColumn(name = "id")
-	private Customer customer;
+	@JoinColumn(name = "rental_id")
+	private Rental rental;
 	
-	@OneToMany(mappedBy = "creditCard")
-	@JsonIgnore
-	private List<Payment> payments;
-	
-	
+	@ManyToOne
+	@JoinColumn(name = "credit_card_id")
+	private CreditCard creditCard;
 }

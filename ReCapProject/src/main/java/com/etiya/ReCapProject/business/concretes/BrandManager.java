@@ -7,7 +7,9 @@ import org.springframework.stereotype.Service;
 
 import com.etiya.ReCapProject.business.abstracts.BrandService;
 import com.etiya.ReCapProject.business.constants.Messages;
+import com.etiya.ReCapProject.core.business.BusinessRules;
 import com.etiya.ReCapProject.core.utilities.results.DataResult;
+import com.etiya.ReCapProject.core.utilities.results.ErrorResult;
 import com.etiya.ReCapProject.core.utilities.results.Result;
 import com.etiya.ReCapProject.core.utilities.results.SuccessDataResult;
 import com.etiya.ReCapProject.core.utilities.results.SuccessResult;
@@ -40,6 +42,14 @@ public class BrandManager implements BrandService{
 
 	@Override
 	public Result add(CreateBrandRequest createBrandrequest) {	
+		
+		var result = BusinessRules.run(checkBrandName(createBrandrequest.getBrandName()));
+
+		if (result != null) {
+			return result;
+		}
+			
+		
 		Brand brand = new Brand();
 		brand.setBrandName(createBrandrequest.getBrandName());
 		
@@ -67,7 +77,16 @@ public class BrandManager implements BrandService{
 		this.brandDao.save(brand);
 		return new SuccessResult(Messages.BRAND + " " +  Messages.UPDATE);
 	}
+	
+	private Result checkBrandName(String brandName) {
 
+		if (this.brandDao.existsByBrandName(brandName)) {
+			return new ErrorResult(Messages.ExistBrand);
+		}
+		return new SuccessResult(Messages.Success);
+
+	}
+	
 
 	
 }

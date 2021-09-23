@@ -27,6 +27,8 @@ public class Messages {
     public static final String Calculated = "Findex puanı hesaplandı";
     public static final String CustomerCreditScoreNotEnoughtToRentCar = "Findeks puanınız yetmemektedir.";
     public static final String FormatError = "Fotoğraflarınızı png formatında yükleyiniz";
+    public static final String ExistBrand = "Bu marka zaten var";
+    public static final String ExistColor = "Bu renk zaten var";
 
     		
     

@@ -170,8 +170,6 @@ public class CarImageManager implements CarImageService{
 			Car car = new Car();
 			car.setCarId(carId);
 
-			
-
 			CarImage carImage=new CarImage();
 			carImage.setCar(car);
 			carImage.setImagePath(FilePathConfiguration.CAR_IMAGE_DEFAULT_PATH);
