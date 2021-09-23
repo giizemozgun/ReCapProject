@@ -12,7 +12,6 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
-import javax.validation.constraints.Size;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
@@ -40,10 +39,11 @@ public class CreditCard {
 	@Column(name="card_number")
 	private String cardNumber;
 	
-	@Size(min=3, max=3)
+	
 	@Column(name="expiry_date")
 	private String expiryDate;
 	
+
 	@Column(name="cvv")
 	private String cvv;
 	

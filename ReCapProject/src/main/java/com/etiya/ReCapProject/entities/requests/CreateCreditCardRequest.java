@@ -1,7 +1,6 @@
 package com.etiya.ReCapProject.entities.requests;
 
 import javax.validation.constraints.NotNull;
-import javax.validation.constraints.Size;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -24,7 +23,6 @@ public class CreateCreditCardRequest {
 	private String expiryDate;
 	
 	@NotNull
-	@Size(min=3,max=3)
 	private String cvv;
 	
 	@NotNull
