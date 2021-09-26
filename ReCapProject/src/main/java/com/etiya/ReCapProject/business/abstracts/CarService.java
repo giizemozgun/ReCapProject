@@ -6,6 +6,7 @@ import com.etiya.ReCapProject.core.utilities.results.DataResult;
 import com.etiya.ReCapProject.core.utilities.results.Result;
 import com.etiya.ReCapProject.entities.concretes.Car;
 import com.etiya.ReCapProject.entities.dtos.CarDetailDto;
+
 import com.etiya.ReCapProject.entities.requests.CreateCarRequest;
 import com.etiya.ReCapProject.entities.requests.DeleteCarRequest;
 import com.etiya.ReCapProject.entities.requests.UpdateCarRequest;
@@ -24,5 +25,5 @@ public interface CarService {
 	
 	DataResult<List<Car>> getByColorId(int colorId);
 	
-	
+	DataResult<List<Car>> getAvailableCars();
 }

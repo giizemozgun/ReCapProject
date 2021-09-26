@@ -1,5 +1,6 @@
 package com.etiya.ReCapProject.business.concretes;
 
+
 import java.util.List;
 
 
@@ -9,6 +10,7 @@ import org.springframework.stereotype.Service;
 import com.etiya.ReCapProject.business.abstracts.CarService;
 import com.etiya.ReCapProject.business.constants.Messages;
 import com.etiya.ReCapProject.core.utilities.results.DataResult;
+
 import com.etiya.ReCapProject.core.utilities.results.Result;
 import com.etiya.ReCapProject.core.utilities.results.SuccessDataResult;
 import com.etiya.ReCapProject.core.utilities.results.SuccessResult;
@@ -24,10 +26,10 @@ import com.etiya.ReCapProject.entities.requests.UpdateCarRequest;
 @Service
 public class CarManager implements CarService {
 	private CarDao carDao;
-	
+
 
 	@Autowired
-	public CarManager(CarDao carDao) {
+	public CarManager(CarDao carDao ) {
 		super();
 		this.carDao = carDao;
 	}
@@ -35,6 +37,16 @@ public class CarManager implements CarService {
 	@Override
 	public DataResult<List<Car>> getAll() {
 		return new SuccessDataResult<List<Car>>(this.carDao.findAll());
+	}
+	
+	@Override
+	public DataResult<List<Car>> getAvailableCars() {
+		List<Car> cars = this.carDao.findAll();          
+		List<Car> maintenanceCars = this.carDao.getByMaintenances_ReturnDateIsNullAndMaintenances_MaintenanceDateIsNotNull();          
+		cars.removeAll(maintenanceCars);     
+		
+		return new SuccessDataResult<List<Car>>(cars);
+	
 	}
 
 	@Override
@@ -113,7 +125,8 @@ public class CarManager implements CarService {
 		
 		return new SuccessDataResult<List<Car>>(this.carDao.getByColor_ColorId(colorId));
 	}
-
+	
+	
 
 	
 	

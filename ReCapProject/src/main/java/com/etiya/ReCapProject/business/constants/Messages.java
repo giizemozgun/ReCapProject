@@ -30,6 +30,9 @@ public class Messages {
     public static final String ExistBrand = "Bu marka zaten var";
     public static final String ExistColor = "Bu renk zaten var";
     public static final String InvalidCreditCard = "Geçersiz kredi kartı";
+    public static final String NotAvailableCar = "Araba kirada. Bakıma gönderilemez";
+    public static final String InCarMaintenance = "Araba bakımda. Kiralanamaz.";
+    
 
     		
     

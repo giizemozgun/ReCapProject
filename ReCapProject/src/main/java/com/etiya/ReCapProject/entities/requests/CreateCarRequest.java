@@ -22,13 +22,11 @@ public class CreateCarRequest {
 	@Size(min=2, max=30)
 	private String carName;
 
-	
 	@NotNull
 	private int brandId;
 	
 	@NotNull
 	private int colorId;
-	
 	
 	@NotNull
 	private int modelYear;
