@@ -12,6 +12,7 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
+import javax.persistence.OneToOne;
 import javax.persistence.Table;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
@@ -41,6 +42,12 @@ public class Rental {
 	@Nullable
 	private Date returnDate;
 	
+	@Column(name="pick_up_location")
+	private String pickUpLocation;
+
+	@Column(name="return_location")
+	private String returnLocation;
+	
 	
 	@ManyToOne
 	@JoinColumn(name = "customer_id")
@@ -54,5 +61,8 @@ public class Rental {
 	@OneToMany(mappedBy = "rental")
 	@JsonIgnore
 	private List<Payment> payments;
+	
+	@OneToOne(mappedBy="rental")
+	private Invoice invoice;
 	
 }

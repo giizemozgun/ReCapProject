@@ -46,6 +46,9 @@ public class Car {
 	@Column(name="min_findex_score")
 	private int minFindexScore;
 	
+	@Column(name="city")
+	private String city;
+	
 	@OneToMany(mappedBy = "car")
 	@JsonIgnore
 	private List<Rental> rentals;

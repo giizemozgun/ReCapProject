@@ -16,7 +16,9 @@ public interface RentalService {
 	Result addForIndividualCustomer(CreateRentalRequest createRentalRequest);
 	Result addForCorporateCustomer(CreateRentalRequest createRentalRequest);
 	Result delete(DeleteRentalRequest deleteRentalRequest);
-	Result update(UpdateRentalRequest updateRentalRequest);
+	Result updateForCorporateCustomer(UpdateRentalRequest updateRentalRequest);
+	Result updateForIndividualCustomer(UpdateRentalRequest updateRentalRequest);
+	
 
 	
 	

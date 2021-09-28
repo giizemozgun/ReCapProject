@@ -57,9 +57,14 @@ public class RentalsController {
 		return this.rentalService.getById(rentalId);
 	}
 	
-	@PostMapping("/update")
-	public Result update(@Valid @RequestBody UpdateRentalRequest updateRentalRequest) {
-		return this.rentalService.update(updateRentalRequest);
+	@PostMapping("/updateforcorporatecustomer")
+	public Result updateForCorporateCustomer(@Valid @RequestBody UpdateRentalRequest updateRentalRequest) {
+		return this.rentalService.updateForCorporateCustomer(updateRentalRequest);
+	}
+	
+	@PostMapping("/updateforindividualcustomer")
+	public Result updateForIndividualCustomer(@Valid @RequestBody UpdateRentalRequest updateRentalRequest) {
+		return this.rentalService.updateForIndividualCustomer(updateRentalRequest);
 	}
 	
 	@PutMapping("/delete")

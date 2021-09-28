@@ -32,16 +32,12 @@ import com.etiya.ReCapProject.entities.requests.UpdateRentalRequest;
 public class RentalManager implements RentalService {
 
 	private RentalDao rentalDao;
-	
 	private FindexPointService findexPointService;
-	
 	private CarService carService;
-	
 	private IndividualCustomerDao individualCustomerDao;
-	
 	private CorporateCustomerDao corporateCustomerDao;
-	
 	private MaintenanceDao maintenanceDao;
+
 
 	@Autowired
 	public RentalManager(RentalDao rentalDao, FindexPointService findexPointService, CarService carService,
@@ -70,11 +66,10 @@ public class RentalManager implements RentalService {
 
 	public Result addForIndividualCustomer(CreateRentalRequest createRentalRequest) {
 		
-		Car car=new Car();
-		car.setCarId(createRentalRequest.getCarId());
-		car.setCarName(createRentalRequest.getCarName());
+		Car car=this.carService.getById(createRentalRequest.getCarId()).getData();
 		
-		Customer customer=new Customer();
+		
+		IndividualCustomer customer=new IndividualCustomer();
 		customer.setId(createRentalRequest.getCustomerId());
 		
 		Rental rental=new Rental();
@@ -82,6 +77,10 @@ public class RentalManager implements RentalService {
 		rental.setReturnDate(createRentalRequest.getReturnDate());
 		rental.setCar(car);
 		rental.setCustomer(customer);
+		rental.setPickUpLocation(car.getCity());
+		rental.setReturnLocation(createRentalRequest.getReturnLocation());
+		
+		car.setCity(createRentalRequest.getReturnLocation());
 		
 		var result = BusinessRules.run(checkReturn(rental.getCar().getCarId()), 
 				checkFindexPointForIndividualCustomer(this.individualCustomerDao.getById(createRentalRequest.getCustomerId()),
@@ -98,11 +97,9 @@ public class RentalManager implements RentalService {
 	@Override
 	public Result addForCorporateCustomer(CreateRentalRequest createRentalRequest) {
 			
-		Car car=new Car();
-		car.setCarId(createRentalRequest.getCarId());
-		car.setCarName(createRentalRequest.getCarName());
+		Car car=this.carService.getById(createRentalRequest.getCarId()).getData();
 		
-		Customer customer=new Customer();
+		CorporateCustomer customer=new CorporateCustomer();
 		customer.setId(createRentalRequest.getCustomerId());
 		
 		Rental rental=new Rental();
@@ -110,6 +107,10 @@ public class RentalManager implements RentalService {
 		rental.setReturnDate(createRentalRequest.getReturnDate());
 		rental.setCar(car);
 		rental.setCustomer(customer);
+		rental.setPickUpLocation(car.getCity());
+		rental.setReturnLocation(createRentalRequest.getReturnLocation());
+		
+		car.setCity(createRentalRequest.getReturnLocation());
 		
 		var result = BusinessRules.run(checkReturn(rental.getCar().getCarId()), 
 				checkFindexPointForCorporateCustomer(this.corporateCustomerDao.getById(createRentalRequest.getCustomerId()),
@@ -123,6 +124,49 @@ public class RentalManager implements RentalService {
 		return new SuccessResult(Messages.RENTAL + " " +  Messages.ADD);
 		
 	}
+	
+	@Override
+	public Result updateForCorporateCustomer(UpdateRentalRequest updateRentalRequest) {
+		Car car=new Car();
+		car.setCarId(updateRentalRequest.getCarId());
+
+		
+		
+		Customer customer=new Customer();
+		customer.setId(updateRentalRequest.getCustomerId());
+		
+		Rental rental=new Rental();
+		rental.setId(updateRentalRequest.getId());
+		rental.setRentDate(updateRentalRequest.getRentDate());
+		rental.setReturnDate(updateRentalRequest.getReturnDate());
+		rental.setCar(car);
+		rental.setCustomer(customer);		
+		
+		this.rentalDao.save(rental);
+		return new SuccessResult(Messages.RENTAL + " " + Messages.UPDATE);
+	}
+	
+
+	@Override
+	public Result updateForIndividualCustomer(UpdateRentalRequest updateRentalRequest) {
+		Car car=new Car();
+		car.setCarId(updateRentalRequest.getCarId());
+		
+		Customer customer=new Customer();
+		customer.setId(updateRentalRequest.getCustomerId());
+		
+		Rental rental=new Rental();
+		rental.setId(updateRentalRequest.getId());
+		rental.setRentDate(updateRentalRequest.getRentDate());
+		rental.setReturnDate(updateRentalRequest.getReturnDate());
+		rental.setCar(car);
+		rental.setCustomer(customer);		
+		
+		this.rentalDao.save(rental);
+		return new SuccessResult(Messages.RENTAL + " " + Messages.UPDATE);
+	}
+
+	
 
 	@Override
 	public Result delete(DeleteRentalRequest deleteRentalRequest) {
@@ -138,32 +182,17 @@ public class RentalManager implements RentalService {
 		return new SuccessResult(Messages.RENTAL + " " +Messages.DELETE);
 	}
 
-	@Override
-	public Result update(UpdateRentalRequest updateRentalRequest) {
-		Car car=new Car();
-		car.setCarId(updateRentalRequest.getCarId());
-		car.setCarName(updateRentalRequest.getCarName());
-		
-		Rental rental=new Rental();
-		rental.setId(updateRentalRequest.getId());
-		rental.setRentDate(updateRentalRequest.getRentDate());
-		rental.setReturnDate(updateRentalRequest.getReturnDate());
-		rental.setCar(car);
-		
-		
-		this.rentalDao.save(rental);
-		return new SuccessResult(Messages.RENTAL + " " + Messages.UPDATE);
-	}
-	
-	private Result checkReturn(int carId) {
-		for (Rental rental : this.rentalDao.getByCar_CarId(carId)) {
-			if (rental.getReturnDate() == null) {
-				return new ErrorResult(Messages.NOT_DELİVERED);
-			}
+	private Result checkReturn(int carId) {         
+		for (Rental rental : this.rentalDao.getByCar_CarId(carId)) {              
+			
+			if (rental.getReturnDate()==null) {                 
+				return new ErrorResult(Messages.NOT_DELİVERED);             
+				}         
+			}         
+		return new SuccessResult();     
 		}
-		return new SuccessResult();
 
-	}
+	
 	
 	private Result checkFindexPointForIndividualCustomer(IndividualCustomer individualCustomer,int carId) {  
 		
@@ -192,16 +221,16 @@ public class RentalManager implements RentalService {
 		}
 		
 	private Result checkIsTheCarInMaintenance(int carId) {
-		
+		if(this.maintenanceDao.getByCar_CarId(carId).size() != 0) {
 		Maintenance maintenance = this.maintenanceDao.getByCar_CarId(carId)
 				.get(this.maintenanceDao.getByCar_CarId(carId).size()-1);
 		
 		if(maintenance.getReturnDate()==null) {
 			return new ErrorResult(Messages.InCarMaintenance);
 		}
+		}
 		return new SuccessResult();
 	}
-
-	
+	 
 	
 }

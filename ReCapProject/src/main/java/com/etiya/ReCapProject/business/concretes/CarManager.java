@@ -45,8 +45,7 @@ public class CarManager implements CarService {
 		List<Car> maintenanceCars = this.carDao.getByMaintenances_ReturnDateIsNullAndMaintenances_MaintenanceDateIsNotNull();          
 		cars.removeAll(maintenanceCars);     
 		
-		return new SuccessDataResult<List<Car>>(cars);
-	
+		return new SuccessDataResult<List<Car>>(cars);	
 	}
 
 	@Override
@@ -67,6 +66,8 @@ public class CarManager implements CarService {
 		car.setDailyPrice(createCarRequest.getDailyPrice());
 		car.setDescription(createCarRequest.getDescription());
 		car.setModelYear(createCarRequest.getModelYear());
+		car.setMinFindexScore(createCarRequest.getMinFindexScore());
+		car.setCity(createCarRequest.getCity());
 		
 		car.setBrand(brand);
 		car.setColor(color);
@@ -100,6 +101,8 @@ public class CarManager implements CarService {
 		car.setDailyPrice(updateCarRequest.getDailyPrice());
 		car.setDescription(updateCarRequest.getDescription());
 		car.setModelYear(updateCarRequest.getModelYear());
+		car.setMinFindexScore(updateCarRequest.getMinFindexScore());
+		car.setCity(updateCarRequest.getCity());
 		
 		car.setBrand(brand);
 		car.setColor(color);
@@ -125,6 +128,12 @@ public class CarManager implements CarService {
 		
 		return new SuccessDataResult<List<Car>>(this.carDao.getByColor_ColorId(colorId));
 	}
+
+	@Override
+	public DataResult<List<Car>> getByCity(String city) {
+		return new SuccessDataResult<List<Car>>(this.carDao.getByCity(city));
+	}
+	
 	
 	
 

@@ -24,6 +24,8 @@ public interface CarDao extends JpaRepository<Car, Integer> {
 	List<Car> getByBrand_BrandId(int branId);
 	
 	List<Car> getByColor_ColorId(int colorId);
+	
+	List<Car> getByCity(String city);
 
 	
 	List<Car> getByMaintenances_ReturnDateIsNullAndMaintenances_MaintenanceDateIsNotNull();

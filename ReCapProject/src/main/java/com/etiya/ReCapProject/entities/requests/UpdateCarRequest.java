@@ -32,5 +32,7 @@ public class UpdateCarRequest {
 	
 	private int minFindexScore;
 	
+	private String city;
+	
 	
 }

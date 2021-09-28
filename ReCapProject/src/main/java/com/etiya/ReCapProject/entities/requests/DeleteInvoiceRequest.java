@@ -1,9 +1,6 @@
 package com.etiya.ReCapProject.entities.requests;
 
-import java.util.Date;
-
-
-import com.sun.istack.NotNull;
+import javax.validation.constraints.NotNull;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -14,14 +11,9 @@ import lombok.Setter;
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
-public class CreateRentalRequest {
+public class DeleteInvoiceRequest {
 	
-	private int carId;
 	@NotNull
-	private int customerId;
-	@NotNull
-	private Date rentDate;
-	private Date returnDate;
-	private String returnLocation;
+	private int invoiceId;
 	
 }

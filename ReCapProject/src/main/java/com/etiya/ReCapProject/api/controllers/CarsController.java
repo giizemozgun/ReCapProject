@@ -79,5 +79,10 @@ public class CarsController {
 	public DataResult<List<Car>> getAvailableCars(){
 		return this.carService.getAvailableCars();
 	}
+	@GetMapping("/getcity")
+	public DataResult<List<Car>> getByCity(String city){
+		return this.carService.getByCity(city);
+	}
+	
 	
 }

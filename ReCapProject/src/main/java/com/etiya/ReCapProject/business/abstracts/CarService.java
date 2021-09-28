@@ -26,4 +26,6 @@ public interface CarService {
 	DataResult<List<Car>> getByColorId(int colorId);
 	
 	DataResult<List<Car>> getAvailableCars();
+	
+	DataResult<List<Car>> getByCity(String city);
 }

@@ -31,6 +31,9 @@ public class CreateCarRequest {
 	@NotNull
 	private int modelYear;
 	
+	@NotNull
+	private String city;
+	
 	@Min(0)
 	@NotNull
 	private double dailyPrice;
