@@ -48,6 +48,12 @@ public class Rental {
 	@Column(name="return_location")
 	private String returnLocation;
 	
+	@Column(name="pick_up_km")
+	private int pickUpKm;
+	
+	@Column(name="return_km")
+	private int returnKm;
+	
 	
 	@ManyToOne
 	@JoinColumn(name = "customer_id")

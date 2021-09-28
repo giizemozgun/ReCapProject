@@ -46,6 +46,9 @@ public class Car {
 	@Column(name="min_findex_score")
 	private int minFindexScore;
 	
+	@Column(name="km")
+	private int km;
+	
 	@Column(name="city")
 	private String city;
 	

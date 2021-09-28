@@ -2,8 +2,7 @@ package com.etiya.ReCapProject.entities.requests;
 
 import java.util.Date;
 
-
-import com.sun.istack.NotNull;
+import javax.validation.constraints.NotNull;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -28,7 +27,9 @@ public class UpdateRentalRequest {
 
 	private Date returnDate;
 
+	@NotNull
 	private String returnLocation;
 	
-	
+	@NotNull
+	int returnKm;
 }

@@ -34,6 +34,9 @@ public class CreateCarRequest {
 	@NotNull
 	private String city;
 	
+	@NotNull
+	private int km;
+	
 	@Min(0)
 	@NotNull
 	private double dailyPrice;

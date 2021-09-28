@@ -17,11 +17,14 @@ import lombok.Setter;
 public class CreateRentalRequest {
 	
 	private int carId;
+	
 	@NotNull
 	private int customerId;
+	
 	@NotNull
 	private Date rentDate;
-	private Date returnDate;
-	private String returnLocation;
 	
+	private Date returnDate;
+	
+	private String returnLocation;
 }
