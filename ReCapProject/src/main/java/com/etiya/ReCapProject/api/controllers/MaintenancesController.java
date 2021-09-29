@@ -16,6 +16,7 @@ import com.etiya.ReCapProject.business.abstracts.MaintenanceService;
 import com.etiya.ReCapProject.core.utilities.results.DataResult;
 import com.etiya.ReCapProject.core.utilities.results.Result;
 import com.etiya.ReCapProject.entities.concretes.Maintenance;
+import com.etiya.ReCapProject.entities.requests.CarReturnedFromMaintenanceRequest;
 import com.etiya.ReCapProject.entities.requests.CreateMaintenanceRequest;
 import com.etiya.ReCapProject.entities.requests.DeleteMaintenanceRequest;
 import com.etiya.ReCapProject.entities.requests.UpdateMaintenanceRequest;
@@ -59,5 +60,9 @@ public class MaintenancesController {
 		return this.maintenanceService.delete(deleteMaintenanceRequest);
 	}
 	
+	@PostMapping("/validateCarReturned")
+	public Result validateCarReturned(CarReturnedFromMaintenanceRequest carReturnedFromMaintenanceRequest) {
+		return this.maintenanceService.validateCarReturned(carReturnedFromMaintenanceRequest);
+	}
 	
 }

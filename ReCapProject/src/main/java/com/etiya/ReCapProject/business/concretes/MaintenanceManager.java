@@ -5,6 +5,7 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.etiya.ReCapProject.business.abstracts.CarService;
 import com.etiya.ReCapProject.business.abstracts.MaintenanceService;
 import com.etiya.ReCapProject.business.constants.Messages;
 import com.etiya.ReCapProject.core.business.BusinessRules;
@@ -13,10 +14,12 @@ import com.etiya.ReCapProject.core.utilities.results.Result;
 import com.etiya.ReCapProject.core.utilities.results.SuccessDataResult;
 import com.etiya.ReCapProject.core.utilities.results.SuccessResult;
 import com.etiya.ReCapProject.core.utilities.results.ErrorResult;
+import com.etiya.ReCapProject.dataAccess.abstracts.CarDao;
 import com.etiya.ReCapProject.dataAccess.abstracts.MaintenanceDao;
 import com.etiya.ReCapProject.dataAccess.abstracts.RentalDao;
 import com.etiya.ReCapProject.entities.concretes.Car;
 import com.etiya.ReCapProject.entities.concretes.Maintenance;
+import com.etiya.ReCapProject.entities.requests.CarReturnedFromMaintenanceRequest;
 import com.etiya.ReCapProject.entities.requests.CreateMaintenanceRequest;
 import com.etiya.ReCapProject.entities.requests.DeleteMaintenanceRequest;
 import com.etiya.ReCapProject.entities.requests.UpdateMaintenanceRequest;
@@ -26,14 +29,18 @@ public class MaintenanceManager implements MaintenanceService {
 
 	private MaintenanceDao maintenanceDao;
 	private RentalDao rentalDao;
+	private CarService carService;
+	private CarDao carDao;
 	
 	
 	
 	@Autowired
-	public MaintenanceManager(MaintenanceDao maintenanceDao, RentalDao rentalDao) {
+	public MaintenanceManager(MaintenanceDao maintenanceDao, RentalDao rentalDao, CarService carService,CarDao carDao) {
 		super();
 		this.maintenanceDao = maintenanceDao;
 		this.rentalDao = rentalDao;
+		this.carService = carService;
+		this.carDao = carDao;
 	}
 
 	@Override
@@ -49,15 +56,15 @@ public class MaintenanceManager implements MaintenanceService {
 	@Override
 	public Result add(CreateMaintenanceRequest createMaintenanceRequest) {
 		
-		var result = BusinessRules.run(checkIsTheCarRented(createMaintenanceRequest.getCarId()));
+		var result = BusinessRules.run(checkReturnFromRental(createMaintenanceRequest.getCarId()));
 				
 
 		if (result != null) {
 			return result;
 		}
 		
-		Car car = new Car();
-		car.setCarId(createMaintenanceRequest.getCarId());
+		Car car = this.carService.getById(createMaintenanceRequest.getCarId()).getData();
+		car.setAvailable(false);
 		
 		
 		Maintenance maintenance = new Maintenance();
@@ -68,6 +75,7 @@ public class MaintenanceManager implements MaintenanceService {
 		
 		
 		this.maintenanceDao.save(maintenance);
+		this.carDao.save(car);
 		return new SuccessResult(Messages.MaintenanceAdded);
 	}
 
@@ -94,13 +102,33 @@ public class MaintenanceManager implements MaintenanceService {
 		this.maintenanceDao.save(maintenance);
 		return new SuccessResult(Messages.MaintenanceUpdated);
 	}
-	
-	private Result checkIsTheCarRented(int carId) {
-		if(!this.rentalDao.getByCar_CarId(carId).isEmpty()) {
+	@Override
+	public Result validateCarReturned(CarReturnedFromMaintenanceRequest carReturnedFromMaintenanceRequest) {
+		
+		Maintenance maintenance = this.maintenanceDao.getById(carReturnedFromMaintenanceRequest.getMaintenanceId());
+		maintenance.setCarReturned(true);
+		
+		Car car = this.carService.getById(maintenance.getCar().getCarId()).getData();
+		car.setAvailable(true);
+		
+		maintenance.setCar(car);
+		this.maintenanceDao.save(maintenance);
+		this.carDao.save(car);
+		
+		return new SuccessResult(Messages.CarIsReturnedFromMaintenance);
+		
+		
+	}
+
+	private Result checkReturnFromRental(int carId) {
+		if (this.rentalDao.existsByIsCarReturnedIsFalseAndCar_CarId(carId)) {
 			return new ErrorResult(Messages.NotAvailableCar);
 		}
 		return new SuccessResult();
+
 	}
+
+	
 	
 
 }

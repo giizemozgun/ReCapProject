@@ -16,6 +16,7 @@ import com.etiya.ReCapProject.business.abstracts.RentalService;
 import com.etiya.ReCapProject.core.utilities.results.DataResult;
 import com.etiya.ReCapProject.core.utilities.results.Result;
 import com.etiya.ReCapProject.entities.concretes.Rental;
+import com.etiya.ReCapProject.entities.requests.CarReturnedRequest;
 import com.etiya.ReCapProject.entities.requests.CreateRentalRequest;
 import com.etiya.ReCapProject.entities.requests.DeleteRentalRequest;
 import com.etiya.ReCapProject.entities.requests.UpdateRentalRequest;
@@ -72,4 +73,8 @@ public class RentalsController {
 		return this.rentalService.delete(deleteRentalRequest);
 	}
 	
+	@PostMapping("validateCarReturned")
+	public Result validateCarReturned(@Valid @RequestBody CarReturnedRequest carReturnedRequest) {
+		return this.rentalService.validateCarReturned(carReturnedRequest);
+	}
 }

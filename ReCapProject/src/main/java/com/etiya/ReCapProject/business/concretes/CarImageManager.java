@@ -91,14 +91,10 @@ public class CarImageManager implements CarImageService{
 
 	@Override
 	public Result delete(DeleteCarImageRequest deleteCarImageRequest) {
-		Car car = new Car();
-		car.setCarId(deleteCarImageRequest.getCarId());
-		
-		
 		CarImage carImage = new CarImage();
 		
 		carImage.setId(deleteCarImageRequest.getId());
-		carImage.setCar(car);
+		
 		
 		this.carImageDao.delete(carImage);
 		return new SuccessResult(Messages.CarImageDeleted);
@@ -106,6 +102,13 @@ public class CarImageManager implements CarImageService{
 
 	@Override
 	public Result update(UpdateCarImageRequest updateCarImageRequest) throws IOException {
+		
+		var result = BusinessRules.run(checkIfCarImageLimitExceeded(updateCarImageRequest.getCarId(),5),
+				checkImageType(updateCarImageRequest.getFile()),checkCarImageIsNull(updateCarImageRequest.getFile()));
+
+		if (result != null) {
+			return result;
+		}
 		
 		LocalDate date = LocalDate.now();
 		String imagePath = UUID.randomUUID().toString();
@@ -117,7 +120,7 @@ public class CarImageManager implements CarImageService{
 		FileOutputStream fileOutpuStream = new FileOutputStream(myFile);
 		fileOutpuStream.write(updateCarImageRequest.getFile().getBytes());
 		fileOutpuStream.close();
-		
+	
 		Car car = new Car();
 		car.setCarId(updateCarImageRequest.getCarId());
 		

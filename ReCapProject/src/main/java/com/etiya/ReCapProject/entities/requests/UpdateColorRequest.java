@@ -17,7 +17,6 @@ import lombok.Setter;
 @NoArgsConstructor
 public class UpdateColorRequest {
 	
-	@NotBlank(message="Boş olamaz")
 	@NotNull
 	private int colorId;
 	

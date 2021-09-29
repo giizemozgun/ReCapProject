@@ -20,8 +20,8 @@ import com.etiya.ReCapProject.dataAccess.abstracts.RentalDao;
 import com.etiya.ReCapProject.entities.concretes.Car;
 import com.etiya.ReCapProject.entities.concretes.CorporateCustomer;
 import com.etiya.ReCapProject.entities.concretes.IndividualCustomer;
-import com.etiya.ReCapProject.entities.concretes.Maintenance;
 import com.etiya.ReCapProject.entities.concretes.Rental;
+import com.etiya.ReCapProject.entities.requests.CarReturnedRequest;
 import com.etiya.ReCapProject.entities.requests.CreateRentalRequest;
 import com.etiya.ReCapProject.entities.requests.DeleteRentalRequest;
 import com.etiya.ReCapProject.entities.requests.UpdateRentalRequest;
@@ -72,9 +72,9 @@ public class RentalManager implements RentalService {
 		rental.setReturnLocation(createRentalRequest.getReturnLocation());
 		rental.setPickUpKm(car.getKm());
 
-		var result = BusinessRules.run(checkReturn(rental.getCar().getCarId()),
+		var result = BusinessRules.run(checkReturnFromRental(rental.getCar().getCarId()),
 				checkFindexPointForIndividualCustomer(customer, createRentalRequest.getCarId()),
-				checkIsTheCarInMaintenance(createRentalRequest.getCarId()));
+				checkReturnFromMaintenance(createRentalRequest.getCarId()));
 
 		if (result != null) {
 			return result;
@@ -83,7 +83,9 @@ public class RentalManager implements RentalService {
 		this.rentalDao.save(rental);
 		
 		car.setCity(rental.getReturnLocation());
+		car.setAvailable(false);
 		this.carDao.save(car);
+		
 		
 		return new SuccessResult(Messages.RentalAdded);
 
@@ -105,9 +107,9 @@ public class RentalManager implements RentalService {
 		rental.setReturnLocation(createRentalRequest.getReturnLocation());
 		rental.setPickUpKm(car.getKm());
 		
-		var result = BusinessRules.run(checkReturn(rental.getCar().getCarId()),
+		var result = BusinessRules.run(checkReturnFromRental(rental.getCar().getCarId()),
 				checkFindexPointForCorporateCustomer(customer, createRentalRequest.getCarId()),
-				checkIsTheCarInMaintenance(createRentalRequest.getCarId()));
+				checkReturnFromMaintenance(createRentalRequest.getCarId()));
 
 		if (result != null) {
 			return result;
@@ -116,6 +118,7 @@ public class RentalManager implements RentalService {
 		this.rentalDao.save(rental);
 		
 		car.setCity(rental.getReturnLocation());
+		car.setAvailable(false);
 		this.carDao.save(car);
 		
 		return new SuccessResult(Messages.RentalAdded);
@@ -147,20 +150,19 @@ public class RentalManager implements RentalService {
 		rental.setPickUpLocation(car.getCity());
 		rental.setReturnLocation(updateRentalRequest.getReturnLocation());
 		rental.setPickUpKm(car.getKm());
-		rental.setReturnKm(updateRentalRequest.getReturnKm());
 
-		var result = BusinessRules.run(checkReturn(rental.getCar().getCarId()),
+		var result = BusinessRules.run(checkReturnFromRental(rental.getCar().getCarId()),
 				checkFindexPointForIndividualCustomer(customer, updateRentalRequest.getCarId()),
-				checkIsTheCarInMaintenance(updateRentalRequest.getCarId()));
+				checkReturnFromMaintenance(updateRentalRequest.getCarId()));
 
 		if (result != null) {
 			return result;
 		}
-
+	
+		rental.setCarReturned(true);
 		this.rentalDao.save(rental);
 		
 		car.setCity(rental.getReturnLocation());
-		car.setKm(rental.getReturnKm());
 		this.carDao.save(car);
 		
 		return new SuccessResult(Messages.RentalUpdated);
@@ -182,31 +184,53 @@ public class RentalManager implements RentalService {
 		rental.setPickUpLocation(car.getCity());
 		rental.setReturnLocation(updateRentalRequest.getReturnLocation());
 		rental.setPickUpKm(car.getKm());
-		rental.setReturnKm(updateRentalRequest.getReturnKm());
-
-		var result = BusinessRules.run(checkReturn(rental.getCar().getCarId()),
+		
+		var result = BusinessRules.run(checkReturnFromRental(rental.getCar().getCarId()),
 				checkFindexPointForCorporateCustomer(customer, updateRentalRequest.getCarId()),
-				checkIsTheCarInMaintenance(updateRentalRequest.getCarId()));
+				checkReturnFromMaintenance(updateRentalRequest.getCarId()));
 
 		if (result != null) {
 			return result;
 		}
-
+		
+		rental.setCarReturned(true);
 		this.rentalDao.save(rental);
 		
 		car.setCity(rental.getReturnLocation());
-		car.setKm(rental.getReturnKm());
 		this.carDao.save(car);
 		
 		return new SuccessResult(Messages.RentalUpdated);
 	}
+	
+	@Override
+	public Result validateCarReturned(CarReturnedRequest carReturnedRequest) {
+		Rental rental = this.rentalDao.getById(carReturnedRequest.getRentalId());
+		rental.setCarReturned(true);
+		rental.setReturnKm(carReturnedRequest.getReturnKm());
+		
+		Car car = this.carService.getById(rental.getCar().getCarId()).getData();
+		car.setAvailable(true);
+		car.setKm(carReturnedRequest.getReturnKm());
+		
+		
+		rental.setCar(car);
+		this.rentalDao.save(rental);
+		this.carDao.save(car);
+		
+		return new SuccessResult(Messages.CarIsReturned);
+	}
 
-	private Result checkReturn(int carId) {
-		for (Rental rental : this.rentalDao.getByCar_CarId(carId)) {
+	private Result checkReturnFromRental(int carId) {
+		if (this.rentalDao.existsByIsCarReturnedIsFalseAndCar_CarId(carId)) {
+			return new ErrorResult(Messages.NotAvailableCar);
+		}
+		return new SuccessResult();
 
-			if (rental.getReturnDate() == null) {
-				return new ErrorResult(Messages.NotDelivered);
-			}
+	}
+
+	private Result checkReturnFromMaintenance(int carId) {
+		if (this.maintenanceDao.existsByIsCarReturnedIsFalseAndCar_CarId(carId)) {
+			return new ErrorResult(Messages.NotAvailableCar);
 		}
 		return new SuccessResult();
 
@@ -238,16 +262,8 @@ public class RentalManager implements RentalService {
 		return new SuccessResult();
 	}
 
-	private Result checkIsTheCarInMaintenance(int carId) {
-		if (this.maintenanceDao.getByCar_CarId(carId).size() != 0) {
-			Maintenance maintenance = this.maintenanceDao.getByCar_CarId(carId)
-					.get(this.maintenanceDao.getByCar_CarId(carId).size() - 1);
 
-			if (maintenance.getReturnDate() == null) {
-				return new ErrorResult(Messages.InCarMaintenance);
-			}
-		}
-		return new SuccessResult();
-	}
+	
 
+	
 }

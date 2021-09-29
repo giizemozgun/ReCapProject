@@ -28,4 +28,6 @@ public interface CarService {
 	DataResult<List<Car>> getAvailableCars();
 	
 	DataResult<List<Car>> getByCity(String city);
+	
+
 }

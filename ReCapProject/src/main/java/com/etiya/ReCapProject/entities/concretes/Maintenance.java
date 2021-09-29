@@ -40,6 +40,9 @@ public class Maintenance {
 	@Nullable
 	private Date returnDate;
 	
+	@Column(name = "is_car_returned", columnDefinition = "boolean default false")
+	private boolean isCarReturned;
+	
 	@ManyToOne
 	@JoinColumn(name = "car_id")
 	private Car car;

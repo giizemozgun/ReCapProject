@@ -42,6 +42,9 @@ public class Rental {
 	@Nullable
 	private Date returnDate;
 	
+	@Column(name = "is_car_returned", columnDefinition = "boolean default false")
+	private boolean isCarReturned;
+	
 	@Column(name="pick_up_location")
 	private String pickUpLocation;
 
@@ -53,6 +56,7 @@ public class Rental {
 	
 	@Column(name="return_km")
 	private int returnKm;
+	
 	
 	@ManyToOne
 	@JoinColumn(name = "customer_id")

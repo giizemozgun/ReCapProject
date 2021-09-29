@@ -69,6 +69,7 @@ public class CarManager implements CarService {
 		car.setMinFindexScore(createCarRequest.getMinFindexScore());
 		car.setCity(createCarRequest.getCity());
 		car.setKm(createCarRequest.getKm());
+		car.setAvailable(true);
 		
 		car.setBrand(brand);
 		car.setColor(color);
@@ -94,7 +95,7 @@ public class CarManager implements CarService {
 		Brand brand = new Brand();
 		brand.setBrandId(updateCarRequest.getBrandId());
 		Color color = new Color();
-		color.setColorId(updateCarRequest.getCarId());	
+		color.setColorId(updateCarRequest.getColorId());	
 			
 		Car car = new Car();
 		car.setCarId(updateCarRequest.getCarId());
@@ -110,7 +111,7 @@ public class CarManager implements CarService {
 		car.setColor(color);
 		
 		 this.carDao.save(car);
-		 return new SuccessResult(Messages.CarImageUpdated);
+		 return new SuccessResult(Messages.CarUpdated);
 		
 	}
 
@@ -135,8 +136,6 @@ public class CarManager implements CarService {
 	public DataResult<List<Car>> getByCity(String city) {
 		return new SuccessDataResult<List<Car>>(this.carDao.getByCity(city));
 	}
-	
-	
 	
 
 	
