@@ -62,7 +62,7 @@ public class CorporateCustomerManager implements CorporateCustomerService{
 		corporateCustomer.setPassword(createCorporateCustomerRequest.getPassword());
 		
 		this.corporateCustomerDao.save(corporateCustomer);
-		return new SuccessResult(Messages.CUSTOMER + " " + Messages.ADD);
+		return new SuccessResult(Messages.CustomerAdded);
 	}
 
 	@Override
@@ -74,7 +74,7 @@ public class CorporateCustomerManager implements CorporateCustomerService{
 		
 		
 		this.corporateCustomerDao.delete(corporateCustomer);
-		return new SuccessResult(Messages.CUSTOMER + " " + Messages.DELETE);
+		return new SuccessResult(Messages.CustomerDeleted);
 	}
 
 	@Override
@@ -91,7 +91,7 @@ public class CorporateCustomerManager implements CorporateCustomerService{
 			
 		
 		this.corporateCustomerDao.save(corporateCustomer);
-		return new SuccessResult(Messages.CUSTOMER + " " + Messages.UPDATE);
+		return new SuccessResult(Messages.CustomerUpdated);
 	}
 	private Result checkToEmailForRegister(String email) {
 

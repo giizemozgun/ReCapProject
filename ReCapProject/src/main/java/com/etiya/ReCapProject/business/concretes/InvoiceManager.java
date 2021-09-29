@@ -1,35 +1,36 @@
 package com.etiya.ReCapProject.business.concretes;
 
+import java.time.temporal.ChronoUnit;
 import java.util.Date;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-
 import com.etiya.ReCapProject.business.abstracts.InvoiceService;
+import com.etiya.ReCapProject.business.abstracts.RentalService;
 import com.etiya.ReCapProject.business.constants.Messages;
 import com.etiya.ReCapProject.core.utilities.results.DataResult;
 import com.etiya.ReCapProject.core.utilities.results.Result;
 import com.etiya.ReCapProject.core.utilities.results.SuccessDataResult;
 import com.etiya.ReCapProject.core.utilities.results.SuccessResult;
 import com.etiya.ReCapProject.dataAccess.abstracts.InvoiceDao;
-import com.etiya.ReCapProject.entities.concretes.Car;
 import com.etiya.ReCapProject.entities.concretes.Invoice;
 import com.etiya.ReCapProject.entities.concretes.Rental;
 import com.etiya.ReCapProject.entities.requests.CreateInvoiceRequest;
 import com.etiya.ReCapProject.entities.requests.DeleteInvoiceRequest;
+import com.etiya.ReCapProject.entities.requests.InvoiceBetweenDateRequest;
 import com.etiya.ReCapProject.entities.requests.UpdateInvoiceRequest;
 
 @Service
 public class InvoiceManager implements InvoiceService {
-	
 	private InvoiceDao invoiceDao;
+	private RentalService rentalService;
 
-	
 	@Autowired
-	public InvoiceManager(InvoiceDao invoiceDao) {
+	public InvoiceManager(InvoiceDao invoiceDao, RentalService rentalService) {
 		super();
 		this.invoiceDao = invoiceDao;
+		this.rentalService = rentalService;
 	}
 
 	@Override
@@ -38,122 +39,114 @@ public class InvoiceManager implements InvoiceService {
 	}
 
 	@Override
-	public DataResult<Invoice> getById(int id) {
-		return new SuccessDataResult<Invoice>(this.invoiceDao.getById(id));
+	public DataResult<Invoice> getById(int invoiceId) {
+		return new SuccessDataResult<Invoice>(this.invoiceDao.getById(invoiceId));
 	}
 
 	@Override
 	public Result addForIndividualCustomer(CreateInvoiceRequest createInvoiceRequest) {
-		
-		
-		Rental rental = new Rental();
-		rental.setId(createInvoiceRequest.getRentalId());
-	
+		Rental rental = this.rentalService.getById(createInvoiceRequest.getRentalId()).getData();
+
+		long totalRentalDay = ChronoUnit.DAYS.between(rental.getRentDate().toInstant(), rental.getReturnDate().toInstant());
+	    
+		double totalAmount = rental.getCar().getDailyPrice() * totalRentalDay;
+
 		Date now = new Date();
-		
-		Car car = new Car();
-		
+
 		Invoice invoice = new Invoice();
 		invoice.setInvoiceNumber(createInvoiceRequest.getInvoiceNumber());
 		invoice.setInvoiceDate(now);
+		invoice.setTotalRentalDay((int)totalRentalDay);
+		invoice.setTotalAmount(totalAmount);
 		invoice.setRental(rental);
-		
+
 		this.invoiceDao.save(invoice);
-		return new SuccessResult(Messages.ADD);
-			
+		return new SuccessResult(Messages.InvoiceAdded);
 	}
 
 	@Override
 	public Result addForCorporateCustomer(CreateInvoiceRequest createInvoiceRequest) {
-		Rental rental = new Rental();
-		rental.setId(createInvoiceRequest.getRentalId());
-		
-		Date rentDate = rental.getRentDate();
-		Date returnDate = rental.getReturnDate();
-		long totalRentalDay = returnDate.getTime() - rentDate.getTime();
+		Rental rental = this.rentalService.getById(createInvoiceRequest.getRentalId()).getData();
+
+		long totalRentalDay = ChronoUnit.DAYS.between(rental.getRentDate().toInstant(), rental.getReturnDate().toInstant());
+	    
+		double totalAmount = rental.getCar().getDailyPrice() * totalRentalDay;
+
 		Date now = new Date();
-		
-		Car car = new Car();
-		double totalAmount = car.getDailyPrice()* totalRentalDay;
-		
+
 		Invoice invoice = new Invoice();
 		invoice.setInvoiceNumber(createInvoiceRequest.getInvoiceNumber());
 		invoice.setInvoiceDate(now);
-		invoice.setTotalAmount(totalAmount);
 		invoice.setTotalRentalDay((int)totalRentalDay);
+		invoice.setTotalAmount(totalAmount);
 		invoice.setRental(rental);
-		
+
 		this.invoiceDao.save(invoice);
-		return new SuccessResult(Messages.ADD);
-			
+		return new SuccessResult(Messages.InvoiceAdded);
+	}
+
+	@Override
+	public Result updateForIndividualCustomer(UpdateInvoiceRequest updateInvoiceRequest) {
+		Rental rental = this.rentalService.getById(updateInvoiceRequest.getRentalId()).getData();
+
+		long totalRentalDay = ChronoUnit.DAYS.between(rental.getRentDate().toInstant(), rental.getReturnDate().toInstant());
+	    
+		double totalAmount = rental.getCar().getDailyPrice() * totalRentalDay;
+
+		Date now = new Date();
+
+		Invoice invoice = new Invoice();
+		invoice.setInvoiceId(updateInvoiceRequest.getInvoiceId());
+		invoice.setInvoiceNumber(updateInvoiceRequest.getInvoiceNumber());
+		invoice.setInvoiceDate(now);
+		invoice.setTotalRentalDay((int)totalRentalDay);
+		invoice.setTotalAmount(totalAmount);
+		invoice.setRental(rental);
+
+		this.invoiceDao.save(invoice);
+		return new SuccessResult(Messages.InvoiceUpdated);
+	}
+
+	@Override
+	public Result updateForCorporateCustomer(UpdateInvoiceRequest updateInvoiceRequest) {
+		Rental rental = this.rentalService.getById(updateInvoiceRequest.getRentalId()).getData();
+
+		long totalRentalDay = ChronoUnit.DAYS.between(rental.getRentDate().toInstant(), rental.getReturnDate().toInstant());
+	    
+		double totalAmount = rental.getCar().getDailyPrice() * totalRentalDay;
+
+		Date now = new Date();
+
+		Invoice invoice = new Invoice();
+		invoice.setInvoiceId(updateInvoiceRequest.getInvoiceId());
+		invoice.setInvoiceNumber(updateInvoiceRequest.getInvoiceNumber());
+		invoice.setInvoiceDate(now);
+		invoice.setTotalRentalDay((int)totalRentalDay);
+		invoice.setTotalAmount(totalAmount);
+		invoice.setRental(rental);
+
+		this.invoiceDao.save(invoice);
+		return new SuccessResult(Messages.InvoiceUpdated);
+	}
+
+	@Override
+	public DataResult<List<Invoice>> getByCustomerId(int customerId) {
+		return new SuccessDataResult<List<Invoice>>(this.invoiceDao.getByRental_Customer_Id(customerId));
 	}
 
 	@Override
 	public Result delete(DeleteInvoiceRequest deleteInvoiceRequest) {
 		Invoice invoice = new Invoice();
 		invoice.setInvoiceId(deleteInvoiceRequest.getInvoiceId());
-		
+
 		this.invoiceDao.delete(invoice);
-		return new SuccessResult(Messages.DELETE);
+		return new SuccessResult(Messages.InvoiceDeleted);
 	}
 
 	@Override
-	public Result updateForCorporateCustomer(UpdateInvoiceRequest updateInvoiceRequest) {
-		Rental rental = new Rental();
-		rental.setId(updateInvoiceRequest.getRentalId());
+	public DataResult<List<Invoice>> getByInvoiceDateBetween(InvoiceBetweenDateRequest invoiceBetweenDateRequest) {
 		
-		Date rentDate = rental.getRentDate();
-		Date returnDate = rental.getReturnDate();
-		long totalRentalDay = returnDate.getTime() - rentDate.getTime();
-		Date now = new Date();
-		
-		Car car = new Car();
-		double totalAmount = car.getDailyPrice()* totalRentalDay;
-		
-		Invoice invoice = new Invoice();
-		invoice.setInvoiceId(updateInvoiceRequest.getInvoiceId());
-		invoice.setInvoiceNumber(updateInvoiceRequest.getInvoiceNumber());
-		invoice.setInvoiceDate(now);
-		invoice.setTotalAmount(totalAmount);
-		invoice.setTotalRentalDay((int)totalRentalDay);
-		invoice.setRental(rental);
-		
-		this.invoiceDao.save(invoice);
-		return new SuccessResult(Messages.UPDATE);
-			
-		
+		return new SuccessDataResult<List<Invoice>>(this.invoiceDao.getByInvoiceDateBetween(invoiceBetweenDateRequest.getStartDate(), invoiceBetweenDateRequest.getEndDate()));
 	}
 
-	@Override
-	public Result updateForIndividualCustomer(UpdateInvoiceRequest updateInvoiceRequest) {
-		Rental rental = new Rental();
-		rental.setId(updateInvoiceRequest.getRentalId());
-		
-		Date rentDate = rental.getRentDate();
-		Date returnDate = rental.getReturnDate();
-		long totalRentalDay = returnDate.getTime() - rentDate.getTime();
-		Date now = new Date();
-		
-		Car car = new Car();
-		double totalAmount = car.getDailyPrice()* totalRentalDay;
-		
-		Invoice invoice = new Invoice();
-		invoice.setInvoiceId(updateInvoiceRequest.getInvoiceId());
-		invoice.setInvoiceNumber(updateInvoiceRequest.getInvoiceNumber());
-		invoice.setInvoiceDate(now);
-		invoice.setTotalAmount(totalAmount);
-		invoice.setTotalRentalDay((int)totalRentalDay);
-		invoice.setRental(rental);
-		
-		this.invoiceDao.save(invoice);
-		return new SuccessResult(Messages.UPDATE);
-	}
-
-	@Override
-	public DataResult<List<Invoice>> getByCustomerId(int customerId) {
-		
-		return new SuccessDataResult<List<Invoice>>(this.invoiceDao.getByRental_Customer_Id(customerId));
-	}
-	
-	
 }

@@ -74,7 +74,7 @@ public class CarManager implements CarService {
 		car.setColor(color);
 			
 	 this.carDao.save(car);
-	 return new SuccessResult(Messages.CAR + " " + Messages.ADD);
+	 return new SuccessResult(Messages.CarAdded);
 		
 	}
 
@@ -85,7 +85,7 @@ public class CarManager implements CarService {
 		car.setCarId(deleteCarRequest.getCarId());
 		
 		this.carDao.delete(car);
-		 return new SuccessResult(Messages.CAR + " " + Messages.DELETE);
+		 return new SuccessResult(Messages.CarDeleted);
 	}
 
 	@Override
@@ -110,7 +110,7 @@ public class CarManager implements CarService {
 		car.setColor(color);
 		
 		 this.carDao.save(car);
-		 return new SuccessResult(Messages.CAR + " " + Messages.UPDATE);
+		 return new SuccessResult(Messages.CarImageUpdated);
 		
 	}
 

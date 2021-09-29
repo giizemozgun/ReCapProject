@@ -86,7 +86,7 @@ public class CarImageManager implements CarImageService{
 		
 		
 		this.carImageDao.save(carImage);
-		return new SuccessResult(Messages.ADD) ;
+		return new SuccessResult(Messages.CarImageAdded) ;
 	}
 
 	@Override
@@ -101,7 +101,7 @@ public class CarImageManager implements CarImageService{
 		carImage.setCar(car);
 		
 		this.carImageDao.delete(carImage);
-		return new SuccessResult(Messages.DELETE);
+		return new SuccessResult(Messages.CarImageDeleted);
 	}
 
 	@Override
@@ -127,7 +127,7 @@ public class CarImageManager implements CarImageService{
 		carImage.setCar(car);
 				
 		this.carImageDao.save(carImage);
-		return new SuccessResult(Messages.UPDATE) ;
+		return new SuccessResult(Messages.CarImageUpdated) ;
 	}
 	
 	@Override

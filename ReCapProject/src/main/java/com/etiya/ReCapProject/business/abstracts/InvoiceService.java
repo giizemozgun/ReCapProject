@@ -9,7 +9,7 @@ import com.etiya.ReCapProject.entities.concretes.Invoice;
 import com.etiya.ReCapProject.entities.requests.CreateInvoiceRequest;
 
 import com.etiya.ReCapProject.entities.requests.DeleteInvoiceRequest;
-
+import com.etiya.ReCapProject.entities.requests.InvoiceBetweenDateRequest;
 import com.etiya.ReCapProject.entities.requests.UpdateInvoiceRequest;
 
 
@@ -26,4 +26,6 @@ public interface InvoiceService  {
 	
 	
 	DataResult<List<Invoice>> getByCustomerId(int customerId);
+	
+	DataResult<List<Invoice>> getByInvoiceDateBetween(InvoiceBetweenDateRequest invoiceBetweenDateRequest);
 }

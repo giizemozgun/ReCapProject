@@ -54,7 +54,6 @@ public class Rental {
 	@Column(name="return_km")
 	private int returnKm;
 	
-	
 	@ManyToOne
 	@JoinColumn(name = "customer_id")
 	private Customer customer;
@@ -62,13 +61,13 @@ public class Rental {
 	@ManyToOne
 	@JoinColumn(name = "car_id")
 	private Car car;
-
 	
 	@OneToMany(mappedBy = "rental")
 	@JsonIgnore
 	private List<Payment> payments;
 	
 	@OneToOne(mappedBy="rental")
+	@JsonIgnore
 	private Invoice invoice;
 	
 }

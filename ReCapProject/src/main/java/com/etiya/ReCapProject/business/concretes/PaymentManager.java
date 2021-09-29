@@ -49,7 +49,7 @@ public class PaymentManager implements PaymentService {
 		payment.setRental(rental);
 		
 		this.paymentDao.save(payment);
-		return new SuccessResult(Messages.ADD);
+		return new SuccessResult(Messages.PaymentReceived);
 	}
 	
 }

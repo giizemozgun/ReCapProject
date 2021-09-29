@@ -20,6 +20,7 @@ import com.etiya.ReCapProject.entities.concretes.CreditCard;
 import com.etiya.ReCapProject.entities.concretes.Customer;
 import com.etiya.ReCapProject.entities.requests.CreateCreditCardRequest;
 import com.etiya.ReCapProject.entities.requests.DeleteCreditCardRequest;
+import com.etiya.ReCapProject.entities.requests.UpdateCreditCardRequest;
 
 @Service
 public class CreditCardManager implements CreditCardService {
@@ -65,7 +66,7 @@ public class CreditCardManager implements CreditCardService {
 		
 		this.creditCardDao.save(creditCard);
 		
-		return new SuccessResult(Messages.ADD);
+		return new SuccessResult(Messages.CreditCardAdded);
 	}
 
 	@Override
@@ -74,7 +75,34 @@ public class CreditCardManager implements CreditCardService {
 		creditCard.setCreditCardId(deleteCreditCardRequest.getCreditCardId());
 		
 		this.creditCardDao.delete(creditCard);
-		return new SuccessResult(Messages.DELETE);
+		return new SuccessResult(Messages.CreditCardDeleted);
+	}
+	
+	@Override
+	public Result update(UpdateCreditCardRequest updateCreditCardRequest) {
+
+		var result = BusinessRules.run(checkCreditCardNumber(updateCreditCardRequest.getCardNumber()),
+				checkCreditCardCvv(updateCreditCardRequest.getCvv()), 
+				checkCreditCardExpiryDate(updateCreditCardRequest.getExpiryDate()));
+
+		if (result != null) {
+			return result;
+		}
+		
+		Customer customer=new Customer();
+		customer.setId(updateCreditCardRequest.getCustomerId());
+
+		CreditCard creditCard=new CreditCard();
+		creditCard.setCreditCardId(updateCreditCardRequest.getCreditCardId());
+		creditCard.setCardNumber(updateCreditCardRequest.getCardNumber());
+		creditCard.setName(updateCreditCardRequest.getName());
+		creditCard.setExpiryDate(updateCreditCardRequest.getExpiryDate());
+		creditCard.setCvv(updateCreditCardRequest.getCvv());
+		creditCard.setCustomer(customer);
+		
+		this.creditCardDao.save(creditCard);
+		
+		return new SuccessResult(Messages.CreditCardUpdated);
 	}
 
 	@Override
@@ -125,6 +153,8 @@ public class CreditCardManager implements CreditCardService {
 		}
 		return new SuccessResult();
 	}
+
+	
 	
 	
 

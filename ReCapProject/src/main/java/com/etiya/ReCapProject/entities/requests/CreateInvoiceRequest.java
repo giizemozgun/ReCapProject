@@ -1,6 +1,5 @@
 package com.etiya.ReCapProject.entities.requests;
 
-import java.util.Date;
 
 import javax.validation.constraints.NotNull;
 
@@ -20,8 +19,6 @@ public class CreateInvoiceRequest {
 	@NotNull
 	private int rentalId;
 	
-	@NotNull
-	private Date returnDate;
 	
 	
 

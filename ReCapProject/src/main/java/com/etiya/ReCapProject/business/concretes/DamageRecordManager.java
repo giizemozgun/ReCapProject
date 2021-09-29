@@ -49,7 +49,7 @@ public class DamageRecordManager implements DamageRecordService {
 	damageRecord.setCar(car);
 	
 	this.damageRecordDao.save(damageRecord);
-	return new SuccessResult(Messages.ADD);
+	return new SuccessResult(Messages.DamageRecordAdded);
 	}
 
 	@Override
@@ -58,7 +58,7 @@ public class DamageRecordManager implements DamageRecordService {
 		damageRecord.setId(deleteDamageRecordRequest.getId());
 		
 		this.damageRecordDao.delete(damageRecord);
-		return new SuccessResult(Messages.DELETE);
+		return new SuccessResult(Messages.DamageRecordDeleted);
 	}
 
 	@Override
@@ -72,7 +72,7 @@ public class DamageRecordManager implements DamageRecordService {
 		damageRecord.setCar(car);
 		
 		this.damageRecordDao.save(damageRecord);
-		return new SuccessResult(Messages.UPDATE);
+		return new SuccessResult(Messages.DamageRecordUpdated);
 	}
 
 }

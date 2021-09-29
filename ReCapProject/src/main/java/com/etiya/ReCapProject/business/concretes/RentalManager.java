@@ -35,7 +35,6 @@ public class RentalManager implements RentalService {
 	private MaintenanceDao maintenanceDao;
 	private CarDao carDao;
 
-
 	@Autowired
 	public RentalManager(RentalDao rentalDao, FindexPointService findexPointService, CarService carService,
 			MaintenanceDao maintenanceDao, CarDao carDao) {
@@ -45,64 +44,26 @@ public class RentalManager implements RentalService {
 		this.carService = carService;
 		this.maintenanceDao = maintenanceDao;
 		this.carDao = carDao;
-		
 	}
 
 	@Override
 	public DataResult<List<Rental>> getAll() {
 		return new SuccessDataResult<List<Rental>>(this.rentalDao.findAll());
 	}
-	
 
 	@Override
 	public DataResult<Rental> getById(int rentalId) {
 		return new SuccessDataResult<Rental>(this.rentalDao.getById(rentalId));
 	}
 
-	public Result addForIndividualCustomer(CreateRentalRequest createRentalRequest) {
-		
-		Car car=this.carService.getById(createRentalRequest.getCarId()).getData();
-		
-		
-		IndividualCustomer customer=new IndividualCustomer();
-		customer.setId(createRentalRequest.getCustomerId());
-		
-		Rental rental=new Rental();
-		rental.setRentDate(createRentalRequest.getRentDate());
-		rental.setReturnDate(createRentalRequest.getReturnDate());
-		rental.setCar(car);
-		rental.setCustomer(customer);
-		rental.setPickUpLocation(car.getCity());
-		rental.setReturnLocation(createRentalRequest.getReturnLocation());
-		rental.setPickUpKm(car.getKm());
-		
-		
-		var result = BusinessRules.run(checkReturn(rental.getCar().getCarId()), 
-				checkFindexPointForIndividualCustomer(customer,
-						createRentalRequest.getCarId()),checkIsTheCarInMaintenance(createRentalRequest.getCarId()));
-
-		if (result != null) {
-			return result;
-		}
-		
-		this.rentalDao.save(rental);
-		
-		car.setCity(rental.getReturnLocation());
-		this.carDao.save(car);
-		
-		return new SuccessResult(Messages.RENTAL + " " +  Messages.ADD);
-		
-	}
 	@Override
-	public Result addForCorporateCustomer(CreateRentalRequest createRentalRequest) {
-			
-		Car car=this.carService.getById(createRentalRequest.getCarId()).getData();
-		
-		CorporateCustomer customer=new CorporateCustomer();
+	public Result addForIndividualCustomer(CreateRentalRequest createRentalRequest) {
+		Car car = this.carService.getById(createRentalRequest.getCarId()).getData();
+
+		IndividualCustomer customer = new IndividualCustomer();
 		customer.setId(createRentalRequest.getCustomerId());
-		
-		
-		Rental rental=new Rental();
+
+		Rental rental = new Rental();
 		rental.setRentDate(createRentalRequest.getRentDate());
 		rental.setReturnDate(createRentalRequest.getReturnDate());
 		rental.setCar(car);
@@ -110,168 +71,183 @@ public class RentalManager implements RentalService {
 		rental.setPickUpLocation(car.getCity());
 		rental.setReturnLocation(createRentalRequest.getReturnLocation());
 		rental.setPickUpKm(car.getKm());
-		
-		
-		var result = BusinessRules.run(checkReturn(rental.getCar().getCarId()), 
-				checkFindexPointForCorporateCustomer(customer,createRentalRequest.getCarId()),
+
+		var result = BusinessRules.run(checkReturn(rental.getCar().getCarId()),
+				checkFindexPointForIndividualCustomer(customer, createRentalRequest.getCarId()),
 				checkIsTheCarInMaintenance(createRentalRequest.getCarId()));
 
 		if (result != null) {
 			return result;
 		}
-		
+
 		this.rentalDao.save(rental);
 		
 		car.setCity(rental.getReturnLocation());
 		this.carDao.save(car);
 		
-		
-		
-		return new SuccessResult(Messages.RENTAL + " " +  Messages.ADD);
-		
+		return new SuccessResult(Messages.RentalAdded);
+
 	}
-	
+
 	@Override
-	public Result updateForCorporateCustomer(UpdateRentalRequest updateRentalRequest) {
-		Car car=this.carService.getById(updateRentalRequest.getCarId()).getData();
-		
-		CorporateCustomer customer=new CorporateCustomer();
-		customer.setId(updateRentalRequest.getCustomerId());
-		
-		Rental rental=new Rental();
-		rental.setId(updateRentalRequest.getId());
-		rental.setRentDate(updateRentalRequest.getRentDate());
-		rental.setReturnDate(updateRentalRequest.getReturnDate());
+	public Result addForCorporateCustomer(CreateRentalRequest createRentalRequest) {
+		Car car = this.carService.getById(createRentalRequest.getCarId()).getData();
+
+		CorporateCustomer customer = new CorporateCustomer();
+		customer.setId(createRentalRequest.getCustomerId());
+
+		Rental rental = new Rental();
+		rental.setRentDate(createRentalRequest.getRentDate());
+		rental.setReturnDate(createRentalRequest.getReturnDate());
 		rental.setCar(car);
 		rental.setCustomer(customer);
 		rental.setPickUpLocation(car.getCity());
-		rental.setReturnLocation(updateRentalRequest.getReturnLocation());
+		rental.setReturnLocation(createRentalRequest.getReturnLocation());
 		rental.setPickUpKm(car.getKm());
-		rental.setReturnKm(updateRentalRequest.getReturnKm());
 		
-		
-		
-		var result = BusinessRules.run(checkReturn(rental.getCar().getCarId()), 
-				checkFindexPointForCorporateCustomer(customer,
-						updateRentalRequest.getCarId()),checkIsTheCarInMaintenance(updateRentalRequest.getCarId()));
+		var result = BusinessRules.run(checkReturn(rental.getCar().getCarId()),
+				checkFindexPointForCorporateCustomer(customer, createRentalRequest.getCarId()),
+				checkIsTheCarInMaintenance(createRentalRequest.getCarId()));
 
 		if (result != null) {
 			return result;
 		}
-		
+
 		this.rentalDao.save(rental);
 		
 		car.setCity(rental.getReturnLocation());
-		car.setKm(rental.getReturnKm());
 		this.carDao.save(car);
 		
-	
-		return new SuccessResult(Messages.RENTAL + " " +  Messages.UPDATE);
-		
+		return new SuccessResult(Messages.RentalAdded);
+
 	}
-	
-
-	@Override
-	public Result updateForIndividualCustomer(UpdateRentalRequest updateRentalRequest) {
-Car car=this.carService.getById(updateRentalRequest.getCarId()).getData();
-		
-		IndividualCustomer customer=new IndividualCustomer();
-		customer.setId(updateRentalRequest.getCustomerId());
-		
-		Rental rental=new Rental();
-		rental.setId(updateRentalRequest.getId());
-		rental.setRentDate(updateRentalRequest.getRentDate());
-		rental.setReturnDate(updateRentalRequest.getReturnDate());
-		rental.setCar(car);
-		rental.setCustomer(customer);
-		rental.setPickUpLocation(car.getCity());
-		rental.setReturnLocation(updateRentalRequest.getReturnLocation());
-		rental.setPickUpKm(car.getKm());
-		rental.setReturnKm(updateRentalRequest.getReturnKm());
-		
-		
-		
-		var result = BusinessRules.run(checkReturn(rental.getCar().getCarId()), 
-				checkFindexPointForIndividualCustomer(customer,
-						updateRentalRequest.getCarId()),checkIsTheCarInMaintenance(updateRentalRequest.getCarId()));
-
-		if (result != null) {
-			return result;
-		}
-		
-		this.rentalDao.save(rental);
-		
-		car.setCity(rental.getReturnLocation());
-		car.setKm(rental.getReturnKm());
-		this.carDao.save(car);
-		return new SuccessResult(Messages.RENTAL + " " +  Messages.UPDATE);
-	}
-
-	
 
 	@Override
 	public Result delete(DeleteRentalRequest deleteRentalRequest) {
-		Car car=new Car();
-		car.setCarId(deleteRentalRequest.getCarId());
-
-		Rental rental=new Rental();
+		Rental rental = new Rental();
 		rental.setId(deleteRentalRequest.getId());
-		rental.setCar(car);
-		
-		
+
 		this.rentalDao.delete(rental);
-		return new SuccessResult(Messages.RENTAL + " " +Messages.DELETE);
+		return new SuccessResult(Messages.RentalDeleted);
 	}
 
-	private Result checkReturn(int carId) {         
-		for (Rental rental : this.rentalDao.getByCar_CarId(carId)) {              
-			
-			if (rental.getReturnDate()==null) {                 
-				return new ErrorResult(Messages.NOT_DELİVERED);             
-				}         
-			}         
-		return new SuccessResult();     
+	@Override
+	public Result updateForIndividualCustomer(UpdateRentalRequest updateRentalRequest) {
+		Car car = this.carService.getById(updateRentalRequest.getCarId()).getData();
+
+		IndividualCustomer customer = new IndividualCustomer();
+		customer.setId(updateRentalRequest.getCustomerId());
+
+		Rental rental = new Rental();
+		rental.setId(updateRentalRequest.getId());
+		rental.setRentDate(updateRentalRequest.getRentDate());
+		rental.setReturnDate(updateRentalRequest.getReturnDate());
+		rental.setCar(car);
+		rental.setCustomer(customer);
+		rental.setPickUpLocation(car.getCity());
+		rental.setReturnLocation(updateRentalRequest.getReturnLocation());
+		rental.setPickUpKm(car.getKm());
+		rental.setReturnKm(updateRentalRequest.getReturnKm());
+
+		var result = BusinessRules.run(checkReturn(rental.getCar().getCarId()),
+				checkFindexPointForIndividualCustomer(customer, updateRentalRequest.getCarId()),
+				checkIsTheCarInMaintenance(updateRentalRequest.getCarId()));
+
+		if (result != null) {
+			return result;
 		}
 
-	
-	
-	private Result checkFindexPointForIndividualCustomer(IndividualCustomer individualCustomer,int carId) {  
+		this.rentalDao.save(rental);
 		
-	var findexScoreResult=this.findexPointService.getIndividualCustomerFindexPoint(individualCustomer.getIdentityNumber()); 
-	
-	var minFindexScoreForCar=this.carService.getById(carId).getData().getMinFindexScore();
-	
-	if (findexScoreResult <= minFindexScoreForCar) {
+		car.setCity(rental.getReturnLocation());
+		car.setKm(rental.getReturnKm());
+		this.carDao.save(car);
 		
-		return new ErrorResult(Messages.CustomerCreditScoreNotEnoughtToRentCar);         
-		}                  
-	return new SuccessResult();     
+		return new SuccessResult(Messages.RentalUpdated);
 	}
-	
-	
-	private Result checkFindexPointForCorporateCustomer(CorporateCustomer corporateCustomer,int carId) {  
-		
-		var findexScoreResult=this.findexPointService.getCorporateCustomerFindexPoint(corporateCustomer.getTaxNumber()); 
-		
-		var minFindexScoreForCar=this.carService.getById(carId).getData().getMinFindexScore();
-		
-		if (findexScoreResult <= minFindexScoreForCar) {             
-			return new ErrorResult(Messages.CustomerCreditScoreNotEnoughtToRentCar);         
-			}                  
-		return new SuccessResult();     
+
+	@Override
+	public Result updateForCorporateCustomer(UpdateRentalRequest updateRentalRequest) {
+		Car car = this.carService.getById(updateRentalRequest.getCarId()).getData();
+
+		CorporateCustomer customer = new CorporateCustomer();
+		customer.setId(updateRentalRequest.getCustomerId());
+
+		Rental rental = new Rental();
+		rental.setId(updateRentalRequest.getId());
+		rental.setRentDate(updateRentalRequest.getRentDate());
+		rental.setReturnDate(updateRentalRequest.getReturnDate());
+		rental.setCar(car);
+		rental.setCustomer(customer);
+		rental.setPickUpLocation(car.getCity());
+		rental.setReturnLocation(updateRentalRequest.getReturnLocation());
+		rental.setPickUpKm(car.getKm());
+		rental.setReturnKm(updateRentalRequest.getReturnKm());
+
+		var result = BusinessRules.run(checkReturn(rental.getCar().getCarId()),
+				checkFindexPointForCorporateCustomer(customer, updateRentalRequest.getCarId()),
+				checkIsTheCarInMaintenance(updateRentalRequest.getCarId()));
+
+		if (result != null) {
+			return result;
 		}
+
+		this.rentalDao.save(rental);
 		
+		car.setCity(rental.getReturnLocation());
+		car.setKm(rental.getReturnKm());
+		this.carDao.save(car);
+		
+		return new SuccessResult(Messages.RentalUpdated);
+	}
+
+	private Result checkReturn(int carId) {
+		for (Rental rental : this.rentalDao.getByCar_CarId(carId)) {
+
+			if (rental.getReturnDate() == null) {
+				return new ErrorResult(Messages.NotDelivered);
+			}
+		}
+		return new SuccessResult();
+
+	}
+
+	private Result checkFindexPointForIndividualCustomer(IndividualCustomer individualCustomer, int carId) {
+		var findexScoreResult = this.findexPointService
+				.getIndividualCustomerFindexPoint(individualCustomer.getIdentityNumber());
+
+		var minFindexScoreForCar = this.carService.getById(carId).getData().getMinFindexScore();
+
+		if (findexScoreResult <= minFindexScoreForCar) {
+			return new ErrorResult(Messages.CustomerCreditScoreNotEnoughtToRentCar);
+		}
+
+		return new SuccessResult();
+	}
+
+	private Result checkFindexPointForCorporateCustomer(CorporateCustomer corporateCustomer, int carId) {
+		var findexScoreResult = this.findexPointService
+				.getCorporateCustomerFindexPoint(corporateCustomer.getTaxNumber());
+
+		var minFindexScoreForCar = this.carService.getById(carId).getData().getMinFindexScore();
+
+		if (findexScoreResult <= minFindexScoreForCar) {
+			return new ErrorResult(Messages.CustomerCreditScoreNotEnoughtToRentCar);
+		}
+
+		return new SuccessResult();
+	}
+
 	private Result checkIsTheCarInMaintenance(int carId) {
-		if(this.maintenanceDao.getByCar_CarId(carId).size() != 0) {
-		Maintenance maintenance = this.maintenanceDao.getByCar_CarId(carId)
-				.get(this.maintenanceDao.getByCar_CarId(carId).size()-1);
-		
-		if(maintenance.getReturnDate()==null) {
-			return new ErrorResult(Messages.InCarMaintenance);
-		}
+		if (this.maintenanceDao.getByCar_CarId(carId).size() != 0) {
+			Maintenance maintenance = this.maintenanceDao.getByCar_CarId(carId)
+					.get(this.maintenanceDao.getByCar_CarId(carId).size() - 1);
+
+			if (maintenance.getReturnDate() == null) {
+				return new ErrorResult(Messages.InCarMaintenance);
+			}
 		}
 		return new SuccessResult();
 	}
-	 
-	
+
 }

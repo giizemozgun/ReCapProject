@@ -66,7 +66,7 @@ public class AuthManager implements AuthService {
 		applicationUser.setPassword(updateUserProfileDto.getPassword());
 
 		this.userDao.save(applicationUser);
-		return new SuccessResult(Messages.UPDATE);
+		return new SuccessResult(Messages.UserUpdated);
 	}
 
 }

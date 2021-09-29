@@ -19,7 +19,7 @@ public interface RentalService {
 	Result updateForCorporateCustomer(UpdateRentalRequest updateRentalRequest);
 	Result updateForIndividualCustomer(UpdateRentalRequest updateRentalRequest);
 	
-
+	
 	
 	
 }

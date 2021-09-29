@@ -21,6 +21,7 @@ import com.etiya.ReCapProject.entities.concretes.CreditCard;
 import com.etiya.ReCapProject.entities.requests.CreateCreditCardRequest;
 
 import com.etiya.ReCapProject.entities.requests.DeleteCreditCardRequest;
+import com.etiya.ReCapProject.entities.requests.UpdateCreditCardRequest;
 
 @RestController
 @RequestMapping("/api/creditcards")
@@ -55,5 +56,10 @@ public class CreditCardsController {
 	@PutMapping("/delete")
 	public Result delete(@Valid @RequestBody DeleteCreditCardRequest deleteCreditCardRequest) {
 		return this.creditCardService.delete(deleteCreditCardRequest);
+	}
+	@PostMapping("/update")
+	public Result update(@Valid @RequestBody UpdateCreditCardRequest updateCreditCardRequest) {
+		
+	return this.creditCardService.update(updateCreditCardRequest);
 	}
 }

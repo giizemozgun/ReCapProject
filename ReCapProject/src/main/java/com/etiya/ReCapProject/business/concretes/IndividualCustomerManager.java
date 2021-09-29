@@ -61,7 +61,7 @@ public class IndividualCustomerManager implements IndividualCustomerService {
 		individualCustomer.setIdentityNumber(createIndividualCustomerRequest.getIdentityNumber());
 		
 		this.individualCustomerDao.save(individualCustomer);
-		return new SuccessResult(Messages.ADD);
+		return new SuccessResult(Messages.CustomerAdded);
 	}
 
 	@Override
@@ -71,7 +71,7 @@ public class IndividualCustomerManager implements IndividualCustomerService {
 		individualCustomer.setId(deleteIndividualCustomerRequest.getId());
 		
 		this.individualCustomerDao.delete(individualCustomer);
-		return new SuccessResult(Messages.DELETE);
+		return new SuccessResult(Messages.CustomerDeleted);
 	}
 
 	@Override
@@ -86,7 +86,7 @@ public class IndividualCustomerManager implements IndividualCustomerService {
 		individualCustomer.setIdentityNumber(updateIndividualCustomerRequest.getIdentityNumber());
 		
 		this.individualCustomerDao.save(individualCustomer);
-		return new SuccessResult(Messages.UPDATE);
+		return new SuccessResult(Messages.CustomerUpdated);
 	}
 	
 	private Result checkToEmailForRegister(String email) {

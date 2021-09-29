@@ -1,6 +1,5 @@
 package com.etiya.ReCapProject.entities.requests;
 
-
 import javax.validation.constraints.NotNull;
 
 import lombok.AllArgsConstructor;
@@ -12,13 +11,17 @@ import lombok.Setter;
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
-public class UpdateInvoiceRequest {
-	
+public class UpdateCreditCardRequest {
 	@NotNull
-	private int invoiceId;
+	private int creditCardId;
+	
+	private String name;
+	
+	private String cardNumber;
 
-	private int invoiceNumber;
+	private String expiryDate;
+
+	private String cvv;
 	
-	private int rentalId;
-	
+	private int customerId;
 }

@@ -46,7 +46,7 @@ public class UserManager implements UserService {
 		user.setPassword(createUserRequest.getPassword());
 		
 		this.userDao.save(user);
-		return new SuccessResult(Messages.USER + " " + Messages.ADD);
+		return new SuccessResult(Messages.UserAdded);
 	}
 
 	@Override
@@ -56,7 +56,7 @@ public class UserManager implements UserService {
 		user.setId(deleteUserRequest.getId());
 		
 		this.userDao.delete(user);
-		return new SuccessResult(Messages.USER + " " + Messages.DELETE);
+		return new SuccessResult(Messages.UserDeleted);
 	}
 
 	@Override
@@ -69,7 +69,7 @@ public class UserManager implements UserService {
 		user.setPassword(updateUserRequest.getPassword());
 		
 		this.userDao.save(user);
-		return new SuccessResult(Messages.USER + " " + Messages.UPDATE);
+		return new SuccessResult(Messages.UserUpdated);
 	}
 
 }

@@ -68,7 +68,7 @@ public class MaintenanceManager implements MaintenanceService {
 		
 		
 		this.maintenanceDao.save(maintenance);
-		return new SuccessResult(Messages.ADD);
+		return new SuccessResult(Messages.MaintenanceAdded);
 	}
 
 	@Override
@@ -77,7 +77,7 @@ public class MaintenanceManager implements MaintenanceService {
 		maintenance.setMaintenanceId(deleteMaintenanceRequest.getMaintenanceId());
 		
 		this.maintenanceDao.delete(maintenance);
-		return new SuccessResult(Messages.DELETE);
+		return new SuccessResult(Messages.MaintenanceDeleted);
 	}
 
 	@Override
@@ -92,7 +92,7 @@ public class MaintenanceManager implements MaintenanceService {
 		maintenance.setCar(car);
 		
 		this.maintenanceDao.save(maintenance);
-		return new SuccessResult(Messages.UPDATE);
+		return new SuccessResult(Messages.MaintenanceUpdated);
 	}
 	
 	private Result checkIsTheCarRented(int carId) {

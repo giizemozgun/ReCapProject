@@ -65,6 +65,7 @@ public class Car {
 	private Color color;
 	
 	@OneToMany(mappedBy = "car")
+	@JsonIgnore
 	private List<CarImage> carImages;
 	
 	@OneToMany(mappedBy="car")
