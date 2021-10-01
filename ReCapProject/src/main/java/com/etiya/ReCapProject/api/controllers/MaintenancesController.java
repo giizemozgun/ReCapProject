@@ -17,9 +17,9 @@ import com.etiya.ReCapProject.core.utilities.results.DataResult;
 import com.etiya.ReCapProject.core.utilities.results.Result;
 import com.etiya.ReCapProject.entities.concretes.Maintenance;
 import com.etiya.ReCapProject.entities.requests.CarReturnedFromMaintenanceRequest;
-import com.etiya.ReCapProject.entities.requests.CreateMaintenanceRequest;
-import com.etiya.ReCapProject.entities.requests.DeleteMaintenanceRequest;
-import com.etiya.ReCapProject.entities.requests.UpdateMaintenanceRequest;
+import com.etiya.ReCapProject.entities.requests.create.CreateMaintenanceRequest;
+import com.etiya.ReCapProject.entities.requests.delete.DeleteMaintenanceRequest;
+import com.etiya.ReCapProject.entities.requests.update.UpdateMaintenanceRequest;
 
 @RestController
 @RequestMapping("/api/maintenances")

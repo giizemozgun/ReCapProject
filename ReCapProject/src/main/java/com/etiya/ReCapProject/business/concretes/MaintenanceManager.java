@@ -20,9 +20,9 @@ import com.etiya.ReCapProject.dataAccess.abstracts.RentalDao;
 import com.etiya.ReCapProject.entities.concretes.Car;
 import com.etiya.ReCapProject.entities.concretes.Maintenance;
 import com.etiya.ReCapProject.entities.requests.CarReturnedFromMaintenanceRequest;
-import com.etiya.ReCapProject.entities.requests.CreateMaintenanceRequest;
-import com.etiya.ReCapProject.entities.requests.DeleteMaintenanceRequest;
-import com.etiya.ReCapProject.entities.requests.UpdateMaintenanceRequest;
+import com.etiya.ReCapProject.entities.requests.create.CreateMaintenanceRequest;
+import com.etiya.ReCapProject.entities.requests.delete.DeleteMaintenanceRequest;
+import com.etiya.ReCapProject.entities.requests.update.UpdateMaintenanceRequest;
 
 @Service
 public class MaintenanceManager implements MaintenanceService {

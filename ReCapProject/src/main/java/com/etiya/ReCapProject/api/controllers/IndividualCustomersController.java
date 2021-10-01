@@ -16,9 +16,9 @@ import com.etiya.ReCapProject.business.abstracts.IndividualCustomerService;
 import com.etiya.ReCapProject.core.utilities.results.DataResult;
 import com.etiya.ReCapProject.core.utilities.results.Result;
 import com.etiya.ReCapProject.entities.concretes.IndividualCustomer;
-import com.etiya.ReCapProject.entities.requests.CreateIndividualCustomerRequest;
-import com.etiya.ReCapProject.entities.requests.DeleteIndividualCustomerRequest;
-import com.etiya.ReCapProject.entities.requests.UpdateIndividualCustomerRequest;
+import com.etiya.ReCapProject.entities.requests.create.CreateIndividualCustomerRequest;
+import com.etiya.ReCapProject.entities.requests.delete.DeleteIndividualCustomerRequest;
+import com.etiya.ReCapProject.entities.requests.update.UpdateIndividualCustomerRequest;
 
 @RestController
 @RequestMapping("/api/individualcustomers")

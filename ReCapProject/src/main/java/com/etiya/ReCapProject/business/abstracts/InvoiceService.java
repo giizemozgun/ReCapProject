@@ -5,12 +5,10 @@ import java.util.List;
 import com.etiya.ReCapProject.core.utilities.results.DataResult;
 import com.etiya.ReCapProject.core.utilities.results.Result;
 import com.etiya.ReCapProject.entities.concretes.Invoice;
-
-import com.etiya.ReCapProject.entities.requests.CreateInvoiceRequest;
-
-import com.etiya.ReCapProject.entities.requests.DeleteInvoiceRequest;
 import com.etiya.ReCapProject.entities.requests.InvoiceBetweenDateRequest;
-import com.etiya.ReCapProject.entities.requests.UpdateInvoiceRequest;
+import com.etiya.ReCapProject.entities.requests.create.CreateInvoiceRequest;
+import com.etiya.ReCapProject.entities.requests.delete.DeleteInvoiceRequest;
+import com.etiya.ReCapProject.entities.requests.update.UpdateInvoiceRequest;
 
 
 public interface InvoiceService  {

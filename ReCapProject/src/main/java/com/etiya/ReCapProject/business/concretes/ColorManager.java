@@ -15,9 +15,9 @@ import com.etiya.ReCapProject.core.utilities.results.SuccessDataResult;
 import com.etiya.ReCapProject.core.utilities.results.SuccessResult;
 import com.etiya.ReCapProject.dataAccess.abstracts.ColorDao;
 import com.etiya.ReCapProject.entities.concretes.Color;
-import com.etiya.ReCapProject.entities.requests.CreateColorRequest;
-import com.etiya.ReCapProject.entities.requests.DeleteColorRequest;
-import com.etiya.ReCapProject.entities.requests.UpdateColorRequest;
+import com.etiya.ReCapProject.entities.requests.create.CreateColorRequest;
+import com.etiya.ReCapProject.entities.requests.delete.DeleteColorRequest;
+import com.etiya.ReCapProject.entities.requests.update.UpdateColorRequest;
 
 @Service
 public class ColorManager implements ColorService{

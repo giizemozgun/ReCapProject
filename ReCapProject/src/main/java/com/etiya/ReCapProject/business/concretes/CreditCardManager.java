@@ -18,9 +18,9 @@ import com.etiya.ReCapProject.core.utilities.results.ErrorResult;
 import com.etiya.ReCapProject.dataAccess.abstracts.CreditCardDao;
 import com.etiya.ReCapProject.entities.concretes.CreditCard;
 import com.etiya.ReCapProject.entities.concretes.Customer;
-import com.etiya.ReCapProject.entities.requests.CreateCreditCardRequest;
-import com.etiya.ReCapProject.entities.requests.DeleteCreditCardRequest;
-import com.etiya.ReCapProject.entities.requests.UpdateCreditCardRequest;
+import com.etiya.ReCapProject.entities.requests.create.CreateCreditCardRequest;
+import com.etiya.ReCapProject.entities.requests.delete.DeleteCreditCardRequest;
+import com.etiya.ReCapProject.entities.requests.update.UpdateCreditCardRequest;
 
 @Service
 public class CreditCardManager implements CreditCardService {

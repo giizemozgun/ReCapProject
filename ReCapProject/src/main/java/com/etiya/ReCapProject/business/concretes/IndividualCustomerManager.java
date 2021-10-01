@@ -16,9 +16,9 @@ import com.etiya.ReCapProject.core.utilities.results.SuccessResult;
 import com.etiya.ReCapProject.dataAccess.abstracts.IndividualCustomerDao;
 import com.etiya.ReCapProject.dataAccess.abstracts.UserDao;
 import com.etiya.ReCapProject.entities.concretes.IndividualCustomer;
-import com.etiya.ReCapProject.entities.requests.CreateIndividualCustomerRequest;
-import com.etiya.ReCapProject.entities.requests.DeleteIndividualCustomerRequest;
-import com.etiya.ReCapProject.entities.requests.UpdateIndividualCustomerRequest;
+import com.etiya.ReCapProject.entities.requests.create.CreateIndividualCustomerRequest;
+import com.etiya.ReCapProject.entities.requests.delete.DeleteIndividualCustomerRequest;
+import com.etiya.ReCapProject.entities.requests.update.UpdateIndividualCustomerRequest;
 
 @Service
 public class IndividualCustomerManager implements IndividualCustomerService {

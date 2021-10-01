@@ -14,9 +14,9 @@ import com.etiya.ReCapProject.core.utilities.results.SuccessResult;
 import com.etiya.ReCapProject.dataAccess.abstracts.DamageRecordDao;
 import com.etiya.ReCapProject.entities.concretes.Car;
 import com.etiya.ReCapProject.entities.concretes.DamageRecord;
-import com.etiya.ReCapProject.entities.requests.CreateDamageRecordRequest;
-import com.etiya.ReCapProject.entities.requests.DeleteDamageRecordRequest;
-import com.etiya.ReCapProject.entities.requests.UpdateDamageRecordRequest;
+import com.etiya.ReCapProject.entities.requests.create.CreateDamageRecordRequest;
+import com.etiya.ReCapProject.entities.requests.delete.DeleteDamageRecordRequest;
+import com.etiya.ReCapProject.entities.requests.update.UpdateDamageRecordRequest;
 
 @Service
 public class DamageRecordManager implements DamageRecordService {

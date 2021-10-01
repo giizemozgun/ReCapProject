@@ -13,9 +13,9 @@ import com.etiya.ReCapProject.core.utilities.results.SuccessDataResult;
 import com.etiya.ReCapProject.core.utilities.results.SuccessResult;
 import com.etiya.ReCapProject.dataAccess.abstracts.UserDao;
 import com.etiya.ReCapProject.entities.concretes.ApplicationUser;
-import com.etiya.ReCapProject.entities.requests.CreateUserRequest;
-import com.etiya.ReCapProject.entities.requests.DeleteUserRequest;
-import com.etiya.ReCapProject.entities.requests.UpdateUserRequest;
+import com.etiya.ReCapProject.entities.requests.create.CreateUserRequest;
+import com.etiya.ReCapProject.entities.requests.delete.DeleteUserRequest;
+import com.etiya.ReCapProject.entities.requests.update.UpdateUserRequest;
 @Service
 public class UserManager implements UserService {
 

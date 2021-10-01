@@ -16,9 +16,9 @@ import com.etiya.ReCapProject.business.abstracts.DamageRecordService;
 import com.etiya.ReCapProject.core.utilities.results.DataResult;
 import com.etiya.ReCapProject.core.utilities.results.Result;
 import com.etiya.ReCapProject.entities.concretes.DamageRecord;
-import com.etiya.ReCapProject.entities.requests.CreateDamageRecordRequest;
-import com.etiya.ReCapProject.entities.requests.DeleteDamageRecordRequest;
-import com.etiya.ReCapProject.entities.requests.UpdateDamageRecordRequest;
+import com.etiya.ReCapProject.entities.requests.create.CreateDamageRecordRequest;
+import com.etiya.ReCapProject.entities.requests.delete.DeleteDamageRecordRequest;
+import com.etiya.ReCapProject.entities.requests.update.UpdateDamageRecordRequest;
 
 @RestController
 @RequestMapping("/api/damagerecords")

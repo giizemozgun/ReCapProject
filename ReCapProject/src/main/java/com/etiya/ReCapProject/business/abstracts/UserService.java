@@ -5,9 +5,9 @@ import java.util.List;
 import com.etiya.ReCapProject.core.utilities.results.DataResult;
 import com.etiya.ReCapProject.core.utilities.results.Result;
 import com.etiya.ReCapProject.entities.concretes.ApplicationUser;
-import com.etiya.ReCapProject.entities.requests.CreateUserRequest;
-import com.etiya.ReCapProject.entities.requests.DeleteUserRequest;
-import com.etiya.ReCapProject.entities.requests.UpdateUserRequest;
+import com.etiya.ReCapProject.entities.requests.create.CreateUserRequest;
+import com.etiya.ReCapProject.entities.requests.delete.DeleteUserRequest;
+import com.etiya.ReCapProject.entities.requests.update.UpdateUserRequest;
 
 public interface UserService {
 	
