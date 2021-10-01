@@ -82,9 +82,6 @@ public class CarImageManager implements CarImageService{
 		carImage.setDate(date);
 		carImage.setImagePath(myFile.toString());
 				
-		
-		
-		
 		this.carImageDao.save(carImage);
 		return new SuccessResult(Messages.CarImageAdded) ;
 	}
@@ -121,13 +118,13 @@ public class CarImageManager implements CarImageService{
 		fileOutpuStream.write(updateCarImageRequest.getFile().getBytes());
 		fileOutpuStream.close();
 	
-		Car car = new Car();
-		car.setCarId(updateCarImageRequest.getCarId());
+	
 		
-		CarImage carImage = new CarImage();
+		CarImage carImage = this.carImageDao.getById(updateCarImageRequest.getId());
+		carImage.setId(updateCarImageRequest.getId());
 		carImage.setImagePath(myFile.toString());
 		carImage.setDate(date);
-		carImage.setCar(car);
+	
 				
 		this.carImageDao.save(carImage);
 		return new SuccessResult(Messages.CarImageUpdated) ;

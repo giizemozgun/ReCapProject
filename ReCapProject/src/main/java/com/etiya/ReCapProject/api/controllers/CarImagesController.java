@@ -37,10 +37,10 @@ public class CarImagesController {
 	@PostMapping("/add")
 	public Result add(@RequestParam("carId") int carId, MultipartFile file) throws IOException {
 		
-		CreateCarImageRequest creataCarImageRequest = new CreateCarImageRequest();
-		creataCarImageRequest.setCarId(carId);
-		creataCarImageRequest.setFile(file);
-		return this.carImageService.add(creataCarImageRequest);
+		CreateCarImageRequest createCarImageRequest = new CreateCarImageRequest();
+		createCarImageRequest.setCarId(carId);
+		createCarImageRequest.setFile(file);
+		return this.carImageService.add(createCarImageRequest);
 	}
 	
 	@GetMapping("/getall")
@@ -55,9 +55,9 @@ public class CarImagesController {
 	}
 	
 	@PostMapping("/update")
-	public Result update(@RequestParam("carId") int carId, MultipartFile file) throws IOException {
+	public Result update(@RequestParam("CarImageId") int id, MultipartFile file) throws IOException {
 		UpdateCarImageRequest updateCarImageRequest = new UpdateCarImageRequest();
-		updateCarImageRequest.setCarId(carId);
+		updateCarImageRequest.setId(id);	
 		updateCarImageRequest.setFile(file);
 		return this.carImageService.update(updateCarImageRequest);
 	}
