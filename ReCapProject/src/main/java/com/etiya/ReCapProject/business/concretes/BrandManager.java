@@ -43,7 +43,7 @@ public class BrandManager implements BrandService{
 	@Override
 	public Result add(CreateBrandRequest createBrandrequest) {	
 		
-		var result = BusinessRules.run(checkBrandName(createBrandrequest.getBrandName()));
+		var result = BusinessRules.run(checkBrandNameDuplication(createBrandrequest.getBrandName()));
 
 		if (result != null) {
 			return result;
@@ -70,6 +70,13 @@ public class BrandManager implements BrandService{
 
 	@Override
 	public Result update(UpdateBrandRequest updateBrandrequest) {
+		
+		var result = BusinessRules.run(checkBrandNameDuplication(updateBrandrequest.getBrandName()));
+
+		if (result != null) {
+			return result;
+		}
+		
 		Brand brand = new Brand();
 		brand.setBrandName(updateBrandrequest.getBrandName());
 		brand.setBrandId(updateBrandrequest.getBrandId());
@@ -78,12 +85,12 @@ public class BrandManager implements BrandService{
 		return new SuccessResult(Messages.BrandUpdated);
 	}
 	
-	private Result checkBrandName(String brandName) {
+	private Result checkBrandNameDuplication(String brandName) {
 
 		if (this.brandDao.existsByBrandName(brandName)) {
 			return new ErrorResult(Messages.ExistBrand);
 		}
-		return new SuccessResult(Messages.Success);
+		return new SuccessResult();
 
 	}
 	

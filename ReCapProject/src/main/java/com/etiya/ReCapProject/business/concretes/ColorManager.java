@@ -43,7 +43,7 @@ public class ColorManager implements ColorService{
 	@Override
 	public Result add(CreateColorRequest createColorRequest) {
 		
-		var result = BusinessRules.run(checkColorName(createColorRequest.getColorName()));
+		var result = BusinessRules.run(checkColorNameDuplication(createColorRequest.getColorName()));
 
 		if (result != null) {
 			return result;
@@ -71,6 +71,12 @@ public class ColorManager implements ColorService{
 	@Override
 	public Result update(UpdateColorRequest updateColorRequest) {
 		
+		var result = BusinessRules.run(checkColorNameDuplication(updateColorRequest.getColorName()));
+
+		if (result != null) {
+			return result;
+		}
+		
 		Color color = new Color();
 		color.setColorId(updateColorRequest.getColorId());
 		color.setColorName(updateColorRequest.getColorName());
@@ -79,12 +85,12 @@ public class ColorManager implements ColorService{
 		return new SuccessResult(Messages.ColorUpdated);
 	}
 	
-	private Result checkColorName(String colorName) {
+	private Result checkColorNameDuplication(String colorName) {
 
 		if (this.colorDao.existsByColorName(colorName)) {
 			return new ErrorResult(Messages.ExistColor);
 		}
-		return new SuccessResult(Messages.Success);
+		return new SuccessResult();
 
 	}
 	
