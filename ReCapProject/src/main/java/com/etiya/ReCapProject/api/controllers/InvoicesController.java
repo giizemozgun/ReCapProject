@@ -37,17 +37,12 @@ public class InvoicesController {
 		this.invoiceService = invoiceService;
 	}
 
-	@PostMapping("/addforindividulacustomer")
-	public Result addForIndividualCustomer(@Valid @RequestBody CreateInvoiceRequest createInvoiceRequest ) {
+	@PostMapping("/add")
+	public Result add(@Valid @RequestBody CreateInvoiceRequest createInvoiceRequest ) {
 		
-	return this.invoiceService.addForIndividualCustomer(createInvoiceRequest);
+	return this.invoiceService.add(createInvoiceRequest);
 	}
-	
-	@PostMapping("/addforcorporatecustomer")
-	public Result addForCorporateCustomer(@Valid @RequestBody CreateInvoiceRequest createInvoiceRequest) {
-		
-	return this.invoiceService.addForCorporateCustomer(createInvoiceRequest);
-	}
+
 	
 	@GetMapping("/getall")
 	public DataResult<List<Invoice>> getAll(){
@@ -65,14 +60,9 @@ public class InvoicesController {
 		return this.invoiceService.getByCustomerId(customerId);
 	}
 	
-	@PostMapping("/updateforindividualcustomer")
-	public Result updateForIndividualCustomer(@Valid @RequestBody UpdateInvoiceRequest updateInvoiceRequest) {
-		return this.invoiceService.updateForIndividualCustomer(updateInvoiceRequest);
-	}
-	
-	@PostMapping("/updateforcorporatecustomer")
-	public Result updateForCorporateCustomer(@Valid @RequestBody UpdateInvoiceRequest updateInvoiceRequest) {
-		return this.invoiceService.updateForCorporateCustomer(updateInvoiceRequest);
+	@PostMapping("/update")
+	public Result update(@Valid @RequestBody UpdateInvoiceRequest updateInvoiceRequest) {
+		return this.invoiceService.update(updateInvoiceRequest);
 	}
 	
 	@PutMapping("/delete")

@@ -17,12 +17,10 @@ public interface InvoiceService  {
 
 	DataResult<List<Invoice>> getAll();
 	DataResult<Invoice> getById(int id);
-	Result addForIndividualCustomer(CreateInvoiceRequest createInvoiceRequest);
-	Result addForCorporateCustomer(CreateInvoiceRequest createInvoiceRequest);
+	Result add(CreateInvoiceRequest createInvoiceRequest);
 	Result delete(DeleteInvoiceRequest deleteInvoiceRequest);
-	
-	Result updateForCorporateCustomer(UpdateInvoiceRequest updateInvoiceRequest);
-	Result updateForIndividualCustomer(UpdateInvoiceRequest updateInvoiceRequest);
+	Result update(UpdateInvoiceRequest updateInvoiceRequest);
+
 	
 	
 	DataResult<List<Invoice>> getByCustomerId(int customerId);

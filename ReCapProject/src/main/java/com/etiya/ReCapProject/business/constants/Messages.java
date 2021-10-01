@@ -56,6 +56,7 @@ public class Messages {
     public static final String CreditCardDeleted = "Kredi kartı bilgisi silindi";
     public static final String CreditCardUpdated = "Kredi kartı bilgisi güncellendi";
     public static final String InvalidCreditCard = "Geçersiz kredi kartı";
+    public static final String CreditCardLimitExceeded = "Kredi kart limiti aşıldı";
     
     public static final String PaymentReceived = "Ödeme alındı";
     

@@ -11,4 +11,6 @@ public interface PaymentService {
 	
 	DataResult<List<Payment>> getAll();
 	Result add(CreatePaymentRequest createPaymentRequest);
+	
+	
 }	

@@ -52,9 +52,6 @@ public class CreditCard {
 	@JoinColumn(name = "id")
 	private Customer customer;
 	
-	@OneToMany(mappedBy = "creditCard")
-	@JsonIgnore
-	private List<Payment> payments;
 	
 	
 }

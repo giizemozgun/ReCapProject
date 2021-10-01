@@ -1,27 +1,32 @@
 package com.etiya.ReCapProject.entities.requests;
 
-
 import javax.validation.constraints.NotNull;
 
-
 import lombok.AllArgsConstructor;
-import lombok.Getter;
+import lombok.Data;
 import lombok.NoArgsConstructor;
 
-@Getter
+@Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class CreateInvoiceRequest {
-	
-	@NotNull
-	private int invoiceNumber;	
-	
-	@NotNull
-	private int rentalId;
-	
-	
-	
-	
+public class PosServiceRequest {
 
+	
+	@NotNull
+	private String name;
+	
+	@NotNull
+	private String cardNumber;
+	
+	@NotNull
+	private String expiryDate;
+	
+	@NotNull
+	private String cvv;
+	
+	@NotNull
+	private double paymentAmount;
+	
+	
 	
 }

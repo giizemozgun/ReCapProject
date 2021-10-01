@@ -16,4 +16,6 @@ public class CreatePaymentRequest {
 	
 	private int creditCardId;
 	
+	private double totalAmount;
+	
 }

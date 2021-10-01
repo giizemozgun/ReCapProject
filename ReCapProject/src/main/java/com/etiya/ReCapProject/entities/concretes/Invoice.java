@@ -2,7 +2,6 @@ package com.etiya.ReCapProject.entities.concretes;
 
 import java.util.Date;
 
-
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -11,6 +10,7 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
+
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
 import lombok.AllArgsConstructor;
@@ -42,8 +42,9 @@ public class Invoice {
 	@Column(name="total_amount")
 	private double totalAmount;
 
-	
 	@OneToOne
 	@JoinColumn(name="rental_id")
 	private Rental rental;
+	
+	
 }

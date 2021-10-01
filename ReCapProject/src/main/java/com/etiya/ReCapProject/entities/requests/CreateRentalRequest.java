@@ -2,7 +2,7 @@ package com.etiya.ReCapProject.entities.requests;
 
 import java.util.Date;
 
-
+import com.etiya.ReCapProject.entities.dtos.CreditCardDetailDto;
 import com.sun.istack.NotNull;
 
 import lombok.AllArgsConstructor;
@@ -27,4 +27,11 @@ public class CreateRentalRequest {
 	private Date returnDate;
 	
 	private String returnLocation;
+	
+	private CreditCardDetailDto creditCardDetailDto;
+	
+	private boolean isCardSaved;
+	
+	private int creditCardId;
+	
 }
