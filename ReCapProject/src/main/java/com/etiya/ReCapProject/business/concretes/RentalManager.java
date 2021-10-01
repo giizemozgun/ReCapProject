@@ -102,6 +102,10 @@ public class RentalManager implements RentalService {
 		
 		this.rentalDao.save(rental);
 		
+		if(createRentalRequest.isCardSaved()) {
+			this.cardInformationSavedIfCardIsSavedIsTrue(createRentalRequest.getCreditCardDetailDto(), createRentalRequest.getCustomerId());
+		}
+		
 		car.setCity(rental.getReturnLocation());
 		car.setAvailable(false);
 		this.carDao.save(car);
@@ -143,6 +147,9 @@ public class RentalManager implements RentalService {
 		
 		this.rentalDao.save(rental);
 		
+		if(createRentalRequest.isCardSaved()) {
+			this.cardInformationSavedIfCardIsSavedIsTrue(createRentalRequest.getCreditCardDetailDto(), createRentalRequest.getCustomerId());
+		}
 		
 		
 		car.setCity(rental.getReturnLocation());
@@ -316,7 +323,17 @@ public class RentalManager implements RentalService {
 		
 		
 	}
-	
+	private Result cardInformationSavedIfCardIsSavedIsTrue(CreditCardDetailDto creditCardDetailDto, int customerId) {
+
+		CreateCreditCardRequest createCreditCardRequest = new CreateCreditCardRequest();
+		createCreditCardRequest.setName(creditCardDetailDto.getName());
+		createCreditCardRequest.setCardNumber(creditCardDetailDto.getCardNumber());
+		createCreditCardRequest.setExpiryDate(creditCardDetailDto.getExpiryDate());
+		createCreditCardRequest.setCvv(creditCardDetailDto.getCvv());
+		createCreditCardRequest.setCustomerId(customerId);
+
+		return new SuccessResult(this.creditCardService.add(createCreditCardRequest).getMessage());
+	}
 	
 
 	
