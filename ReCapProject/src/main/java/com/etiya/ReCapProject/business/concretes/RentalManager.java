@@ -1,6 +1,7 @@
 package com.etiya.ReCapProject.business.concretes;
 
 import java.time.temporal.ChronoUnit;
+import java.util.ArrayList;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -105,6 +106,7 @@ public class RentalManager implements RentalService {
 		rental.setReturnLocation(createRentalRequest.getReturnLocation());
 		rental.setPickUpKm(car.getKm());
 		rental.setTotalAmount(calculateTotalAmount(createRentalRequest, 500));
+		rental.setAdditionalServices(this.convertFromAdditionalServiceDto(createRentalRequest.getAdditionalServiceDtos()));
 		
 		this.rentalDao.save(rental);
 		
@@ -149,6 +151,7 @@ public class RentalManager implements RentalService {
 		rental.setReturnLocation(createRentalRequest.getReturnLocation());
 		rental.setPickUpKm(car.getKm());
 		rental.setTotalAmount(calculateTotalAmount(createRentalRequest, 500));
+		rental.setAdditionalServices(this.convertFromAdditionalServiceDto(createRentalRequest.getAdditionalServiceDtos()));
 			
 		
 		this.rentalDao.save(rental);
@@ -191,6 +194,7 @@ public class RentalManager implements RentalService {
 		rental.setPickUpLocation(car.getCity());
 		rental.setReturnLocation(updateRentalRequest.getReturnLocation());
 		rental.setPickUpKm(car.getKm());
+		rental.setAdditionalServices(this.convertFromAdditionalServiceDto(updateRentalRequest.getAdditionalServiceDtos()));
 
 		var result = BusinessRules.run(checkReturnFromRental(rental.getCar().getCarId()),
 				checkFindexPointForIndividualCustomer(customer, updateRentalRequest.getCarId()),
@@ -225,6 +229,7 @@ public class RentalManager implements RentalService {
 		rental.setPickUpLocation(car.getCity());
 		rental.setReturnLocation(updateRentalRequest.getReturnLocation());
 		rental.setPickUpKm(car.getKm());
+		rental.setAdditionalServices(this.convertFromAdditionalServiceDto(updateRentalRequest.getAdditionalServiceDtos()));
 		
 		var result = BusinessRules.run(checkReturnFromRental(rental.getCar().getCarId()),
 				checkFindexPointForCorporateCustomer(customer, updateRentalRequest.getCarId()),
@@ -355,6 +360,14 @@ public class RentalManager implements RentalService {
 		createCreditCardRequest.setCustomerId(customerId);
 
 		return new SuccessResult(this.creditCardService.add(createCreditCardRequest).getMessage());
+	}
+	
+	private List<AdditionalService> convertFromAdditionalServiceDto(List<AdditionalServiceDto> additionalServiceDtos  ){
+		List<AdditionalService> additionalServices = new ArrayList<AdditionalService>();          
+		for (AdditionalServiceDto additionalServicedto : additionalServiceDtos ) {             
+			additionalServices.add(this.additionalServiceService.getById(additionalServicedto.getId()).getData());         
+			}
+		return additionalServices;
 	}
 	
 	

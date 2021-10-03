@@ -1,8 +1,11 @@
 package com.etiya.ReCapProject.entities.requests.update;
 
 import java.util.Date;
+import java.util.List;
 
 import javax.validation.constraints.NotNull;
+
+import com.etiya.ReCapProject.entities.dtos.AdditionalServiceDto;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -29,5 +32,7 @@ public class UpdateRentalRequest {
 
 	@NotNull
 	private String returnLocation;
+	
+	private List<AdditionalServiceDto> additionalServiceDtos;
 	
 }
