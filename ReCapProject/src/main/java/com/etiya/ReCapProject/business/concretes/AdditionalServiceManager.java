@@ -51,7 +51,7 @@ public class AdditionalServiceManager implements AdditionalServiceService{
 		
 		AdditionalService additionalService = new AdditionalService();
 		additionalService.setName(createAdditionalServiceRequest.getName());
-		additionalService.setPrice(createAdditionalServiceRequest.getPrice());
+		additionalService.setDailyPrice(createAdditionalServiceRequest.getDailyPrice());
 		additionalService.setDescription(createAdditionalServiceRequest.getDescription());
 		
 		this.additionalServiceDao.save(additionalService);
@@ -73,7 +73,7 @@ public class AdditionalServiceManager implements AdditionalServiceService{
 		AdditionalService additionalService = new AdditionalService();
 		additionalService.setId(updateAdditionalServiceRequest.getId());
 		additionalService.setName(updateAdditionalServiceRequest.getName());
-		additionalService.setPrice(updateAdditionalServiceRequest.getPrice());
+		additionalService.setDailyPrice(updateAdditionalServiceRequest.getDailyPrice());
 		additionalService.setDescription(updateAdditionalServiceRequest.getDescription());
 		
 		this.additionalServiceDao.save(additionalService);

@@ -19,7 +19,7 @@ public class CreateAdditionalServiceRequest {
 	private String description;
 	
 	@NotNull
-	private int price;
+	private double dailyPrice;
 	
 	
 }

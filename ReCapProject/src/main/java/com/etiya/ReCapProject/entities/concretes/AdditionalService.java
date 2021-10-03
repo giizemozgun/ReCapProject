@@ -33,8 +33,8 @@ public class AdditionalService {
 	@Column(name = "description")
 	private String description;
 	
-	@Column(name = "price")
-	private int price;
+	@Column(name = "daily_price")
+	private double dailyPrice;
 	
 	@ManyToOne
 	@JsonIgnore

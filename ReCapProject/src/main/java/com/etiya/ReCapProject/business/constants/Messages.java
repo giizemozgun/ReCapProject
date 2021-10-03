@@ -23,7 +23,7 @@ public class Messages {
     public static final String CarImageAdded = "Araba resmi eklendi";
     public static final String CarImageDeleted = "Araba resmi silindi";
     public static final String CarImageUpdated = "Araba resmi güncellendi";
-    public static final String FormatError = "Fotoğraflarınızı png formatında yükleyiniz";
+    public static final String FormatError = "Lütfen fotoğraflarınızı png,jpg veya jpeg formatında yükleyiniz";
     
     
     public static final String CustomerAdded = "Müşteri eklendi";
@@ -51,9 +51,9 @@ public class Messages {
     public static final String DamageRecordDeleted = "Arabanın hasar bilgisi silindi";
     public static final String DamageRecordUpdated = "Arabanın hasar bilgisi güncellendi";
     
-    public static final String AdditionalServiceAdded = "Arabaya ek servis eklendi";
-    public static final String AdditionalServiceDeleted = "Arabanın ek servisi silindi";
-    public static final String AdditionalServiceUpdated = "Arabanın ek servisi güncellendi";
+    public static final String AdditionalServiceAdded = "Ek servis eklendi";
+    public static final String AdditionalServiceDeleted = "Ek servis silindi";
+    public static final String AdditionalServiceUpdated = "Ek servis güncellendi";
     public static final String ExistAdditionalService = "Bu ek hizmet zaten var";
    
     

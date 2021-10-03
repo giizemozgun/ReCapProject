@@ -53,14 +53,14 @@ public class InvoiceManager implements InvoiceService {
 
 		long totalRentalDay = ChronoUnit.DAYS.between(rental.getRentDate().toInstant(),                 
 				rental.getReturnDate().toInstant());          
-		double totalAmount = rental.getCar().getDailyPrice() * totalRentalDay;         
+		double totalAmount = rental.getTotalAmount();         
 		
 		Invoice invoice = new Invoice();
 		invoice.setInvoiceNumber(createInvoiceRequest.getInvoiceNumber());
 		invoice.setInvoiceDate(now);
 		invoice.setTotalRentalDay((int)totalRentalDay);
 		invoice.setTotalAmount(totalAmount);
-		invoice.setRental(this.rentalService.getById(createInvoiceRequest.getRentalId()).getData());
+		invoice.setRental(rental);
 
 		this.invoiceDao.save(invoice);
 		return new SuccessResult(Messages.InvoiceAdded);

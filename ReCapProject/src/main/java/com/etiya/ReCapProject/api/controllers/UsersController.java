@@ -15,7 +15,7 @@ import org.springframework.web.bind.annotation.RestController;
 import com.etiya.ReCapProject.business.abstracts.UserService;
 import com.etiya.ReCapProject.core.utilities.results.DataResult;
 import com.etiya.ReCapProject.core.utilities.results.Result;
-import com.etiya.ReCapProject.entities.concretes.ApplicationUser;
+import com.etiya.ReCapProject.entities.abstracts.ApplicationUser;
 import com.etiya.ReCapProject.entities.requests.create.CreateUserRequest;
 import com.etiya.ReCapProject.entities.requests.delete.DeleteUserRequest;
 import com.etiya.ReCapProject.entities.requests.update.UpdateUserRequest;

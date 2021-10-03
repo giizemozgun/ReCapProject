@@ -2,7 +2,7 @@ package com.etiya.ReCapProject.dataAccess.abstracts;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 
-import com.etiya.ReCapProject.entities.concretes.ApplicationUser;
+import com.etiya.ReCapProject.entities.abstracts.ApplicationUser;
 
 
 public interface UserDao extends JpaRepository<ApplicationUser, Integer> {

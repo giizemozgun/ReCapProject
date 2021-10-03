@@ -1,4 +1,4 @@
-package com.etiya.ReCapProject.entities.concretes;
+package com.etiya.ReCapProject.entities.abstracts;
 
 
 import java.util.List;
@@ -11,6 +11,8 @@ import javax.persistence.Id;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
+import com.etiya.ReCapProject.entities.concretes.CreditCard;
+import com.etiya.ReCapProject.entities.concretes.Rental;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 

@@ -14,6 +14,7 @@ import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
+import com.etiya.ReCapProject.entities.abstracts.Customer;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.sun.istack.Nullable;
 
@@ -54,6 +55,9 @@ public class Rental {
 	
 	@Column(name="return_km")
 	private int returnKm;
+	
+	@Column(name="total_amount")
+	private int totalAmount;
 	
 	@ManyToOne
 	@JoinColumn(name = "customer_id")

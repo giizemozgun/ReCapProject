@@ -154,7 +154,9 @@ public class CarImageManager implements CarImageService{
 		
 		if(checkCarImageIsNull(file).isSuccess()) {
 			
-		if(!file.getContentType().substring(file.getContentType().indexOf("/")+1).equals("png")) {
+		if(!file.getContentType().substring(file.getContentType().indexOf("/")+1).equals("png") && 
+			!file.getContentType().substring(file.getContentType().indexOf("/")+1).equals("jpg")&&
+			!file.getContentType().substring(file.getContentType().indexOf("/")+1).equals("jpeg")) {
 			System.out.println(file.getContentType());
 			return new ErrorResult(Messages.FormatError);
 			}
