@@ -28,5 +28,7 @@ public interface CarService {
 	
 	DataResult<List<Car>> getByCity(String city);
 	
+	DataResult<CarDetailDto> getCarDetailByCarId(int carId);
+	
 
 }

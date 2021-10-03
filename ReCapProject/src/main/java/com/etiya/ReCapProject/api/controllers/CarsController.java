@@ -51,6 +51,11 @@ public class CarsController {
 		return this.carService.getById(carId);
 	}
 	
+	@GetMapping("getcardetailbycarid")
+	public DataResult<CarDetailDto> getCarDetailByCarId(int carId){
+		return this.carService.getCarDetailByCarId(carId);
+	}
+	
 	@PostMapping("/update")
 	public Result update(@Valid @RequestBody UpdateCarRequest updateCarRequest) {
 		return this.carService.update(updateCarRequest);

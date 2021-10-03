@@ -10,8 +10,9 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
+import javax.persistence.JoinTable;
+import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
-import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
 import com.etiya.ReCapProject.entities.abstracts.Customer;
@@ -67,7 +68,10 @@ public class Rental {
 	@JoinColumn(name = "car_id")
 	private Car car;
 	
-	@OneToMany(mappedBy="rental")
+	@ManyToMany()     
+	@JoinTable(name = "rental_additional_services",      
+	joinColumns = @JoinColumn(name = "rental_id"),      
+	inverseJoinColumns = @JoinColumn(name = "additional_service_id"))     
 	private List<AdditionalService> additionalServices;
 
 	

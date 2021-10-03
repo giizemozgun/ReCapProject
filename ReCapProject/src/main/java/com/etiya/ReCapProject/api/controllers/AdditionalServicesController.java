@@ -45,8 +45,8 @@ public class AdditionalServicesController {
 	}
 	
 	@GetMapping("/getById")
-	public DataResult<AdditionalService> getById(int brandId){
-		return this.additionalServiceService.getById(brandId);
+	public DataResult<AdditionalService> getById(int id){
+		return this.additionalServiceService.getById(id);
 	}
 	
 	@PostMapping("/update")

@@ -53,6 +53,19 @@ public class CarManager implements CarService {
 		
 		return new SuccessDataResult<Car>(this.carDao.getById(carId));
 	}
+	
+	@Override
+	public DataResult<CarDetailDto> getCarDetailByCarId(int carId) {
+		Car car = this.carDao.getById(carId);
+		
+		CarDetailDto carDetailDto = new CarDetailDto();
+		carDetailDto.setCarName(car.getCarName());
+		carDetailDto.setBrandName(car.getBrand().getBrandName());
+		carDetailDto.setColorName(car.getColor().getColorName());
+		carDetailDto.setDailyPrice(car.getDailyPrice());
+		
+		return new SuccessDataResult<CarDetailDto>(carDetailDto);
+	}
 
 	@Override
 	public Result add(CreateCarRequest createCarRequest) {
@@ -119,6 +132,8 @@ public class CarManager implements CarService {
 	public DataResult<List<CarDetailDto>> getCarDetails() {
 		return new SuccessDataResult<List<CarDetailDto>>(this.carDao.getCarWithBrandAndColorDetails());
 	}
+	
+	
 
 	@Override
 	public DataResult<List<Car>> getByBrandId(int branId) {
@@ -136,6 +151,8 @@ public class CarManager implements CarService {
 	public DataResult<List<Car>> getByCity(String city) {
 		return new SuccessDataResult<List<Car>>(this.carDao.getByCity(city));
 	}
+
+	
 	
 
 	
