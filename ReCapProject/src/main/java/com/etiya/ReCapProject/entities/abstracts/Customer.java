@@ -39,7 +39,6 @@ public class Customer extends ApplicationUser {
 	@JsonIgnore
 	private List<Rental> rentals;
 	
-	
 	@OneToMany(mappedBy= "customer")
 	@JsonIgnore
 	private List<CreditCard> creditCards;

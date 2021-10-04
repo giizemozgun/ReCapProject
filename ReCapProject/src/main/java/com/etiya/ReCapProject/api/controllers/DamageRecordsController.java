@@ -15,7 +15,7 @@ import org.springframework.web.bind.annotation.RestController;
 import com.etiya.ReCapProject.business.abstracts.DamageRecordService;
 import com.etiya.ReCapProject.core.utilities.results.DataResult;
 import com.etiya.ReCapProject.core.utilities.results.Result;
-import com.etiya.ReCapProject.entities.concretes.DamageRecord;
+import com.etiya.ReCapProject.entities.dtos.DamageRecordDetailDto;
 import com.etiya.ReCapProject.entities.requests.create.CreateDamageRecordRequest;
 import com.etiya.ReCapProject.entities.requests.delete.DeleteDamageRecordRequest;
 import com.etiya.ReCapProject.entities.requests.update.UpdateDamageRecordRequest;
@@ -40,13 +40,13 @@ public class DamageRecordsController {
 	}
 	
 	@GetMapping("/getall")
-	public DataResult<List<DamageRecord>> getAll(){
+	public DataResult<List<DamageRecordDetailDto>> getAll(){
 		
 		return this.damageRecordService.getAll();
 	}
 	
 	@GetMapping("/getById")
-	public DataResult<DamageRecord> getById(int id){
+	public DataResult<DamageRecordDetailDto> getById(int id){
 		return this.damageRecordService.getById(id);
 	}
 	

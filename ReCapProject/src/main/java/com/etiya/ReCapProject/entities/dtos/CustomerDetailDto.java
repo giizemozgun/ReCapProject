@@ -7,9 +7,6 @@ import lombok.NoArgsConstructor;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class AdditionalServiceDto {
+public class CustomerDetailDto {
 	private int id;
-	
-
-	
 }

@@ -12,7 +12,6 @@ import lombok.Setter;
 @AllArgsConstructor
 @NoArgsConstructor
 public class UpdateAdditionalServiceRequest {
-
 	@NotNull
 	private int id;
 	
@@ -20,8 +19,8 @@ public class UpdateAdditionalServiceRequest {
 
 	private String description;
 	
-
 	private double dailyPrice;
-	
+
 	private int rentalId;
+	
 }

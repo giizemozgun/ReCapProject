@@ -1,7 +1,9 @@
 package com.etiya.ReCapProject.business.concretes;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
+import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -15,6 +17,7 @@ import com.etiya.ReCapProject.core.utilities.results.SuccessDataResult;
 import com.etiya.ReCapProject.core.utilities.results.SuccessResult;
 import com.etiya.ReCapProject.dataAccess.abstracts.ColorDao;
 import com.etiya.ReCapProject.entities.concretes.Color;
+import com.etiya.ReCapProject.entities.dtos.ColorDetailDto;
 import com.etiya.ReCapProject.entities.requests.create.CreateColorRequest;
 import com.etiya.ReCapProject.entities.requests.delete.DeleteColorRequest;
 import com.etiya.ReCapProject.entities.requests.update.UpdateColorRequest;
@@ -22,22 +25,29 @@ import com.etiya.ReCapProject.entities.requests.update.UpdateColorRequest;
 @Service
 public class ColorManager implements ColorService{
 	private ColorDao colorDao;
+	private ModelMapper modelMapper;
 
 	@Autowired
-	public ColorManager(ColorDao colorDao) {
+	public ColorManager(ColorDao colorDao,ModelMapper modelMapper ) {
 		super();
 		this.colorDao = colorDao;
+		this.modelMapper = modelMapper;
 	}
 
 	@Override
-	public DataResult<List<Color>> getAll() {
+	public DataResult<List<ColorDetailDto>> getAll() {
+		List<Color> colors= this.colorDao.findAll();
+		 
+		 List<ColorDetailDto> colorDetailDtos= colors.stream().map(color -> modelMapper.map(color, ColorDetailDto.class)).collect(Collectors.toList());
+		return new SuccessDataResult<List<ColorDetailDto>>(colorDetailDtos);
+	}
+
+	@Override
+	public DataResult<ColorDetailDto> getById(int colorId) {
+		Color color = this.colorDao.getById(colorId);
+		ColorDetailDto colorDetailDto = modelMapper.map(color,ColorDetailDto.class);
 		
-		return new SuccessDataResult<List<Color>>(this.colorDao.findAll());
-	}
-
-	@Override
-	public DataResult<Color> getById(int colorId) {
-		return new SuccessDataResult<Color>(this.colorDao.getById(colorId));
+		return new SuccessDataResult<ColorDetailDto>(colorDetailDto);
 	}
 
 	@Override
@@ -70,7 +80,6 @@ public class ColorManager implements ColorService{
 
 	@Override
 	public Result update(UpdateColorRequest updateColorRequest) {
-		
 		var result = BusinessRules.run(checkColorNameDuplication(updateColorRequest.getColorName()));
 
 		if (result != null) {

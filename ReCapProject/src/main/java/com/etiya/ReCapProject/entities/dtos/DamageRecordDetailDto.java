@@ -7,9 +7,12 @@ import lombok.NoArgsConstructor;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class AdditionalServiceDto {
+public class DamageRecordDetailDto {
+	
 	private int id;
 	
-
+	private String damageInformation;
+	
+	private String carName;
 	
 }

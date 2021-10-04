@@ -1,7 +1,9 @@
 package com.etiya.ReCapProject.business.concretes;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
+import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -13,6 +15,7 @@ import com.etiya.ReCapProject.core.utilities.results.SuccessDataResult;
 import com.etiya.ReCapProject.core.utilities.results.SuccessResult;
 import com.etiya.ReCapProject.dataAccess.abstracts.UserDao;
 import com.etiya.ReCapProject.entities.abstracts.ApplicationUser;
+import com.etiya.ReCapProject.entities.dtos.ApplicationUserDetailDto;
 import com.etiya.ReCapProject.entities.requests.create.CreateUserRequest;
 import com.etiya.ReCapProject.entities.requests.delete.DeleteUserRequest;
 import com.etiya.ReCapProject.entities.requests.update.UpdateUserRequest;
@@ -20,21 +23,30 @@ import com.etiya.ReCapProject.entities.requests.update.UpdateUserRequest;
 public class UserManager implements UserService {
 
 	private UserDao userDao;
+	private ModelMapper modelMapper;
+	
 	
 	@Autowired
-	public UserManager(UserDao userDao) {
+	public UserManager(UserDao userDao,ModelMapper modelMapper) {
 		super();
 		this.userDao = userDao;
+		this.modelMapper = modelMapper;
 	}
 
 	@Override
-	public DataResult<List<ApplicationUser>> getAll() {
-		return new SuccessDataResult<List<ApplicationUser>>(this.userDao.findAll());
+	public DataResult<List<ApplicationUserDetailDto>> getAll() {
+		List<ApplicationUser> applicationUsers= this.userDao.findAll();
+		 
+		 List<ApplicationUserDetailDto> applicationUserDetailDtos =applicationUsers.stream().map(applicationUser -> modelMapper.map(applicationUser, ApplicationUserDetailDto.class)).collect(Collectors.toList());
+		return new SuccessDataResult<List<ApplicationUserDetailDto>>(applicationUserDetailDtos);
 	}
 
 	@Override
-	public DataResult<ApplicationUser> getById(int userId) {
-		return new SuccessDataResult<ApplicationUser> (this.userDao.getById(userId));
+	public DataResult<ApplicationUserDetailDto> getById(int userId) {
+		ApplicationUser applicationUser = this.userDao.getById(userId);
+		ApplicationUserDetailDto applicationUserDetailDto = modelMapper.map(applicationUser,ApplicationUserDetailDto.class);
+		
+		return new SuccessDataResult<ApplicationUserDetailDto>(applicationUserDetailDto);
 	}
 
 	@Override

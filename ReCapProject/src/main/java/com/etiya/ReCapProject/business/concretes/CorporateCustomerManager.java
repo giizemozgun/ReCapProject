@@ -1,12 +1,13 @@
 package com.etiya.ReCapProject.business.concretes;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
+import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.etiya.ReCapProject.business.abstracts.CorporateCustomerService;
-
 import com.etiya.ReCapProject.business.constants.Messages;
 import com.etiya.ReCapProject.core.business.BusinessRules;
 import com.etiya.ReCapProject.core.utilities.results.DataResult;
@@ -17,6 +18,7 @@ import com.etiya.ReCapProject.core.utilities.results.SuccessResult;
 import com.etiya.ReCapProject.dataAccess.abstracts.CorporateCustomerDao;
 import com.etiya.ReCapProject.dataAccess.abstracts.UserDao;
 import com.etiya.ReCapProject.entities.concretes.CorporateCustomer;
+import com.etiya.ReCapProject.entities.dtos.CorporateCustomerDetailDto;
 import com.etiya.ReCapProject.entities.requests.create.CreateCorporateCustomerRequest;
 import com.etiya.ReCapProject.entities.requests.delete.DeleteCorporateCustomerRequest;
 import com.etiya.ReCapProject.entities.requests.update.UpdateCorporateCustomerRequest;
@@ -26,22 +28,30 @@ public class CorporateCustomerManager implements CorporateCustomerService{
 		
 	private CorporateCustomerDao corporateCustomerDao;
 	private UserDao userDao;
+	private ModelMapper modelMapper;
 	
 	@Autowired
-	public CorporateCustomerManager(CorporateCustomerDao corporateCustomerDao,UserDao userDao) {
+	public CorporateCustomerManager(CorporateCustomerDao corporateCustomerDao,UserDao userDao,ModelMapper modelMapper) {
 		super();
 		this.corporateCustomerDao = corporateCustomerDao;
 		this.userDao = userDao;
+		this.modelMapper = modelMapper;
 	}
 
 	@Override
-	public DataResult<List<CorporateCustomer>> getAll() {
-		return new SuccessDataResult<List<CorporateCustomer>>(this.corporateCustomerDao.findAll());
+	public DataResult<List<CorporateCustomerDetailDto>> getAll() {
+		List<CorporateCustomer> corporateCustomers= this.corporateCustomerDao.findAll();
+		 
+		 List<CorporateCustomerDetailDto> corporateCustomerDetailDto=corporateCustomers.stream().map(corporateCustomer -> modelMapper.map(corporateCustomer, CorporateCustomerDetailDto.class)).collect(Collectors.toList());
+		return new SuccessDataResult<List<CorporateCustomerDetailDto>>(corporateCustomerDetailDto);
 	}
 
 	@Override
-	public DataResult<CorporateCustomer> getById(int id) {
-		return new SuccessDataResult<CorporateCustomer> (this.corporateCustomerDao.getById(id));
+	public DataResult<CorporateCustomerDetailDto> getById(int id) {
+		CorporateCustomer corporateCustomer = this.corporateCustomerDao.getById(id);
+		CorporateCustomerDetailDto corporateCustomerDetailDto = modelMapper.map(corporateCustomer,CorporateCustomerDetailDto.class);
+		
+		return new SuccessDataResult<CorporateCustomerDetailDto>(corporateCustomerDetailDto);
 	}
 
 	@Override

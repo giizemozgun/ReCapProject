@@ -3,7 +3,9 @@ package com.etiya.ReCapProject.business.concretes;
 import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
+import java.util.stream.Collectors;
 
+import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -11,13 +13,14 @@ import com.etiya.ReCapProject.business.abstracts.CreditCardService;
 import com.etiya.ReCapProject.business.constants.Messages;
 import com.etiya.ReCapProject.core.business.BusinessRules;
 import com.etiya.ReCapProject.core.utilities.results.DataResult;
+import com.etiya.ReCapProject.core.utilities.results.ErrorResult;
 import com.etiya.ReCapProject.core.utilities.results.Result;
 import com.etiya.ReCapProject.core.utilities.results.SuccessDataResult;
 import com.etiya.ReCapProject.core.utilities.results.SuccessResult;
-import com.etiya.ReCapProject.core.utilities.results.ErrorResult;
 import com.etiya.ReCapProject.dataAccess.abstracts.CreditCardDao;
 import com.etiya.ReCapProject.entities.abstracts.Customer;
 import com.etiya.ReCapProject.entities.concretes.CreditCard;
+import com.etiya.ReCapProject.entities.dtos.CreditCardDetailDto;
 import com.etiya.ReCapProject.entities.requests.create.CreateCreditCardRequest;
 import com.etiya.ReCapProject.entities.requests.delete.DeleteCreditCardRequest;
 import com.etiya.ReCapProject.entities.requests.update.UpdateCreditCardRequest;
@@ -26,21 +29,29 @@ import com.etiya.ReCapProject.entities.requests.update.UpdateCreditCardRequest;
 public class CreditCardManager implements CreditCardService {
 	
 	private CreditCardDao creditCardDao;
+	private ModelMapper modelMapper;
 	
 	@Autowired
-	public CreditCardManager(CreditCardDao creditCardDao) {
+	public CreditCardManager(CreditCardDao creditCardDao, ModelMapper modelMapper) {
 		super();
 		this.creditCardDao = creditCardDao;
+		this.modelMapper = modelMapper;
 	}
 
 	@Override
-	public DataResult<List<CreditCard>> getAll() {
-		return new SuccessDataResult<List<CreditCard>>(this.creditCardDao.findAll());
+	public DataResult<List<CreditCardDetailDto>> getAll() {
+		List<CreditCard> creditCards = this.creditCardDao.findAll();
+		 
+		 List<CreditCardDetailDto> creditCardDetailDtos = creditCards.stream().map(creditCard -> modelMapper.map(creditCard, CreditCardDetailDto.class)).collect(Collectors.toList());
+		return new SuccessDataResult<List<CreditCardDetailDto>>(creditCardDetailDtos);
 	}
 
 	@Override
-	public DataResult<CreditCard> getById(int creditCardId) {
-		return new SuccessDataResult<CreditCard>(this.creditCardDao.getById(creditCardId));
+	public DataResult<CreditCardDetailDto> getById(int creditCardId) {
+		CreditCard creditCard = this.creditCardDao.getById(creditCardId);
+		CreditCardDetailDto CreditCardDto = modelMapper.map(creditCard,CreditCardDetailDto.class);
+		
+		return new SuccessDataResult<CreditCardDetailDto>(CreditCardDto);
 	}
 
 	@Override
@@ -106,9 +117,12 @@ public class CreditCardManager implements CreditCardService {
 	}
 
 	@Override
-	public DataResult<List<CreditCard>> getByCustomerId(int customerId) {
+	public DataResult<List<CreditCardDetailDto>> getByCustomerId(int customerId) {
 		
-		return new SuccessDataResult<List<CreditCard>>(this.creditCardDao.getByCustomer_id(customerId));
+		List<CreditCard> creditCards = this.creditCardDao.getByCustomer_id(customerId);
+		 
+		 List<CreditCardDetailDto> creditCardDetailDtos = creditCards.stream().map(creditCard -> modelMapper.map(creditCard, CreditCardDetailDto.class)).collect(Collectors.toList());
+		return new SuccessDataResult<List<CreditCardDetailDto>>(creditCardDetailDtos);
 	}
 	
 	private Result checkCreditCardNumber(String creditCardNumber) {

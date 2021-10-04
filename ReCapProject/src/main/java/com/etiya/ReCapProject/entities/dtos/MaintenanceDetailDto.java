@@ -9,20 +9,15 @@ import lombok.NoArgsConstructor;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
+public class MaintenanceDetailDto {
+	
+	private int maintenanceId;
+	
+	private Date maintenanceDate;
+	
+	private Date returnDate;
 
-public class InvoiceDetailDto {
-	
-	private int invoiceId;
-	
-	private String invoiceNumber;
-	
-	private Date invoiceDate;
-	
-	private int totalRentalDay;
-	
-	private double totalAmount;
-	
-	private int customerId;
+	private String carName;
 	
 	
 }

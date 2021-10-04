@@ -3,16 +3,14 @@ package com.etiya.ReCapProject.business.concretes;
 import java.time.temporal.ChronoUnit;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
+import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import com.etiya.ReCapProject.business.abstracts.AdditionalServiceService;
-import com.etiya.ReCapProject.business.abstracts.CarService;
-import com.etiya.ReCapProject.business.abstracts.CorporateCustomerService;
 import com.etiya.ReCapProject.business.abstracts.CreditCardService;
 import com.etiya.ReCapProject.business.abstracts.FindexPointService;
-import com.etiya.ReCapProject.business.abstracts.IndividualCustomerService;
 import com.etiya.ReCapProject.business.abstracts.PosService;
 import com.etiya.ReCapProject.business.abstracts.RentalService;
 import com.etiya.ReCapProject.business.constants.Messages;
@@ -22,7 +20,10 @@ import com.etiya.ReCapProject.core.utilities.results.ErrorResult;
 import com.etiya.ReCapProject.core.utilities.results.Result;
 import com.etiya.ReCapProject.core.utilities.results.SuccessDataResult;
 import com.etiya.ReCapProject.core.utilities.results.SuccessResult;
+import com.etiya.ReCapProject.dataAccess.abstracts.AdditionalServiceDao;
 import com.etiya.ReCapProject.dataAccess.abstracts.CarDao;
+import com.etiya.ReCapProject.dataAccess.abstracts.CorporateCustomerDao;
+import com.etiya.ReCapProject.dataAccess.abstracts.IndividualCustomerDao;
 import com.etiya.ReCapProject.dataAccess.abstracts.MaintenanceDao;
 import com.etiya.ReCapProject.dataAccess.abstracts.RentalDao;
 import com.etiya.ReCapProject.entities.concretes.AdditionalService;
@@ -32,6 +33,7 @@ import com.etiya.ReCapProject.entities.concretes.IndividualCustomer;
 import com.etiya.ReCapProject.entities.concretes.Rental;
 import com.etiya.ReCapProject.entities.dtos.AdditionalServiceDto;
 import com.etiya.ReCapProject.entities.dtos.CreditCardDetailDto;
+import com.etiya.ReCapProject.entities.dtos.RentalDetailDto;
 import com.etiya.ReCapProject.entities.requests.CarReturnedRequest;
 import com.etiya.ReCapProject.entities.requests.PosServiceRequest;
 import com.etiya.ReCapProject.entities.requests.create.CreateCreditCardRequest;
@@ -44,58 +46,66 @@ public class RentalManager implements RentalService {
 
 	private RentalDao rentalDao;
 	private FindexPointService findexPointService;
-	private CarService carService;
 	private MaintenanceDao maintenanceDao;
 	private CarDao carDao;
 	private PosService posService;
-	private CorporateCustomerService corporateCustomerService;
-	private IndividualCustomerService individualCustomerService;
+	private CorporateCustomerDao corporateCustomerDao;
+	private IndividualCustomerDao individualCustomerDao;
 	private CreditCardService creditCardService;
-	private AdditionalServiceService additionalServiceService;
+	private AdditionalServiceDao additionalServiceDao;
+	private ModelMapper modelMapper;
 
 	@Autowired
-	public RentalManager(RentalDao rentalDao, FindexPointService findexPointService, CarService carService,
-			MaintenanceDao maintenanceDao, CarDao carDao, PosService posService
-			,CorporateCustomerService corporateCustomerService,IndividualCustomerService individualCustomerService,
-			CreditCardService creditCardService, AdditionalServiceService additionalServiceService) {
+	public RentalManager(RentalDao rentalDao, FindexPointService findexPointService,CarDao carDao,
+			MaintenanceDao maintenanceDao, PosService posService,
+			CorporateCustomerDao corporateCustomerDao, IndividualCustomerDao individualCustomerDao,
+			CreditCardService creditCardService, AdditionalServiceDao additionalServiceDao, ModelMapper modelMapper) {
 		super();
 		this.rentalDao = rentalDao;
 		this.findexPointService = findexPointService;
-		this.carService = carService;
 		this.maintenanceDao = maintenanceDao;
 		this.carDao = carDao;
-		this.posService = posService;	
-		this.corporateCustomerService = corporateCustomerService;
-		this.individualCustomerService = individualCustomerService;
+		this.posService = posService;
+		this.corporateCustomerDao= corporateCustomerDao;
+		this.individualCustomerDao = individualCustomerDao;
 		this.creditCardService = creditCardService;
-		this.additionalServiceService = additionalServiceService;
+		this.additionalServiceDao = additionalServiceDao;
+		this.modelMapper = modelMapper;
 	}
 
 	@Override
-	public DataResult<List<Rental>> getAll() {
-		return new SuccessDataResult<List<Rental>>(this.rentalDao.findAll());
+	public DataResult<List<RentalDetailDto>> getAll() {
+			List<Rental> rentals= this.rentalDao.findAll();
+		 
+		 List<RentalDetailDto> rentalDetailDtos =rentals.stream().map(rental -> modelMapper.map(rental, RentalDetailDto.class)).collect(Collectors.toList());
+		return new SuccessDataResult<List<RentalDetailDto>>(rentalDetailDtos);
 	}
 
 	@Override
-	public DataResult<Rental> getById(int rentalId) {
-		return new SuccessDataResult<Rental>(this.rentalDao.getById(rentalId));
+	public DataResult<RentalDetailDto> getById(int id) {
+		Rental rental = this.rentalDao.getById(id);
+		RentalDetailDto rentalDetailDto = modelMapper.map(rental,RentalDetailDto.class);
+		
+		return new SuccessDataResult<RentalDetailDto>(rentalDetailDto);
 	}
+
 
 	@Override
 	public Result addForIndividualCustomer(CreateRentalRequest createRentalRequest) {
-		
-		IndividualCustomer customer = this.individualCustomerService.getById(createRentalRequest.getCustomerId()).getData();
-		
+
+		IndividualCustomer customer = this.individualCustomerDao.getById(createRentalRequest.getCustomerId());
+
 		var result = BusinessRules.run(checkReturnFromRental(createRentalRequest.getCarId()),
 				checkFindexPointForIndividualCustomer(customer, createRentalRequest.getCarId()),
 				checkReturnFromMaintenance(createRentalRequest.getCarId()),
-				isCreditCardLimitExceeded(createRentalRequest.getCreditCardDetailDto(),this.calculateTotalAmount(createRentalRequest,500)));
+				isCreditCardLimitExceeded(createRentalRequest.getCreditCardDetailDto(),
+						this.calculateTotalAmount(createRentalRequest, 500)));
 
 		if (result != null) {
 			return result;
 		}
-		
-		Car car = this.carService.getById(createRentalRequest.getCarId()).getData();
+
+		Car car = this.carDao.getById(createRentalRequest.getCarId());
 
 		Rental rental = new Rental();
 		rental.setRentDate(createRentalRequest.getRentDate());
@@ -105,43 +115,40 @@ public class RentalManager implements RentalService {
 		rental.setPickUpLocation(car.getCity());
 		rental.setReturnLocation(createRentalRequest.getReturnLocation());
 		rental.setPickUpKm(car.getKm());
-		rental.setTotalAmount(calculateTotalAmount(createRentalRequest, 500));
-		rental.setAdditionalServices(this.convertFromAdditionalServiceDto(createRentalRequest.getAdditionalServiceDtos()));
-		
+		rental.setTotalAmount(this.calculateTotalAmount(createRentalRequest, 500));
+		rental.setAdditionalServices(this.convertToAdditionalService(createRentalRequest.getAdditionalServiceDtos()));
+
 		this.rentalDao.save(rental);
-		
-		if(createRentalRequest.isCardSaved()) {
-			this.SaveCardInformation(createRentalRequest.getCreditCardDetailDto(), createRentalRequest.getCustomerId());
+
+		if (createRentalRequest.isCardSaved()) {
+			this.saveCardInformation(createRentalRequest.getCreditCardDetailDto(), createRentalRequest.getCustomerId());
 		}
-		
+
 		car.setCity(rental.getReturnLocation());
 		car.setAvailable(false);
 		this.carDao.save(car);
-		
-		
+
 		return new SuccessResult(Messages.RentalAdded);
 
 	}
 
 	@Override
 	public Result addForCorporateCustomer(CreateRentalRequest createRentalRequest) {
-		
 
-		CorporateCustomer customer =this.corporateCustomerService.getById(createRentalRequest.getCustomerId()).getData();
-		
-		
-		
+		CorporateCustomer customer = this.corporateCustomerDao.getById(createRentalRequest.getCustomerId());
+
 		var result = BusinessRules.run(checkReturnFromRental(createRentalRequest.getCarId()),
 				checkFindexPointForCorporateCustomer(customer, createRentalRequest.getCarId()),
 				checkReturnFromMaintenance(createRentalRequest.getCarId()),
-				isCreditCardLimitExceeded(createRentalRequest.getCreditCardDetailDto(),this.calculateTotalAmount(createRentalRequest,500)));
+				isCreditCardLimitExceeded(createRentalRequest.getCreditCardDetailDto(),
+						this.calculateTotalAmount(createRentalRequest, 500)));
 
 		if (result != null) {
 			return result;
 		}
 
-		Car car = this.carService.getById(createRentalRequest.getCarId()).getData();
-		
+		Car car = this.carDao.getById(createRentalRequest.getCarId());
+
 		Rental rental = new Rental();
 		rental.setRentDate(createRentalRequest.getRentDate());
 		rental.setReturnDate(createRentalRequest.getReturnDate());
@@ -150,21 +157,19 @@ public class RentalManager implements RentalService {
 		rental.setPickUpLocation(car.getCity());
 		rental.setReturnLocation(createRentalRequest.getReturnLocation());
 		rental.setPickUpKm(car.getKm());
-		rental.setTotalAmount(calculateTotalAmount(createRentalRequest, 500));
-		rental.setAdditionalServices(this.convertFromAdditionalServiceDto(createRentalRequest.getAdditionalServiceDtos()));
-			
-		
+		rental.setTotalAmount(this.calculateTotalAmount(createRentalRequest, 500));
+		rental.setAdditionalServices(this.convertToAdditionalService(createRentalRequest.getAdditionalServiceDtos()));
+
 		this.rentalDao.save(rental);
-		
-		if(createRentalRequest.isCardSaved()) {
-			this.SaveCardInformation(createRentalRequest.getCreditCardDetailDto(), createRentalRequest.getCustomerId());
+
+		if (createRentalRequest.isCardSaved()) {
+			this.saveCardInformation(createRentalRequest.getCreditCardDetailDto(), createRentalRequest.getCustomerId());
 		}
-		
-		
+
 		car.setCity(rental.getReturnLocation());
 		car.setAvailable(false);
 		this.carDao.save(car);
-		
+
 		return new SuccessResult(Messages.RentalAdded);
 
 	}
@@ -180,7 +185,7 @@ public class RentalManager implements RentalService {
 
 	@Override
 	public Result updateForIndividualCustomer(UpdateRentalRequest updateRentalRequest) {
-		Car car = this.carService.getById(updateRentalRequest.getCarId()).getData();
+		Car car = this.carDao.getById(updateRentalRequest.getCarId());
 
 		IndividualCustomer customer = new IndividualCustomer();
 		customer.setId(updateRentalRequest.getCustomerId());
@@ -194,7 +199,7 @@ public class RentalManager implements RentalService {
 		rental.setPickUpLocation(car.getCity());
 		rental.setReturnLocation(updateRentalRequest.getReturnLocation());
 		rental.setPickUpKm(car.getKm());
-		rental.setAdditionalServices(this.convertFromAdditionalServiceDto(updateRentalRequest.getAdditionalServiceDtos()));
+		rental.setAdditionalServices(this.convertToAdditionalService(updateRentalRequest.getAdditionalServiceDtos()));
 
 		var result = BusinessRules.run(checkReturnFromRental(rental.getCar().getCarId()),
 				checkFindexPointForIndividualCustomer(customer, updateRentalRequest.getCarId()),
@@ -203,19 +208,19 @@ public class RentalManager implements RentalService {
 		if (result != null) {
 			return result;
 		}
-	
+
 		rental.setCarReturned(true);
 		this.rentalDao.save(rental);
-		
+
 		car.setCity(rental.getReturnLocation());
 		this.carDao.save(car);
-		
+
 		return new SuccessResult(Messages.RentalUpdated);
 	}
 
 	@Override
 	public Result updateForCorporateCustomer(UpdateRentalRequest updateRentalRequest) {
-		Car car = this.carService.getById(updateRentalRequest.getCarId()).getData();
+		Car car = this.carDao.getById(updateRentalRequest.getCarId());
 
 		CorporateCustomer customer = new CorporateCustomer();
 		customer.setId(updateRentalRequest.getCustomerId());
@@ -229,8 +234,8 @@ public class RentalManager implements RentalService {
 		rental.setPickUpLocation(car.getCity());
 		rental.setReturnLocation(updateRentalRequest.getReturnLocation());
 		rental.setPickUpKm(car.getKm());
-		rental.setAdditionalServices(this.convertFromAdditionalServiceDto(updateRentalRequest.getAdditionalServiceDtos()));
-		
+		rental.setAdditionalServices(this.convertToAdditionalService(updateRentalRequest.getAdditionalServiceDtos()));
+
 		var result = BusinessRules.run(checkReturnFromRental(rental.getCar().getCarId()),
 				checkFindexPointForCorporateCustomer(customer, updateRentalRequest.getCarId()),
 				checkReturnFromMaintenance(updateRentalRequest.getCarId()));
@@ -238,27 +243,26 @@ public class RentalManager implements RentalService {
 		if (result != null) {
 			return result;
 		}
-		
+
 		rental.setCarReturned(true);
 		this.rentalDao.save(rental);
-		
+
 		car.setCity(rental.getReturnLocation());
 		this.carDao.save(car);
-		
+
 		return new SuccessResult(Messages.RentalUpdated);
 	}
-	
+
 	@Override
 	public Result validateCarReturned(CarReturnedRequest carReturnedRequest) {
 		Rental rental = this.rentalDao.getById(carReturnedRequest.getRentalId());
 		rental.setCarReturned(true);
 		rental.setReturnKm(carReturnedRequest.getReturnKm());
-		
-		Car car = this.carService.getById(rental.getCar().getCarId()).getData();
+
+		Car car = this.carDao.getById(rental.getCar().getCarId());
 		car.setAvailable(true);
 		car.setKm(carReturnedRequest.getReturnKm());
-		
-		
+
 		rental.setCar(car);
 		this.rentalDao.save(rental);
 		this.carDao.save(car);
@@ -285,7 +289,7 @@ public class RentalManager implements RentalService {
 		var findexScoreResult = this.findexPointService
 				.getIndividualCustomerFindexPoint(individualCustomer.getIdentityNumber());
 
-		var minFindexScoreForCar = this.carService.getById(carId).getData().getMinFindexScore();
+		var minFindexScoreForCar = this.carDao.getById(carId).getMinFindexScore();
 
 		if (findexScoreResult <= minFindexScoreForCar) {
 			return new ErrorResult(Messages.CustomerCreditScoreNotEnoughtToRentCar);
@@ -298,7 +302,7 @@ public class RentalManager implements RentalService {
 		var findexScoreResult = this.findexPointService
 				.getCorporateCustomerFindexPoint(corporateCustomer.getTaxNumber());
 
-		var minFindexScoreForCar = this.carService.getById(carId).getData().getMinFindexScore();
+		var minFindexScoreForCar = this.carDao.getById(carId).getMinFindexScore();
 
 		if (findexScoreResult <= minFindexScoreForCar) {
 			return new ErrorResult(Messages.CustomerCreditScoreNotEnoughtToRentCar);
@@ -308,49 +312,47 @@ public class RentalManager implements RentalService {
 	}
 
 	private int calculateTotalAmount(CreateRentalRequest createRentalRequest, double cityChangeFee) {
-		Car car = this.carService.getById(createRentalRequest.getCarId()).getData();
-		long totalRentalDay = ChronoUnit.DAYS.between(createRentalRequest.getRentDate().toInstant(), createRentalRequest.getReturnDate().toInstant());
-	    
-		double totalAmount =car.getDailyPrice() * totalRentalDay;
+		Car car = this.carDao.getById(createRentalRequest.getCarId());
 
-		
-		if(createRentalRequest.getReturnLocation() != car.getCity()) {
-			totalAmount +=cityChangeFee;
+		long totalRentalDay = ChronoUnit.DAYS.between(createRentalRequest.getRentDate().toInstant(),
+				createRentalRequest.getReturnDate().toInstant());
+
+		double totalAmount = car.getDailyPrice() * totalRentalDay;
+
+		if (createRentalRequest.getReturnLocation() != car.getCity()) {
+			totalAmount += cityChangeFee;
 		}
-		
+
 		List<AdditionalServiceDto> additionalServiceDtos = createRentalRequest.getAdditionalServiceDtos();
-		
+
 		for (AdditionalServiceDto additionalServiceDto : additionalServiceDtos) {
-			
-			AdditionalService additionalService = this.additionalServiceService.getById(additionalServiceDto.getId()).getData();
-			
+
+			AdditionalService additionalService = this.additionalServiceDao.getById(additionalServiceDto.getId());
+
 			double additionalServiceTotalPrice = additionalService.getDailyPrice() * totalRentalDay;
-			
+
 			totalAmount += additionalServiceTotalPrice;
 		}
-		
-		return (int)totalAmount ;
+
+		return (int) totalAmount;
 	}
-	
+
 	private Result isCreditCardLimitExceeded(CreditCardDetailDto creditCardDetailDto, double totalAmount) {
-		
+
 		PosServiceRequest posServiceRequest = new PosServiceRequest();
 		posServiceRequest.setCardNumber(creditCardDetailDto.getCardNumber());
 		posServiceRequest.setName(creditCardDetailDto.getName());
 		posServiceRequest.setCvv(creditCardDetailDto.getCvv());
 		posServiceRequest.setExpiryDate(creditCardDetailDto.getExpiryDate());
 		posServiceRequest.setPaymentAmount(totalAmount);
-		
-		
-		
-		if(!this.posService.isCreditCardLimitExceeded(posServiceRequest) ) {
+
+		if (!this.posService.isCreditCardLimitExceeded(posServiceRequest)) {
 			return new ErrorResult(Messages.CreditCardLimitExceeded);
 		}
 		return new SuccessResult();
-		
-		
 	}
-	private Result SaveCardInformation(CreditCardDetailDto creditCardDetailDto, int customerId) {
+
+	private Result saveCardInformation(CreditCardDetailDto creditCardDetailDto, int customerId) {
 
 		CreateCreditCardRequest createCreditCardRequest = new CreateCreditCardRequest();
 		createCreditCardRequest.setName(creditCardDetailDto.getName());
@@ -361,17 +363,15 @@ public class RentalManager implements RentalService {
 
 		return new SuccessResult(this.creditCardService.add(createCreditCardRequest).getMessage());
 	}
-	
-	private List<AdditionalService> convertFromAdditionalServiceDto(List<AdditionalServiceDto> additionalServiceDtos  ){
-		List<AdditionalService> additionalServices = new ArrayList<AdditionalService>();          
-		for (AdditionalServiceDto additionalServicedto : additionalServiceDtos ) {             
-			additionalServices.add(this.additionalServiceService.getById(additionalServicedto.getId()).getData());         
-			}
+
+	private List<AdditionalService> convertToAdditionalService(List<AdditionalServiceDto> additionalServiceDtos) {
+		List<AdditionalService> additionalServices = new ArrayList<AdditionalService>();
+
+		for (AdditionalServiceDto additionalServicedto : additionalServiceDtos) {
+			additionalServices.add(this.additionalServiceDao.getById(additionalServicedto.getId()));
+		}
+
 		return additionalServices;
 	}
-	
-	
-	
 
-	
 }

@@ -7,9 +7,13 @@ import lombok.NoArgsConstructor;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class AdditionalServiceDto {
+public class IndividualCustomerDetailDto {
 	private int id;
 	
-
+	private String firstName;
+	
+	private String lastName;
+	
+	private String identityNumber;
 	
 }

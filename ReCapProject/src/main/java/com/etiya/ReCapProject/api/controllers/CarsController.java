@@ -15,7 +15,6 @@ import org.springframework.web.bind.annotation.RestController;
 import com.etiya.ReCapProject.business.abstracts.CarService;
 import com.etiya.ReCapProject.core.utilities.results.DataResult;
 import com.etiya.ReCapProject.core.utilities.results.Result;
-import com.etiya.ReCapProject.entities.concretes.Car;
 import com.etiya.ReCapProject.entities.dtos.CarDetailDto;
 import com.etiya.ReCapProject.entities.requests.create.CreateCarRequest;
 import com.etiya.ReCapProject.entities.requests.delete.DeleteCarRequest;
@@ -40,20 +39,9 @@ public class CarsController {
 	 return this.carService.add(createCarRequest);
 	}
 	
-	@GetMapping("/getall")
-	public DataResult<List<Car>> getAll(){
-		
-		return this.carService.getAll();
-	}
-	
 	@GetMapping("/getById")
-	public DataResult<Car> getById( int carId){
+	public DataResult<CarDetailDto> getById( int carId){
 		return this.carService.getById(carId);
-	}
-	
-	@GetMapping("getcardetailbycarid")
-	public DataResult<CarDetailDto> getCarDetailByCarId(int carId){
-		return this.carService.getCarDetailByCarId(carId);
 	}
 	
 	@PostMapping("/update")
@@ -71,21 +59,28 @@ public class CarsController {
 		return this.carService.getCarDetails();
 	}
 	
+	@GetMapping("/getcardetailbycarid")
+	public DataResult<CarDetailDto> getCarDetailByCarId(int carId) {
+		return this.carService.getCarDetailByCarId(carId);
+	}
+	
+	
+			
 	@GetMapping("/getbybrandid")
-	public DataResult<List<Car>> getByBrandId( int brandId){
+	public DataResult<List<CarDetailDto>> getByBrandId( int brandId){
 		return this.carService.getByBrandId(brandId);
 	}
 	
 	@GetMapping("/getbycolorid")
-	public DataResult<List<Car>> getByColorId( int colorId){
+	public DataResult<List<CarDetailDto>> getByColorId( int colorId){
 		return this.carService.getByColorId(colorId);
 	}
 	@GetMapping("/getavailablecars")
-	public DataResult<List<Car>> getAvailableCars(){
+	public DataResult<List<CarDetailDto>> getAvailableCars(){
 		return this.carService.getAvailableCars();
 	}
 	@GetMapping("/getcity")
-	public DataResult<List<Car>> getByCity(String city){
+	public DataResult<List<CarDetailDto>> getByCity(String city){
 		return this.carService.getByCity(city);
 	}
 	

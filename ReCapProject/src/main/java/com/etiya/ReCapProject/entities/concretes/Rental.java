@@ -58,7 +58,7 @@ public class Rental {
 	private int returnKm;
 	
 	@Column(name="total_amount")
-	private int totalAmount;
+	private double totalAmount;
 	
 	@ManyToOne
 	@JoinColumn(name = "customer_id")
@@ -68,11 +68,12 @@ public class Rental {
 	@JoinColumn(name = "car_id")
 	private Car car;
 	
-	@ManyToMany()     
-	@JoinTable(name = "rental_additional_services",      
-	joinColumns = @JoinColumn(name = "rental_id"),      
-	inverseJoinColumns = @JoinColumn(name = "additional_service_id"))     
+	@ManyToMany()
+	@JoinTable(name = "rental_additional_services", 
+	joinColumns = @JoinColumn(name = "rental_id"), 
+	inverseJoinColumns = @JoinColumn(name = "additional_service_id"))
 	private List<AdditionalService> additionalServices;
+	
 
 	
 }

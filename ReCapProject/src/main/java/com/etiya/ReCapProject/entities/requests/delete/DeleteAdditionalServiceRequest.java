@@ -12,7 +12,6 @@ import lombok.Setter;
 @AllArgsConstructor
 @NoArgsConstructor
 public class DeleteAdditionalServiceRequest {
-	
 	@NotNull
 	private int id;
 }

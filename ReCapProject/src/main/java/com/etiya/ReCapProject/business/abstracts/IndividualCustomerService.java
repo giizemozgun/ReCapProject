@@ -4,7 +4,7 @@ import java.util.List;
 
 import com.etiya.ReCapProject.core.utilities.results.DataResult;
 import com.etiya.ReCapProject.core.utilities.results.Result;
-import com.etiya.ReCapProject.entities.concretes.IndividualCustomer;
+import com.etiya.ReCapProject.entities.dtos.IndividualCustomerDetailDto;
 import com.etiya.ReCapProject.entities.requests.create.CreateIndividualCustomerRequest;
 import com.etiya.ReCapProject.entities.requests.delete.DeleteIndividualCustomerRequest;
 import com.etiya.ReCapProject.entities.requests.update.UpdateIndividualCustomerRequest;
@@ -12,8 +12,8 @@ import com.etiya.ReCapProject.entities.requests.update.UpdateIndividualCustomerR
 
 public interface IndividualCustomerService {
 	
-	DataResult<List<IndividualCustomer>> getAll();
-	DataResult<IndividualCustomer> getById(int id);
+	DataResult<List<IndividualCustomerDetailDto>> getAll();
+	DataResult<IndividualCustomerDetailDto> getById(int id);
 	Result add(CreateIndividualCustomerRequest createIndividualCustomerRequest);
 	Result delete(DeleteIndividualCustomerRequest deleteIndividualCustomerRequest);
 	Result update(UpdateIndividualCustomerRequest updateIndividualCustomerRequest);

@@ -19,7 +19,7 @@ import org.springframework.web.bind.annotation.RestController;
 import com.etiya.ReCapProject.business.abstracts.InvoiceService;
 import com.etiya.ReCapProject.core.utilities.results.DataResult;
 import com.etiya.ReCapProject.core.utilities.results.Result;
-import com.etiya.ReCapProject.entities.concretes.Invoice;
+import com.etiya.ReCapProject.entities.dtos.InvoiceDetailDto;
 import com.etiya.ReCapProject.entities.requests.InvoiceBetweenDateRequest;
 import com.etiya.ReCapProject.entities.requests.create.CreateInvoiceRequest;
 import com.etiya.ReCapProject.entities.requests.delete.DeleteInvoiceRequest;
@@ -45,18 +45,18 @@ public class InvoicesController {
 
 	
 	@GetMapping("/getall")
-	public DataResult<List<Invoice>> getAll(){
+	public DataResult<List<InvoiceDetailDto>> getAll(){
 		
 		return this.invoiceService.getAll();
 	}
 	
 	@GetMapping("/getbyid")
-	public DataResult<Invoice> getById(int invoiceId){
+	public DataResult<InvoiceDetailDto> getById(int invoiceId){
 		return this.invoiceService.getById(invoiceId);
 	}
 	
 	@GetMapping("/getbycustomerid")
-	public DataResult<List<Invoice>> getByCustomerId(int customerId){
+	public DataResult<List<InvoiceDetailDto>> getByCustomerId(int customerId){
 		return this.invoiceService.getByCustomerId(customerId);
 	}
 	
@@ -71,7 +71,7 @@ public class InvoicesController {
 	}
 	
 	@GetMapping("/getbyinvoicedatebetween")
-	public DataResult<List<Invoice>> getByInvoiceDateBetween(String startDate, String endDate) throws ParseException{
+	public DataResult<List<InvoiceDetailDto>> getByInvoiceDateBetween(String startDate, String endDate) throws ParseException{
 		
 		DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
 		Date startDate1 = dateFormat.parse(endDate);

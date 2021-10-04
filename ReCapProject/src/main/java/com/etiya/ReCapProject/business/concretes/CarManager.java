@@ -2,15 +2,15 @@ package com.etiya.ReCapProject.business.concretes;
 
 
 import java.util.List;
+import java.util.stream.Collectors;
 
-
+import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.etiya.ReCapProject.business.abstracts.CarService;
 import com.etiya.ReCapProject.business.constants.Messages;
 import com.etiya.ReCapProject.core.utilities.results.DataResult;
-
 import com.etiya.ReCapProject.core.utilities.results.Result;
 import com.etiya.ReCapProject.core.utilities.results.SuccessDataResult;
 import com.etiya.ReCapProject.core.utilities.results.SuccessResult;
@@ -26,39 +26,37 @@ import com.etiya.ReCapProject.entities.requests.update.UpdateCarRequest;
 @Service
 public class CarManager implements CarService {
 	private CarDao carDao;
+	private ModelMapper modelMapper;
 
 
 	@Autowired
-	public CarManager(CarDao carDao ) {
+	public CarManager(CarDao carDao,ModelMapper modelMapper ) {
 		super();
 		this.carDao = carDao;
-	}
-
-	@Override
-	public DataResult<List<Car>> getAll() {
-		return new SuccessDataResult<List<Car>>(this.carDao.findAll());
+		this.modelMapper = modelMapper;
 	}
 	
 	@Override
-	public DataResult<List<Car>> getAvailableCars() {
-		List<Car> cars = this.carDao.findAll();          
-		List<Car> maintenanceCars = this.carDao.getByMaintenances_ReturnDateIsNullAndMaintenances_MaintenanceDateIsNotNull();          
-		cars.removeAll(maintenanceCars);     
-		
-		return new SuccessDataResult<List<Car>>(cars);	
+	public DataResult<List<CarDetailDto>> getAvailableCars() {
+		List<Car> cars= this.carDao.getByIsAvailableIsTrue();
+		 
+		 List<CarDetailDto> carDetailDtos=cars.stream().map(car -> modelMapper.map(car, CarDetailDto.class)).collect(Collectors.toList());
+		return new SuccessDataResult<List<CarDetailDto>>(carDetailDtos);
 	}
 
 	@Override
-	public DataResult<Car> getById(int carId) {
+	public DataResult<CarDetailDto> getById(int carId) {
+		Car car = this.carDao.getById(carId);
+		CarDetailDto carDetailDtos = modelMapper.map(car,CarDetailDto.class);
 		
-		return new SuccessDataResult<Car>(this.carDao.getById(carId));
+		return new SuccessDataResult<CarDetailDto>(carDetailDtos);
 	}
 	
 	@Override
 	public DataResult<CarDetailDto> getCarDetailByCarId(int carId) {
-		Car car = this.carDao.getById(carId);
+		Car car=this.carDao.getById(carId);
 		
-		CarDetailDto carDetailDto = new CarDetailDto();
+		CarDetailDto carDetailDto=new CarDetailDto();
 		carDetailDto.setCarName(car.getCarName());
 		carDetailDto.setBrandName(car.getBrand().getBrandName());
 		carDetailDto.setColorName(car.getColor().getColorName());
@@ -132,30 +130,32 @@ public class CarManager implements CarService {
 	public DataResult<List<CarDetailDto>> getCarDetails() {
 		return new SuccessDataResult<List<CarDetailDto>>(this.carDao.getCarWithBrandAndColorDetails());
 	}
-	
-	
 
 	@Override
-	public DataResult<List<Car>> getByBrandId(int branId) {
+	public DataResult<List<CarDetailDto>> getByBrandId(int branId) {
 		
-		return new SuccessDataResult<List<Car>>(this.carDao.getByBrand_BrandId(branId));
+		List<Car> cars= this.carDao.getByBrand_BrandId(branId);
+		 
+		 List<CarDetailDto> carDetailDtos=cars.stream().map(car -> modelMapper.map(car, CarDetailDto.class)).collect(Collectors.toList());
+		return new SuccessDataResult<List<CarDetailDto>>(carDetailDtos);
 	}
 
 	@Override
-	public DataResult<List<Car>> getByColorId(int colorId) {
+	public DataResult<List<CarDetailDto>> getByColorId(int colorId) {
 		
-		return new SuccessDataResult<List<Car>>(this.carDao.getByColor_ColorId(colorId));
+		List<Car> cars= this.carDao.getByColor_ColorId(colorId);
+		 
+		 List<CarDetailDto> carDetailDtos=cars.stream().map(car -> modelMapper.map(car, CarDetailDto.class)).collect(Collectors.toList());
+		return new SuccessDataResult<List<CarDetailDto>>(carDetailDtos);
 	}
 
 	@Override
-	public DataResult<List<Car>> getByCity(String city) {
-		return new SuccessDataResult<List<Car>>(this.carDao.getByCity(city));
+	public DataResult<List<CarDetailDto>> getByCity(String city) {
+		List<Car> cars= this.carDao.getByCity(city);
+		 
+		 List<CarDetailDto> carDetailDtos=cars.stream().map(car -> modelMapper.map(car, CarDetailDto.class)).collect(Collectors.toList());
+		return new SuccessDataResult<List<CarDetailDto>>(carDetailDtos);
 	}
 
-	
-	
-
-	
-	
 	
 }

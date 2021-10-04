@@ -52,5 +52,7 @@ public class ReCapProjectApplication {
 		= new ErrorDataResult<Object>(validationErrors,"Doğrulama hataları");
 		return errors;
 	}
+	
+	
 
 }

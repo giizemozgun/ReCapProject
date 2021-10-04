@@ -1,7 +1,9 @@
 package com.etiya.ReCapProject.business.concretes;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
+import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -16,6 +18,7 @@ import com.etiya.ReCapProject.core.utilities.results.SuccessResult;
 import com.etiya.ReCapProject.dataAccess.abstracts.IndividualCustomerDao;
 import com.etiya.ReCapProject.dataAccess.abstracts.UserDao;
 import com.etiya.ReCapProject.entities.concretes.IndividualCustomer;
+import com.etiya.ReCapProject.entities.dtos.IndividualCustomerDetailDto;
 import com.etiya.ReCapProject.entities.requests.create.CreateIndividualCustomerRequest;
 import com.etiya.ReCapProject.entities.requests.delete.DeleteIndividualCustomerRequest;
 import com.etiya.ReCapProject.entities.requests.update.UpdateIndividualCustomerRequest;
@@ -25,22 +28,30 @@ public class IndividualCustomerManager implements IndividualCustomerService {
 
 	private IndividualCustomerDao individualCustomerDao;
 	private UserDao userDao;
+	private ModelMapper modelMapper;
 
 	@Autowired
-	public IndividualCustomerManager(IndividualCustomerDao individualCustomerDao, UserDao userDao) {
+	public IndividualCustomerManager(IndividualCustomerDao individualCustomerDao, UserDao userDao,ModelMapper modelMapper) {
 		super();
 		this.individualCustomerDao = individualCustomerDao;
 		this.userDao = userDao;
+		this.modelMapper = modelMapper;
 	}
 
 	@Override
-	public DataResult<List<IndividualCustomer>> getAll() {
-		return new SuccessDataResult<List<IndividualCustomer>>(this.individualCustomerDao.findAll());
+	public DataResult<List<IndividualCustomerDetailDto>> getAll() {
+		List<IndividualCustomer> individualCustomers = this.individualCustomerDao.findAll();
+		 
+		 List<IndividualCustomerDetailDto> individualCustomerDetailDtos =individualCustomers.stream().map(individualCustomer -> modelMapper.map(individualCustomer, IndividualCustomerDetailDto.class)).collect(Collectors.toList());
+		return new SuccessDataResult<List<IndividualCustomerDetailDto>>(individualCustomerDetailDtos);
 	}
 
 	@Override
-	public DataResult<IndividualCustomer> getById(int id) {
-		return new SuccessDataResult<IndividualCustomer>(this.individualCustomerDao.getById(id));
+	public DataResult<IndividualCustomerDetailDto> getById(int id) {
+		IndividualCustomer individualCustomer = this.individualCustomerDao.getById(id);
+		IndividualCustomerDetailDto individualCustomerDetailDto = modelMapper.map(individualCustomer,IndividualCustomerDetailDto.class);
+		
+		return new SuccessDataResult<IndividualCustomerDetailDto>(individualCustomerDetailDto);
 	}
 
 	@Override

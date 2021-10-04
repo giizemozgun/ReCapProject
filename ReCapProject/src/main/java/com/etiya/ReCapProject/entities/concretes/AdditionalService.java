@@ -25,20 +25,21 @@ import lombok.Data;
 public class AdditionalService {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	@Column(name = "id")
+	@Column(name="id")
 	private int id;
 	
-	@Column(name = "name")
+	@Column(name="name")
 	private String name;
 	
-	@Column(name = "description")
+	@Column(name="description")
 	private String description;
 	
-	@Column(name = "daily_price")
+	@Column(name="daily_price")
 	private double dailyPrice;
 	
 	@JsonIgnore
-    @ManyToMany(mappedBy = "additionalServices")
-    private List<Rental> rentals;
+	@ManyToMany(mappedBy = "additionalServices")
+	private List<Rental> rentals;
+
 	
 }
