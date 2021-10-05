@@ -40,14 +40,16 @@ public class CorporateCustomerManager implements CorporateCustomerService{
 
 	@Override
 	public DataResult<List<CorporateCustomerDetailDto>> getAll() {
+		
 		List<CorporateCustomer> corporateCustomers= this.corporateCustomerDao.findAll();
+		List<CorporateCustomerDetailDto> corporateCustomerDetailDto=corporateCustomers.stream().map(corporateCustomer -> modelMapper.map(corporateCustomer, CorporateCustomerDetailDto.class)).collect(Collectors.toList());
 		 
-		 List<CorporateCustomerDetailDto> corporateCustomerDetailDto=corporateCustomers.stream().map(corporateCustomer -> modelMapper.map(corporateCustomer, CorporateCustomerDetailDto.class)).collect(Collectors.toList());
 		return new SuccessDataResult<List<CorporateCustomerDetailDto>>(corporateCustomerDetailDto);
 	}
 
 	@Override
 	public DataResult<CorporateCustomerDetailDto> getById(int id) {
+		
 		CorporateCustomer corporateCustomer = this.corporateCustomerDao.getById(id);
 		CorporateCustomerDetailDto corporateCustomerDetailDto = modelMapper.map(corporateCustomer,CorporateCustomerDetailDto.class);
 		
@@ -63,12 +65,8 @@ public class CorporateCustomerManager implements CorporateCustomerService{
 		if (result != null) {
 			return result;
 		}
-			
-		CorporateCustomer corporateCustomer = new CorporateCustomer();
-		corporateCustomer.setTaxNumber(createCorporateCustomerRequest.getTaxNumber());
-		corporateCustomer.setCompanyName(createCorporateCustomerRequest.getCompanyName());
-		corporateCustomer.setEmail(createCorporateCustomerRequest.getEmail());
-		corporateCustomer.setPassword(createCorporateCustomerRequest.getPassword());
+		
+		CorporateCustomer corporateCustomer = modelMapper.map(createCorporateCustomerRequest, CorporateCustomer.class);
 		
 		this.corporateCustomerDao.save(corporateCustomer);
 		return new SuccessResult(Messages.CustomerAdded);
@@ -77,10 +75,7 @@ public class CorporateCustomerManager implements CorporateCustomerService{
 	@Override
 	public Result delete(DeleteCorporateCustomerRequest deleteCorporateCustomerRequest) {
 	
-		
-		CorporateCustomer corporateCustomer = new CorporateCustomer();
-		corporateCustomer.setId(deleteCorporateCustomerRequest.getId());
-		
+		CorporateCustomer corporateCustomer = modelMapper.map(deleteCorporateCustomerRequest, CorporateCustomer.class);
 		
 		this.corporateCustomerDao.delete(corporateCustomer);
 		return new SuccessResult(Messages.CustomerDeleted);
@@ -89,16 +84,8 @@ public class CorporateCustomerManager implements CorporateCustomerService{
 	@Override
 	public Result update(UpdateCorporateCustomerRequest updateCorporateCustomerRequest) {
 		
-		
-		
-		CorporateCustomer corporateCustomer = new CorporateCustomer();
-		corporateCustomer.setTaxNumber(updateCorporateCustomerRequest.getTaxNumber());
-		corporateCustomer.setCompanyName(updateCorporateCustomerRequest.getCompanyName());
-		corporateCustomer.setEmail(updateCorporateCustomerRequest.getEmail());
-		corporateCustomer.setPassword(updateCorporateCustomerRequest.getPassword());
-		corporateCustomer.setId(updateCorporateCustomerRequest.getId());
+		CorporateCustomer corporateCustomer = modelMapper.map(updateCorporateCustomerRequest, CorporateCustomer.class);
 			
-		
 		this.corporateCustomerDao.save(corporateCustomer);
 		return new SuccessResult(Messages.CustomerUpdated);
 	}

@@ -68,10 +68,7 @@ public class AdditionalServiceManager implements AdditionalServiceService{
 			return result;
 		}
 		
-		AdditionalService additionalService=new AdditionalService();
-		additionalService.setName(createAdditionalServiceRequest.getName());
-		additionalService.setDescription(createAdditionalServiceRequest.getDescription());
-		additionalService.setDailyPrice(createAdditionalServiceRequest.getDailyPrice());
+		AdditionalService additionalService = modelMapper.map(createAdditionalServiceRequest, AdditionalService.class);
 		
 		this.additionalServiceDao.save(additionalService);
 		return new SuccessResult(Messages.AdditionalServiceAdded);
@@ -79,8 +76,7 @@ public class AdditionalServiceManager implements AdditionalServiceService{
 
 	@Override
 	public Result delete(DeleteAdditionalServiceRequest deleteAdditionalServiceRequest) {
-		AdditionalService additionalService=new AdditionalService();
-		additionalService.setId(deleteAdditionalServiceRequest.getId());
+		AdditionalService additionalService = modelMapper.map(deleteAdditionalServiceRequest, AdditionalService.class);
 		
 		this.additionalServiceDao.delete(additionalService);
 		return new SuccessResult(Messages.AdditionalServiceDeleted);
@@ -94,11 +90,7 @@ public class AdditionalServiceManager implements AdditionalServiceService{
 			return result;
 		}
 		
-		AdditionalService additionalService=new AdditionalService();
-		additionalService.setId(updateAdditionalServiceRequest.getId());
-		additionalService.setName(updateAdditionalServiceRequest.getName());
-		additionalService.setDescription(updateAdditionalServiceRequest.getDescription());
-		additionalService.setDailyPrice(updateAdditionalServiceRequest.getDailyPrice());
+		AdditionalService additionalService = modelMapper.map(updateAdditionalServiceRequest, AdditionalService.class);
 		
 		this.additionalServiceDao.save(additionalService);
 		return new SuccessResult(Messages.AdditionalServiceUpdated);

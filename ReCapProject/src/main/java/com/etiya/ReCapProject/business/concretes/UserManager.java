@@ -52,11 +52,8 @@ public class UserManager implements UserService {
 	@Override
 	public Result add(CreateUserRequest createUserRequest) {
 		
-		ApplicationUser user = new ApplicationUser();
-		
-		user.setEmail(createUserRequest.getEmail());
-		user.setPassword(createUserRequest.getPassword());
-		
+		ApplicationUser user = modelMapper.map(createUserRequest, ApplicationUser.class);
+	
 		this.userDao.save(user);
 		return new SuccessResult(Messages.UserAdded);
 	}
@@ -64,8 +61,7 @@ public class UserManager implements UserService {
 	@Override
 	public Result delete(DeleteUserRequest deleteUserRequest) {
 		
-		ApplicationUser user = new ApplicationUser();
-		user.setId(deleteUserRequest.getId());
+		ApplicationUser user = modelMapper.map(deleteUserRequest, ApplicationUser.class);
 		
 		this.userDao.delete(user);
 		return new SuccessResult(Messages.UserDeleted);
@@ -74,11 +70,7 @@ public class UserManager implements UserService {
 	@Override
 	public Result update(UpdateUserRequest updateUserRequest) {
 		
-		ApplicationUser user = new ApplicationUser();
-		user.setId(updateUserRequest.getId());
-		
-		user.setEmail(updateUserRequest.getEmail());
-		user.setPassword(updateUserRequest.getPassword());
+		ApplicationUser user = modelMapper.map(updateUserRequest, ApplicationUser.class);
 		
 		this.userDao.save(user);
 		return new SuccessResult(Messages.UserUpdated);

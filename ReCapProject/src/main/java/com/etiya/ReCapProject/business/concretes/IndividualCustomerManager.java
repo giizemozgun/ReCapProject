@@ -64,12 +64,7 @@ public class IndividualCustomerManager implements IndividualCustomerService {
 			return result;
 		}
 		
-		IndividualCustomer individualCustomer=new IndividualCustomer();
-		individualCustomer.setEmail(createIndividualCustomerRequest.getEmail());
-		individualCustomer.setPassword(createIndividualCustomerRequest.getPassword());
-		individualCustomer.setFirstName(createIndividualCustomerRequest.getFirstName());
-		individualCustomer.setLastName(createIndividualCustomerRequest.getLastName());
-		individualCustomer.setIdentityNumber(createIndividualCustomerRequest.getIdentityNumber());
+		IndividualCustomer individualCustomer = modelMapper.map(createIndividualCustomerRequest, IndividualCustomer.class);
 		
 		this.individualCustomerDao.save(individualCustomer);
 		return new SuccessResult(Messages.CustomerAdded);
@@ -78,8 +73,7 @@ public class IndividualCustomerManager implements IndividualCustomerService {
 	@Override
 	public Result delete(DeleteIndividualCustomerRequest deleteIndividualCustomerRequest) {
 		
-		IndividualCustomer individualCustomer=new IndividualCustomer();
-		individualCustomer.setId(deleteIndividualCustomerRequest.getId());
+		IndividualCustomer individualCustomer = modelMapper.map(deleteIndividualCustomerRequest, IndividualCustomer.class);
 		
 		this.individualCustomerDao.delete(individualCustomer);
 		return new SuccessResult(Messages.CustomerDeleted);
@@ -88,13 +82,7 @@ public class IndividualCustomerManager implements IndividualCustomerService {
 	@Override
 	public Result update(UpdateIndividualCustomerRequest updateIndividualCustomerRequest) {
 		
-		IndividualCustomer individualCustomer=new IndividualCustomer();
-		individualCustomer.setId(updateIndividualCustomerRequest.getId());
-		individualCustomer.setEmail(updateIndividualCustomerRequest.getEmail());
-		individualCustomer.setPassword(updateIndividualCustomerRequest.getPassword());
-		individualCustomer.setFirstName(updateIndividualCustomerRequest.getFirstName());
-		individualCustomer.setLastName(updateIndividualCustomerRequest.getLastName());
-		individualCustomer.setIdentityNumber(updateIndividualCustomerRequest.getIdentityNumber());
+		IndividualCustomer individualCustomer = modelMapper.map(updateIndividualCustomerRequest, IndividualCustomer.class);
 		
 		this.individualCustomerDao.save(individualCustomer);
 		return new SuccessResult(Messages.CustomerUpdated);

@@ -10,8 +10,11 @@ import lombok.NoArgsConstructor;
 public class CarDetailDto {
 	
 private String carName;
+
 private String brandName;
+
 private String colorName;
+
 private double dailyPrice;
 
 

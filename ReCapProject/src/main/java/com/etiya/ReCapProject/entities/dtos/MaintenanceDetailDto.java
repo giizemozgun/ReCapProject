@@ -18,6 +18,9 @@ public class MaintenanceDetailDto {
 	private Date returnDate;
 
 	private String carName;
+
+
+
 	
 	
 }

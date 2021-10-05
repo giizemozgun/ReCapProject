@@ -3,7 +3,7 @@ package com.etiya.ReCapProject.entities.requests.rental;
 import java.util.Date;
 import java.util.List;
 
-import com.etiya.ReCapProject.entities.dtos.AdditionalServiceDto;
+import com.etiya.ReCapProject.entities.dtos.AdditionalServiceForRentalDto;
 import com.etiya.ReCapProject.entities.dtos.CreditCardDetailDto;
 import com.sun.istack.NotNull;
 
@@ -36,5 +36,5 @@ public class CreateRentalRequest {
 	
 	private int creditCardId;
 	
-	private List<AdditionalServiceDto> additionalServiceDtos;
+	private List<AdditionalServiceForRentalDto> additionalServiceDtos;
 }

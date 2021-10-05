@@ -64,15 +64,11 @@ public class CreditCardManager implements CreditCardService {
 		if (result != null) {
 			return result;
 		}
-		
-		Customer customer=new Customer();
+
+		Customer customer = new Customer();
 		customer.setId(createCreditCardRequest.getCustomerId());
 
-		CreditCard creditCard=new CreditCard();
-		creditCard.setCardNumber(createCreditCardRequest.getCardNumber());
-		creditCard.setName(createCreditCardRequest.getName());
-		creditCard.setExpiryDate(createCreditCardRequest.getExpiryDate());
-		creditCard.setCvv(createCreditCardRequest.getCvv());
+		CreditCard creditCard = modelMapper.map(createCreditCardRequest, CreditCard.class);
 		creditCard.setCustomer(customer);
 		
 		this.creditCardDao.save(creditCard);
@@ -82,8 +78,8 @@ public class CreditCardManager implements CreditCardService {
 
 	@Override
 	public Result delete(DeleteCreditCardRequest deleteCreditCardRequest) {
-		CreditCard creditCard = new CreditCard();
-		creditCard.setCreditCardId(deleteCreditCardRequest.getCreditCardId());
+		
+		CreditCard creditCard = modelMapper.map(deleteCreditCardRequest, CreditCard.class);
 		
 		this.creditCardDao.delete(creditCard);
 		return new SuccessResult(Messages.CreditCardDeleted);
@@ -100,15 +96,10 @@ public class CreditCardManager implements CreditCardService {
 			return result;
 		}
 		
-		Customer customer=new Customer();
+		Customer customer = new Customer();
 		customer.setId(updateCreditCardRequest.getCustomerId());
 
-		CreditCard creditCard=new CreditCard();
-		creditCard.setCreditCardId(updateCreditCardRequest.getCreditCardId());
-		creditCard.setCardNumber(updateCreditCardRequest.getCardNumber());
-		creditCard.setName(updateCreditCardRequest.getName());
-		creditCard.setExpiryDate(updateCreditCardRequest.getExpiryDate());
-		creditCard.setCvv(updateCreditCardRequest.getCvv());
+		CreditCard creditCard = modelMapper.map(updateCreditCardRequest, CreditCard.class);
 		creditCard.setCustomer(customer);
 		
 		this.creditCardDao.save(creditCard);
@@ -123,6 +114,15 @@ public class CreditCardManager implements CreditCardService {
 		 
 		 List<CreditCardDetailDto> creditCardDetailDtos = creditCards.stream().map(creditCard -> modelMapper.map(creditCard, CreditCardDetailDto.class)).collect(Collectors.toList());
 		return new SuccessDataResult<List<CreditCardDetailDto>>(creditCardDetailDtos);
+	}
+	
+	@Override
+	public Result saveCardInformation(CreditCardDetailDto creditCardDetailDto, int customerId) {
+		
+		CreateCreditCardRequest createCreditCardRequest = modelMapper.map(creditCardDetailDto, CreateCreditCardRequest.class);
+		createCreditCardRequest.setCustomerId(customerId);
+
+		return new SuccessResult(this.add(createCreditCardRequest).getMessage());
 	}
 	
 	private Result checkCreditCardNumber(String creditCardNumber) {
@@ -167,6 +167,8 @@ public class CreditCardManager implements CreditCardService {
 		}
 		return new SuccessResult();
 	}
+	
+	
 
 	
 	

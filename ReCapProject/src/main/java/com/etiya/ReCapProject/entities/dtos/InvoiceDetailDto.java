@@ -22,7 +22,7 @@ public class InvoiceDetailDto {
 	
 	private double totalAmount;
 	
-	private int customerId;
+	private int rentalId;
 	
 	
 }

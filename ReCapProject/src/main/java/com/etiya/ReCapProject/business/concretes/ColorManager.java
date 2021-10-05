@@ -59,8 +59,7 @@ public class ColorManager implements ColorService{
 			return result;
 		}
 			
-		Color color = new Color();
-		color.setColorName(createColorRequest.getColorName());
+		Color color = modelMapper.map(createColorRequest, Color.class);
 		
 		this.colorDao.save(color);
 		return new SuccessResult(Messages.ColorAdded);
@@ -70,8 +69,7 @@ public class ColorManager implements ColorService{
 	@Override
 	public Result delete(DeleteColorRequest deleteColorRequest) {
 		
-		Color color = new Color();
-		color.setColorId(deleteColorRequest.getColorId());
+		Color color = modelMapper.map(deleteColorRequest, Color.class);
 		
 		this.colorDao.delete(color);
 		return new SuccessResult(Messages.ColorDeleted);
@@ -86,9 +84,7 @@ public class ColorManager implements ColorService{
 			return result;
 		}
 		
-		Color color = new Color();
-		color.setColorId(updateColorRequest.getColorId());
-		color.setColorName(updateColorRequest.getColorName());
+		Color color = modelMapper.map(updateColorRequest, Color.class);
 		
 		this.colorDao.save(color);
 		return new SuccessResult(Messages.ColorUpdated);

@@ -26,7 +26,8 @@ public class RentalDetailDto {
 
 	private double totalAmount;
 
-	private List<AdditionalServiceDto> additionalServiceDtos;
+	private List<AdditionalServiceDetailDto> additionalServiceDetailDtos;
 	
-	private CustomerDetailDto customerDetailDto;
+	private int customerId;
+
 }

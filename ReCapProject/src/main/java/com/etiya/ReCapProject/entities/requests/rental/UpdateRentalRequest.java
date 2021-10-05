@@ -5,7 +5,7 @@ import java.util.List;
 
 import javax.validation.constraints.NotNull;
 
-import com.etiya.ReCapProject.entities.dtos.AdditionalServiceDto;
+import com.etiya.ReCapProject.entities.dtos.AdditionalServiceForRentalDto;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -33,6 +33,6 @@ public class UpdateRentalRequest {
 	@NotNull
 	private String returnLocation;
 	
-	private List<AdditionalServiceDto> additionalServiceDtos;
+	private List<AdditionalServiceForRentalDto> additionalServiceDtos;
 	
 }

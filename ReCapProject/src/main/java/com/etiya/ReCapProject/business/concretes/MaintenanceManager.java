@@ -1,7 +1,7 @@
 package com.etiya.ReCapProject.business.concretes;
 
+import java.util.ArrayList;
 import java.util.List;
-import java.util.stream.Collectors;
 
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -47,9 +47,16 @@ public class MaintenanceManager implements MaintenanceService {
 	public DataResult<List<MaintenanceDetailDto>> getAll() {
 		
 		List<Maintenance> maintenances= this.maintenanceDao.findAll();
-		List<MaintenanceDetailDto> maintenanceDetailDto=maintenances.stream().map(maintenance -> modelMapper.map(maintenance, MaintenanceDetailDto.class)).collect(Collectors.toList());
 		
-		return new  SuccessDataResult<List<MaintenanceDetailDto>>(maintenanceDetailDto);
+		List<MaintenanceDetailDto> maintenanceDetailDtos = new ArrayList<MaintenanceDetailDto>();
+
+	        for (Maintenance maintenance : maintenances) {
+	        	MaintenanceDetailDto maintenanceDetailDto = modelMapper.map(maintenance, MaintenanceDetailDto.class);
+	        	maintenanceDetailDto.setCarName(this.carDao.getById(maintenance.getCar().getCarId()).getCarName());
+
+	        	maintenanceDetailDtos.add(maintenanceDetailDto);
+	        }
+	        return new SuccessDataResult<List<MaintenanceDetailDto>>(maintenanceDetailDtos);
 	}
 
 	@Override
@@ -57,6 +64,7 @@ public class MaintenanceManager implements MaintenanceService {
 		
 		Maintenance maintenance= this.maintenanceDao.getById(id);
 		MaintenanceDetailDto maintenanceDetailDto=modelMapper.map(maintenance, MaintenanceDetailDto.class);
+		maintenanceDetailDto.setCarName(this.carDao.getById(maintenance.getCar().getCarId()).getCarName());
 		
 		return new SuccessDataResult<MaintenanceDetailDto>(maintenanceDetailDto);
 	}
@@ -75,10 +83,7 @@ public class MaintenanceManager implements MaintenanceService {
 		car.setAvailable(false);
 		
 		
-		Maintenance maintenance = new Maintenance();
-		maintenance.setMaintenanceDate(createMaintenanceRequest.getMaintenanceDate());
-		maintenance.setReturnDate(createMaintenanceRequest.getReturnDate());
-		
+		Maintenance maintenance = modelMapper.map(createMaintenanceRequest, Maintenance.class);
 		maintenance.setCar(car);
 		
 		
@@ -89,8 +94,8 @@ public class MaintenanceManager implements MaintenanceService {
 
 	@Override
 	public Result delete(DeleteMaintenanceRequest deleteMaintenanceRequest) {
-		Maintenance maintenance = new Maintenance();
-		maintenance.setMaintenanceId(deleteMaintenanceRequest.getMaintenanceId());
+		
+		Maintenance maintenance = modelMapper.map(deleteMaintenanceRequest, Maintenance.class);
 		
 		this.maintenanceDao.delete(maintenance);
 		return new SuccessResult(Messages.MaintenanceDeleted);
@@ -101,10 +106,7 @@ public class MaintenanceManager implements MaintenanceService {
 		Car car = new Car();
 		car.setCarId(updateMaintenanceRequest.getCarId());
 		
-		Maintenance maintenance = new Maintenance();
-		maintenance.setMaintenanceId(updateMaintenanceRequest.getMaintenanceId());
-		maintenance.setMaintenanceDate(updateMaintenanceRequest.getMaintenanceDate());
-		maintenance.setReturnDate(updateMaintenanceRequest.getReturnDate());
+		Maintenance maintenance = modelMapper.map(updateMaintenanceRequest, Maintenance.class);
 		maintenance.setCar(car);
 		
 		this.maintenanceDao.save(maintenance);
@@ -124,8 +126,7 @@ public class MaintenanceManager implements MaintenanceService {
 		this.carDao.save(car);
 		
 		return new SuccessResult(Messages.CarIsReturnedFromMaintenance);
-		
-		
+			
 	}
 
 	private Result checkReturnFromRental(int carId) {

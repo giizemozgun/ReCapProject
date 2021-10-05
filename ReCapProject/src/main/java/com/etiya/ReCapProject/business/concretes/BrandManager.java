@@ -3,6 +3,7 @@ package com.etiya.ReCapProject.business.concretes;
 import java.util.List;
 import java.util.stream.Collectors;
 
+import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -20,8 +21,6 @@ import com.etiya.ReCapProject.entities.dtos.BrandDetailDto;
 import com.etiya.ReCapProject.entities.requests.brand.CreateBrandRequest;
 import com.etiya.ReCapProject.entities.requests.brand.DeleteBrandRequest;
 import com.etiya.ReCapProject.entities.requests.brand.UpdateBrandRequest;
-
-import org.modelmapper.ModelMapper;
 
 @Service
 public class BrandManager implements BrandService{
@@ -62,8 +61,7 @@ public class BrandManager implements BrandService{
 			return result;
 		}
 				
-		Brand brand = new Brand();
-		brand.setBrandName(createBrandrequest.getBrandName());
+		Brand brand = modelMapper.map(createBrandrequest, Brand.class);
 		
 		this.brandDao.save(brand);
 		return new SuccessResult( Messages.BrandAdded);
@@ -72,8 +70,7 @@ public class BrandManager implements BrandService{
 	@Override
 	public Result delete(DeleteBrandRequest deleteBrandrequest) {
 		
-		Brand brand = new Brand();
-		brand.setBrandId(deleteBrandrequest.getBrandId());
+		Brand brand = modelMapper.map(deleteBrandrequest, Brand.class);
 		
 		this.brandDao.delete(brand);
 		return new SuccessResult( Messages.BrandDeleted);
@@ -88,9 +85,7 @@ public class BrandManager implements BrandService{
 			return result;
 		}
 		
-		Brand brand = new Brand();
-		brand.setBrandName(updateBrandrequest.getBrandName());
-		brand.setBrandId(updateBrandrequest.getBrandId());
+		Brand brand = modelMapper.map(updateBrandrequest, Brand.class);
 		
 		this.brandDao.save(brand);
 		return new SuccessResult(Messages.BrandUpdated);

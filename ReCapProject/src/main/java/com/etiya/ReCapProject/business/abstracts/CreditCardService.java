@@ -18,4 +18,6 @@ public interface CreditCardService {
 	Result update(UpdateCreditCardRequest updateCreditCardRequest);
 		
 	DataResult<List<CreditCardDetailDto>> getByCustomerId(int customerId);
+	
+	Result saveCardInformation(CreditCardDetailDto creditCardDetailDto, int customerId);
 }	
