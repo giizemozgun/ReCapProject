@@ -19,9 +19,9 @@ import com.etiya.ReCapProject.dataAccess.abstracts.CorporateCustomerDao;
 import com.etiya.ReCapProject.dataAccess.abstracts.UserDao;
 import com.etiya.ReCapProject.entities.concretes.CorporateCustomer;
 import com.etiya.ReCapProject.entities.dtos.CorporateCustomerDetailDto;
-import com.etiya.ReCapProject.entities.requests.create.CreateCorporateCustomerRequest;
-import com.etiya.ReCapProject.entities.requests.delete.DeleteCorporateCustomerRequest;
-import com.etiya.ReCapProject.entities.requests.update.UpdateCorporateCustomerRequest;
+import com.etiya.ReCapProject.entities.requests.corporateCustomer.CreateCorporateCustomerRequest;
+import com.etiya.ReCapProject.entities.requests.corporateCustomer.DeleteCorporateCustomerRequest;
+import com.etiya.ReCapProject.entities.requests.corporateCustomer.UpdateCorporateCustomerRequest;
 
 @Service
 public class CorporateCustomerManager implements CorporateCustomerService{

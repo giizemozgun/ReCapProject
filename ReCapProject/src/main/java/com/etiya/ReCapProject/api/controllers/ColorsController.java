@@ -16,9 +16,9 @@ import com.etiya.ReCapProject.business.abstracts.ColorService;
 import com.etiya.ReCapProject.core.utilities.results.DataResult;
 import com.etiya.ReCapProject.core.utilities.results.Result;
 import com.etiya.ReCapProject.entities.dtos.ColorDetailDto;
-import com.etiya.ReCapProject.entities.requests.create.CreateColorRequest;
-import com.etiya.ReCapProject.entities.requests.delete.DeleteColorRequest;
-import com.etiya.ReCapProject.entities.requests.update.UpdateColorRequest;
+import com.etiya.ReCapProject.entities.requests.color.CreateColorRequest;
+import com.etiya.ReCapProject.entities.requests.color.DeleteColorRequest;
+import com.etiya.ReCapProject.entities.requests.color.UpdateColorRequest;
 
 @RestController
 @RequestMapping("/api/colors")

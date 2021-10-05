@@ -20,10 +20,10 @@ import com.etiya.ReCapProject.dataAccess.abstracts.RentalDao;
 import com.etiya.ReCapProject.entities.concretes.Invoice;
 import com.etiya.ReCapProject.entities.concretes.Rental;
 import com.etiya.ReCapProject.entities.dtos.InvoiceDetailDto;
-import com.etiya.ReCapProject.entities.requests.InvoiceBetweenDateRequest;
-import com.etiya.ReCapProject.entities.requests.create.CreateInvoiceRequest;
-import com.etiya.ReCapProject.entities.requests.delete.DeleteInvoiceRequest;
-import com.etiya.ReCapProject.entities.requests.update.UpdateInvoiceRequest;
+import com.etiya.ReCapProject.entities.requests.invoice.CreateInvoiceRequest;
+import com.etiya.ReCapProject.entities.requests.invoice.DeleteInvoiceRequest;
+import com.etiya.ReCapProject.entities.requests.invoice.InvoiceBetweenDateRequest;
+import com.etiya.ReCapProject.entities.requests.invoice.UpdateInvoiceRequest;
 
 @Service
 public class InvoiceManager implements InvoiceService {

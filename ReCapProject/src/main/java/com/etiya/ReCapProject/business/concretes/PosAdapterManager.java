@@ -4,7 +4,7 @@ import org.springframework.stereotype.Service;
 
 import com.etiya.ReCapProject.business.abstracts.PosService;
 import com.etiya.ReCapProject.core.services.FakePosService;
-import com.etiya.ReCapProject.entities.requests.PosServiceRequest;
+import com.etiya.ReCapProject.entities.requests.creditCard.PosServiceRequest;
 
 @Service
 public class PosAdapterManager implements PosService{

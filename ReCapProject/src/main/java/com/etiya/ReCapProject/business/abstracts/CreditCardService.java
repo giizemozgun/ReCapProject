@@ -5,9 +5,9 @@ import java.util.List;
 import com.etiya.ReCapProject.core.utilities.results.DataResult;
 import com.etiya.ReCapProject.core.utilities.results.Result;
 import com.etiya.ReCapProject.entities.dtos.CreditCardDetailDto;
-import com.etiya.ReCapProject.entities.requests.create.CreateCreditCardRequest;
-import com.etiya.ReCapProject.entities.requests.delete.DeleteCreditCardRequest;
-import com.etiya.ReCapProject.entities.requests.update.UpdateCreditCardRequest;
+import com.etiya.ReCapProject.entities.requests.creditCard.CreateCreditCardRequest;
+import com.etiya.ReCapProject.entities.requests.creditCard.DeleteCreditCardRequest;
+import com.etiya.ReCapProject.entities.requests.creditCard.UpdateCreditCardRequest;
 
 public interface CreditCardService {
 	

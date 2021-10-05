@@ -21,9 +21,9 @@ import com.etiya.ReCapProject.dataAccess.abstracts.CreditCardDao;
 import com.etiya.ReCapProject.entities.abstracts.Customer;
 import com.etiya.ReCapProject.entities.concretes.CreditCard;
 import com.etiya.ReCapProject.entities.dtos.CreditCardDetailDto;
-import com.etiya.ReCapProject.entities.requests.create.CreateCreditCardRequest;
-import com.etiya.ReCapProject.entities.requests.delete.DeleteCreditCardRequest;
-import com.etiya.ReCapProject.entities.requests.update.UpdateCreditCardRequest;
+import com.etiya.ReCapProject.entities.requests.creditCard.CreateCreditCardRequest;
+import com.etiya.ReCapProject.entities.requests.creditCard.DeleteCreditCardRequest;
+import com.etiya.ReCapProject.entities.requests.creditCard.UpdateCreditCardRequest;
 
 @Service
 public class CreditCardManager implements CreditCardService {

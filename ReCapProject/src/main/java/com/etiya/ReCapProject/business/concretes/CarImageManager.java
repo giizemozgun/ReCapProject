@@ -26,9 +26,9 @@ import com.etiya.ReCapProject.dataAccess.abstracts.CarImageDao;
 import com.etiya.ReCapProject.entities.concretes.Car;
 import com.etiya.ReCapProject.entities.concretes.CarImage;
 import com.etiya.ReCapProject.entities.dtos.CarImageDetailDto;
-import com.etiya.ReCapProject.entities.requests.create.CreateCarImageRequest;
-import com.etiya.ReCapProject.entities.requests.delete.DeleteCarImageRequest;
-import com.etiya.ReCapProject.entities.requests.update.UpdateCarImageRequest;
+import com.etiya.ReCapProject.entities.requests.carImage.CreateCarImageRequest;
+import com.etiya.ReCapProject.entities.requests.carImage.DeleteCarImageRequest;
+import com.etiya.ReCapProject.entities.requests.carImage.UpdateCarImageRequest;
 
 @Service
 public class CarImageManager implements CarImageService {

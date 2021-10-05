@@ -18,9 +18,9 @@ import com.etiya.ReCapProject.core.utilities.results.SuccessResult;
 import com.etiya.ReCapProject.dataAccess.abstracts.AdditionalServiceDao;
 import com.etiya.ReCapProject.entities.concretes.AdditionalService;
 import com.etiya.ReCapProject.entities.dtos.AdditionalServiceDetailDto;
-import com.etiya.ReCapProject.entities.requests.create.CreateAdditionalServiceRequest;
-import com.etiya.ReCapProject.entities.requests.delete.DeleteAdditionalServiceRequest;
-import com.etiya.ReCapProject.entities.requests.update.UpdateAdditionalServiceRequest;
+import com.etiya.ReCapProject.entities.requests.additionalService.CreateAdditionalServiceRequest;
+import com.etiya.ReCapProject.entities.requests.additionalService.DeleteAdditionalServiceRequest;
+import com.etiya.ReCapProject.entities.requests.additionalService.UpdateAdditionalServiceRequest;
 
 @Service
 public class AdditionalServiceManager implements AdditionalServiceService{

@@ -19,9 +19,9 @@ import com.etiya.ReCapProject.entities.concretes.Brand;
 import com.etiya.ReCapProject.entities.concretes.Car;
 import com.etiya.ReCapProject.entities.concretes.Color;
 import com.etiya.ReCapProject.entities.dtos.CarDetailDto;
-import com.etiya.ReCapProject.entities.requests.create.CreateCarRequest;
-import com.etiya.ReCapProject.entities.requests.delete.DeleteCarRequest;
-import com.etiya.ReCapProject.entities.requests.update.UpdateCarRequest;
+import com.etiya.ReCapProject.entities.requests.car.CreateCarRequest;
+import com.etiya.ReCapProject.entities.requests.car.DeleteCarRequest;
+import com.etiya.ReCapProject.entities.requests.car.UpdateCarRequest;
 
 @Service
 public class CarManager implements CarService {

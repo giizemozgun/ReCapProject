@@ -34,12 +34,12 @@ import com.etiya.ReCapProject.entities.concretes.Rental;
 import com.etiya.ReCapProject.entities.dtos.AdditionalServiceDto;
 import com.etiya.ReCapProject.entities.dtos.CreditCardDetailDto;
 import com.etiya.ReCapProject.entities.dtos.RentalDetailDto;
-import com.etiya.ReCapProject.entities.requests.CarReturnedRequest;
-import com.etiya.ReCapProject.entities.requests.PosServiceRequest;
-import com.etiya.ReCapProject.entities.requests.create.CreateCreditCardRequest;
-import com.etiya.ReCapProject.entities.requests.create.CreateRentalRequest;
-import com.etiya.ReCapProject.entities.requests.delete.DeleteRentalRequest;
-import com.etiya.ReCapProject.entities.requests.update.UpdateRentalRequest;
+import com.etiya.ReCapProject.entities.requests.car.CarReturnedRequest;
+import com.etiya.ReCapProject.entities.requests.creditCard.CreateCreditCardRequest;
+import com.etiya.ReCapProject.entities.requests.creditCard.PosServiceRequest;
+import com.etiya.ReCapProject.entities.requests.rental.CreateRentalRequest;
+import com.etiya.ReCapProject.entities.requests.rental.DeleteRentalRequest;
+import com.etiya.ReCapProject.entities.requests.rental.UpdateRentalRequest;
 
 @Service
 public class RentalManager implements RentalService {

@@ -20,10 +20,10 @@ import com.etiya.ReCapProject.business.abstracts.InvoiceService;
 import com.etiya.ReCapProject.core.utilities.results.DataResult;
 import com.etiya.ReCapProject.core.utilities.results.Result;
 import com.etiya.ReCapProject.entities.dtos.InvoiceDetailDto;
-import com.etiya.ReCapProject.entities.requests.InvoiceBetweenDateRequest;
-import com.etiya.ReCapProject.entities.requests.create.CreateInvoiceRequest;
-import com.etiya.ReCapProject.entities.requests.delete.DeleteInvoiceRequest;
-import com.etiya.ReCapProject.entities.requests.update.UpdateInvoiceRequest;
+import com.etiya.ReCapProject.entities.requests.invoice.CreateInvoiceRequest;
+import com.etiya.ReCapProject.entities.requests.invoice.DeleteInvoiceRequest;
+import com.etiya.ReCapProject.entities.requests.invoice.InvoiceBetweenDateRequest;
+import com.etiya.ReCapProject.entities.requests.invoice.UpdateInvoiceRequest;
 
 @RestController
 @RequestMapping("/api/invoices")

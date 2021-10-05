@@ -5,10 +5,10 @@ import java.util.List;
 import com.etiya.ReCapProject.core.utilities.results.DataResult;
 import com.etiya.ReCapProject.core.utilities.results.Result;
 import com.etiya.ReCapProject.entities.dtos.MaintenanceDetailDto;
-import com.etiya.ReCapProject.entities.requests.CarReturnedFromMaintenanceRequest;
-import com.etiya.ReCapProject.entities.requests.create.CreateMaintenanceRequest;
-import com.etiya.ReCapProject.entities.requests.delete.DeleteMaintenanceRequest;
-import com.etiya.ReCapProject.entities.requests.update.UpdateMaintenanceRequest;
+import com.etiya.ReCapProject.entities.requests.car.CarReturnedFromMaintenanceRequest;
+import com.etiya.ReCapProject.entities.requests.maintenance.CreateMaintenanceRequest;
+import com.etiya.ReCapProject.entities.requests.maintenance.DeleteMaintenanceRequest;
+import com.etiya.ReCapProject.entities.requests.maintenance.UpdateMaintenanceRequest;
 
 public interface MaintenanceService {
 	

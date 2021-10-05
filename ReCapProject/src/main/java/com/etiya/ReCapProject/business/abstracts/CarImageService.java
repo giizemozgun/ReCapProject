@@ -6,9 +6,9 @@ import java.util.List;
 import com.etiya.ReCapProject.core.utilities.results.DataResult;
 import com.etiya.ReCapProject.core.utilities.results.Result;
 import com.etiya.ReCapProject.entities.dtos.CarImageDetailDto;
-import com.etiya.ReCapProject.entities.requests.create.CreateCarImageRequest;
-import com.etiya.ReCapProject.entities.requests.delete.DeleteCarImageRequest;
-import com.etiya.ReCapProject.entities.requests.update.UpdateCarImageRequest;
+import com.etiya.ReCapProject.entities.requests.carImage.CreateCarImageRequest;
+import com.etiya.ReCapProject.entities.requests.carImage.DeleteCarImageRequest;
+import com.etiya.ReCapProject.entities.requests.carImage.UpdateCarImageRequest;
 
 public interface CarImageService {
 	
