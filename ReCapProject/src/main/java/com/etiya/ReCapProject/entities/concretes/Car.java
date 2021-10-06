@@ -52,8 +52,8 @@ public class Car {
 	@Column(name="city")
 	private String city;
 	
-	@Column(name="is_Available" , columnDefinition = "boolean default true")
-	private boolean isAvailable;
+	@Column(name="is_Available")
+	private boolean isAvailable = true;
 	
 	@OneToMany(mappedBy = "car")
 	@JsonIgnore

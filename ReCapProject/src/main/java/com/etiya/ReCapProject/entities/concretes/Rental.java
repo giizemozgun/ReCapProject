@@ -42,8 +42,8 @@ public class Rental {
 	@Nullable
 	private Date returnDate;
 	
-	@Column(name = "is_car_returned", columnDefinition = "boolean default false")
-	private boolean isCarReturned;
+	@Column(name = "is_car_returned")
+	private boolean isCarReturned = false;
 	
 	@Column(name="pick_up_location")
 	private String pickUpLocation;

@@ -6,17 +6,25 @@ public class Messages {
 	public static final String BrandDeleted = "Marka silindi";
 	public static final String BrandUpdated = "Marka güncellendi";
 	public static final String ExistBrand = "Bu marka zaten var";
+	public static final String BrandsListed = "Markalar listelendi";
+	public static final String GetBrand = "Marka getirildi.";
 
 	public static final String ColorAdded = "Renk eklendi";
 	public static final String ColorDeleted = "Renk silindi";
 	public static final String ColorUpdated = "Renk güncellendi";
 	public static final String ExistColor = "Bu renk zaten var";
+	public static final String ColorsListed = "Renkler listelendi";
+	public static final String GetColor = "Renk getirildi.";
 
 	public static final String CarAdded = "Araba eklendi";
 	public static final String CarDeleted = "Araba silindi";
 	public static final String CarUpdated = "Araba güncellendi";
 	public static final String NotAvailableCar = "Araba uygun değil!";
-
+	public static final String CarsListed = "Arabalar listelendi";
+	public static final String GetCar = "Araba getirildi.";
+	public static final String CarsListedByBrand = "Seçilen markadaki arabalar listelendi";
+	
+	
 	public static final String CarImageAdded = "Araba resmi eklendi";
 	public static final String CarImageDeleted = "Araba resmi silindi";
 	public static final String CarImageUpdated = "Araba resmi güncellendi";

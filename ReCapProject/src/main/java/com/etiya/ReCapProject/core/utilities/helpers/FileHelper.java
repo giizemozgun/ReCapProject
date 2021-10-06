@@ -15,7 +15,7 @@ public class FileHelper {
 
 		String imagePath = UUID.randomUUID().toString();
 
-		File myFile = new File(FilePathConfiguration.CAR_IMAGES_PATH + imagePath + "."
+		File myFile = new File(FilePathConfiguration.CarImagesPath + imagePath + "."
 				+ file.getContentType().substring(file.getContentType().indexOf("/") + 1));
 		myFile.createNewFile();
 

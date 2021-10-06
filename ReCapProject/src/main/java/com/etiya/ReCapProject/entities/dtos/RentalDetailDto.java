@@ -12,7 +12,7 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 public class RentalDetailDto {
 
-	private CarDetailDto carDetailDto;
+	private String carName;
 	
 	private Date rentDate;
 

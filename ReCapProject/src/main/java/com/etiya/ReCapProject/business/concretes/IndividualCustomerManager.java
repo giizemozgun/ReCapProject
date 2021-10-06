@@ -31,7 +31,8 @@ public class IndividualCustomerManager implements IndividualCustomerService {
 	private ModelMapper modelMapper;
 
 	@Autowired
-	public IndividualCustomerManager(IndividualCustomerDao individualCustomerDao, UserDao userDao,ModelMapper modelMapper) {
+	public IndividualCustomerManager(IndividualCustomerDao individualCustomerDao, UserDao userDao,
+			ModelMapper modelMapper) {
 		super();
 		this.individualCustomerDao = individualCustomerDao;
 		this.userDao = userDao;
@@ -41,53 +42,59 @@ public class IndividualCustomerManager implements IndividualCustomerService {
 	@Override
 	public DataResult<List<IndividualCustomerDetailDto>> getAll() {
 		List<IndividualCustomer> individualCustomers = this.individualCustomerDao.findAll();
-		 
-		 List<IndividualCustomerDetailDto> individualCustomerDetailDtos =individualCustomers.stream().map(individualCustomer -> modelMapper.map(individualCustomer, IndividualCustomerDetailDto.class)).collect(Collectors.toList());
+
+		List<IndividualCustomerDetailDto> individualCustomerDetailDtos = individualCustomers.stream()
+				.map(individualCustomer -> modelMapper.map(individualCustomer, IndividualCustomerDetailDto.class))
+				.collect(Collectors.toList());
 		return new SuccessDataResult<List<IndividualCustomerDetailDto>>(individualCustomerDetailDtos);
 	}
 
 	@Override
 	public DataResult<IndividualCustomerDetailDto> getById(int id) {
 		IndividualCustomer individualCustomer = this.individualCustomerDao.getById(id);
-		IndividualCustomerDetailDto individualCustomerDetailDto = modelMapper.map(individualCustomer,IndividualCustomerDetailDto.class);
-		
+		IndividualCustomerDetailDto individualCustomerDetailDto = modelMapper.map(individualCustomer,
+				IndividualCustomerDetailDto.class);
+
 		return new SuccessDataResult<IndividualCustomerDetailDto>(individualCustomerDetailDto);
 	}
 
 	@Override
 	public Result add(CreateIndividualCustomerRequest createIndividualCustomerRequest) {
-		
+
 		var result = BusinessRules.run(checkToEmailForRegister(createIndividualCustomerRequest.getEmail()),
 				checkToPasswordForRegister(createIndividualCustomerRequest.getPassword()));
 
 		if (result != null) {
 			return result;
 		}
-		
-		IndividualCustomer individualCustomer = modelMapper.map(createIndividualCustomerRequest, IndividualCustomer.class);
-		
+
+		IndividualCustomer individualCustomer = modelMapper.map(createIndividualCustomerRequest,
+				IndividualCustomer.class);
+
 		this.individualCustomerDao.save(individualCustomer);
 		return new SuccessResult(Messages.CustomerAdded);
 	}
 
 	@Override
 	public Result delete(DeleteIndividualCustomerRequest deleteIndividualCustomerRequest) {
-		
-		IndividualCustomer individualCustomer = modelMapper.map(deleteIndividualCustomerRequest, IndividualCustomer.class);
-		
+
+		IndividualCustomer individualCustomer = modelMapper.map(deleteIndividualCustomerRequest,
+				IndividualCustomer.class);
+
 		this.individualCustomerDao.delete(individualCustomer);
 		return new SuccessResult(Messages.CustomerDeleted);
 	}
 
 	@Override
 	public Result update(UpdateIndividualCustomerRequest updateIndividualCustomerRequest) {
-		
-		IndividualCustomer individualCustomer = modelMapper.map(updateIndividualCustomerRequest, IndividualCustomer.class);
-		
+
+		IndividualCustomer individualCustomer = modelMapper.map(updateIndividualCustomerRequest,
+				IndividualCustomer.class);
+
 		this.individualCustomerDao.save(individualCustomer);
 		return new SuccessResult(Messages.CustomerUpdated);
 	}
-	
+
 	private Result checkToEmailForRegister(String email) {
 
 		if (this.userDao.existsByEmail(email)) {
@@ -96,9 +103,10 @@ public class IndividualCustomerManager implements IndividualCustomerService {
 		return new SuccessResult();
 
 	}
+
 	private Result checkToPasswordForRegister(String password) {
 
-		if (this.userDao.existsByPassword(password))  {
+		if (this.userDao.existsByPassword(password)) {
 			return new ErrorResult(Messages.ERROR);
 		}
 		return new SuccessResult();

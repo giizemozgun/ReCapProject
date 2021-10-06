@@ -28,6 +28,6 @@ public class UpdateUserRequest {
 	
 	@NotBlank(message="Boş olamaz")
 	@NotNull
-	@Size(min=6, max=10)
+	@Size(min=6)
 	private String password;
 }

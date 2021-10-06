@@ -3,15 +3,13 @@ package com.etiya.ReCapProject.business.concretes;
 import java.time.temporal.ChronoUnit;
 import java.util.ArrayList;
 import java.util.List;
-
-import javax.transaction.Transactional;
+import java.util.stream.Collectors;
 
 import org.modelmapper.ModelMapper;
+import org.modelmapper.convention.MatchingStrategies;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import com.etiya.ReCapProject.business.abstracts.AdditionalServiceService;
-import com.etiya.ReCapProject.business.abstracts.CarService;
 import com.etiya.ReCapProject.business.abstracts.CreditCardService;
 import com.etiya.ReCapProject.business.abstracts.FindexPointService;
 import com.etiya.ReCapProject.business.abstracts.PosService;
@@ -50,21 +48,18 @@ public class RentalManager implements RentalService {
 	private FindexPointService findexPointService;
 	private MaintenanceDao maintenanceDao;
 	private CarDao carDao;
-	private CarService carService;
 	private PosService posService;
 	private CorporateCustomerDao corporateCustomerDao;
 	private IndividualCustomerDao individualCustomerDao;
 	private CreditCardService creditCardService;
 	private AdditionalServiceDao additionalServiceDao;
 	private ModelMapper modelMapper;
-	private AdditionalServiceService additionalServiceService;
 
 	@Autowired
 	public RentalManager(RentalDao rentalDao, FindexPointService findexPointService,CarDao carDao,
 			MaintenanceDao maintenanceDao, PosService posService,
 			CorporateCustomerDao corporateCustomerDao, IndividualCustomerDao individualCustomerDao,
-			CreditCardService creditCardService, AdditionalServiceDao additionalServiceDao, ModelMapper modelMapper,
-			CarService carService,AdditionalServiceService additionalServiceService) {
+			CreditCardService creditCardService, AdditionalServiceDao additionalServiceDao,ModelMapper modelMapper) {
 		super();
 		this.rentalDao = rentalDao;
 		this.findexPointService = findexPointService;
@@ -76,42 +71,32 @@ public class RentalManager implements RentalService {
 		this.creditCardService = creditCardService;
 		this.additionalServiceDao = additionalServiceDao;
 		this.modelMapper = modelMapper;
-		this.carService = carService;
-		this.additionalServiceService = additionalServiceService;
 	}
 
 	@Override
 	public DataResult<List<RentalDetailDto>> getAll() {
-			List<Rental> rentals= this.rentalDao.findAll();
-			
-			List<RentalDetailDto> rentalDetailDtos = new ArrayList<RentalDetailDto>();
-			
-			for(Rental rental : rentals) {
-			RentalDetailDto rentalDetailDto = modelMapper.map(rental,RentalDetailDto.class);
-			rentalDetailDto.setCarDetailDto(this.carService.getById(rental.getCar().getCarId()).getData());
-			rentalDetailDto.setAdditionalServiceDetailDtos(this.additionalServiceService.getByRentalId(rental.getId()).getData());
-			rentalDetailDto.setCustomerId(this.rentalDao.getById(rental.getId()).getCustomer().getId());
-			
-			rentalDetailDtos.add(rentalDetailDto);
-			}
+		
+		modelMapper.getConfiguration().setMatchingStrategy(MatchingStrategies.LOOSE);
+		
+		List<Rental> rentals= this.rentalDao.findAll();
+		List<RentalDetailDto> rentalDetailDtos =rentals.stream().map(rental -> modelMapper.map(rental, RentalDetailDto.class)).collect(Collectors.toList());
 	
 		return new SuccessDataResult<List<RentalDetailDto>>(rentalDetailDtos);
 	}
 
 	@Override
 	public DataResult<RentalDetailDto> getById(int id) {
+		
+		modelMapper.getConfiguration().setMatchingStrategy(MatchingStrategies.LOOSE);
+		
 		Rental rental = this.rentalDao.getById(id);
 		RentalDetailDto rentalDetailDto = modelMapper.map(rental,RentalDetailDto.class);
-		rentalDetailDto.setCarDetailDto(this.carService.getById(rental.getCar().getCarId()).getData());
-		rentalDetailDto.setAdditionalServiceDetailDtos(this.additionalServiceService.getByRentalId(rental.getId()).getData());
-		rentalDetailDto.setCustomerId(this.rentalDao.getById(rental.getId()).getCustomer().getId());
 		
 		return new SuccessDataResult<RentalDetailDto>(rentalDetailDto);
 	}
 
 
 	@Override
-	@Transactional
 	public Result addForIndividualCustomer(CreateRentalRequest createRentalRequest) {
 
 		IndividualCustomer customer = this.individualCustomerDao.getById(createRentalRequest.getCustomerId());
@@ -129,7 +114,6 @@ public class RentalManager implements RentalService {
 		Car car = this.carDao.getById(createRentalRequest.getCarId());
 		
 		Rental rental = modelMapper.map(createRentalRequest, Rental.class);
-		rental.setCar(car);
 		rental.setCustomer(customer);
 		rental.setPickUpLocation(car.getCity());
 		rental.setPickUpKm(car.getKm());
@@ -151,7 +135,6 @@ public class RentalManager implements RentalService {
 	}
 
 	@Override
-	@Transactional
 	public Result addForCorporateCustomer(CreateRentalRequest createRentalRequest) {
 
 		CorporateCustomer customer = this.corporateCustomerDao.getById(createRentalRequest.getCustomerId());
@@ -169,7 +152,6 @@ public class RentalManager implements RentalService {
 		Car car = this.carDao.getById(createRentalRequest.getCarId());
 		
 		Rental rental = modelMapper.map(createRentalRequest, Rental.class);
-		rental.setCar(car);
 		rental.setCustomer(customer);
 		rental.setPickUpLocation(car.getCity());
 		rental.setPickUpKm(car.getKm());
@@ -200,7 +182,6 @@ public class RentalManager implements RentalService {
 	}
 
 	@Override
-	@Transactional
 	public Result updateForIndividualCustomer(UpdateRentalRequest updateRentalRequest) {
 		Car car = this.carDao.getById(updateRentalRequest.getCarId());
 
@@ -216,7 +197,6 @@ public class RentalManager implements RentalService {
 		}
 
 		Rental rental = modelMapper.map(updateRentalRequest, Rental.class);
-		rental.setCar(car);
 		rental.setCustomer(customer);
 		rental.setPickUpLocation(car.getCity());
 		rental.setPickUpKm(car.getKm());
@@ -232,7 +212,6 @@ public class RentalManager implements RentalService {
 	}
 
 	@Override
-	@Transactional
 	public Result updateForCorporateCustomer(UpdateRentalRequest updateRentalRequest) {
 		Car car = this.carDao.getById(updateRentalRequest.getCarId());
 
@@ -246,7 +225,6 @@ public class RentalManager implements RentalService {
 		}
 
 		Rental rental = modelMapper.map(updateRentalRequest, Rental.class);
-		rental.setCar(car);
 		rental.setCustomer(customer);
 		rental.setPickUpLocation(car.getCity());
 		rental.setPickUpKm(car.getKm());
@@ -262,7 +240,6 @@ public class RentalManager implements RentalService {
 	}
 
 	@Override
-	@Transactional
 	public Result validateCarReturned(CarReturnedRequest carReturnedRequest) {
 		Rental rental = this.rentalDao.getById(carReturnedRequest.getRentalId());
 		rental.setCarReturned(true);

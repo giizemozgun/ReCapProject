@@ -5,6 +5,7 @@ import java.util.List;
 
 import com.etiya.ReCapProject.entities.dtos.AdditionalServiceForRentalDto;
 import com.etiya.ReCapProject.entities.dtos.CreditCardDetailDto;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.sun.istack.NotNull;
 
 import lombok.AllArgsConstructor;
@@ -17,6 +18,9 @@ import lombok.Setter;
 @AllArgsConstructor
 @NoArgsConstructor
 public class CreateRentalRequest {
+	
+	@JsonIgnore
+	private int id;
 	
 	private int carId;
 	

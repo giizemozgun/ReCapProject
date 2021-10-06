@@ -9,6 +9,8 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 public class CarDetailDto {
 	
+	
+	
 private String carName;
 
 private String brandName;

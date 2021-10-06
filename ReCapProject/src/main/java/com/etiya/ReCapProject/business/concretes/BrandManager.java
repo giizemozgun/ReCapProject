@@ -23,13 +23,13 @@ import com.etiya.ReCapProject.entities.requests.brand.DeleteBrandRequest;
 import com.etiya.ReCapProject.entities.requests.brand.UpdateBrandRequest;
 
 @Service
-public class BrandManager implements BrandService{
-	
+public class BrandManager implements BrandService {
+
 	private BrandDao brandDao;
 	private ModelMapper modelMapper;
 
 	@Autowired
-	public BrandManager(BrandDao brandDao,ModelMapper modelMapper) {
+	public BrandManager(BrandDao brandDao, ModelMapper modelMapper) {
 		super();
 		this.brandDao = brandDao;
 		this.modelMapper = modelMapper;
@@ -37,44 +37,45 @@ public class BrandManager implements BrandService{
 
 	@Override
 	public DataResult<List<BrandDetailDto>> getAll() {
-		
-		 List<Brand> brands= this.brandDao.findAll();
-		 
-		 List<BrandDetailDto> brandDetailDtos=brands.stream().map(brand -> modelMapper.map(brand, BrandDetailDto.class)).collect(Collectors.toList());
+
+		List<Brand> brands = this.brandDao.findAll();
+
+		List<BrandDetailDto> brandDetailDtos = brands.stream()
+				.map(brand -> modelMapper.map(brand, BrandDetailDto.class)).collect(Collectors.toList());
 		return new SuccessDataResult<List<BrandDetailDto>>(brandDetailDtos);
 	}
 
 	@Override
 	public DataResult<BrandDetailDto> getById(int brandId) {
 		Brand brand = this.brandDao.getById(brandId);
-		BrandDetailDto brandDetailDto = modelMapper.map(brand,BrandDetailDto.class);
-		
+		BrandDetailDto brandDetailDto = modelMapper.map(brand, BrandDetailDto.class);
+
 		return new SuccessDataResult<BrandDetailDto>(brandDetailDto);
 	}
 
 	@Override
-	public Result add(CreateBrandRequest createBrandrequest) {	
-		
+	public Result add(CreateBrandRequest createBrandrequest) {
+
 		var result = BusinessRules.run(checkBrandNameDuplication(createBrandrequest.getBrandName()));
 
 		if (result != null) {
 			return result;
 		}
-				
+
 		Brand brand = modelMapper.map(createBrandrequest, Brand.class);
-		
+
 		this.brandDao.save(brand);
-		return new SuccessResult( Messages.BrandAdded);
+		return new SuccessResult(Messages.BrandAdded);
 	}
 
 	@Override
 	public Result delete(DeleteBrandRequest deleteBrandrequest) {
-		
+
 		Brand brand = modelMapper.map(deleteBrandrequest, Brand.class);
-		
+
 		this.brandDao.delete(brand);
-		return new SuccessResult( Messages.BrandDeleted);
-		
+		return new SuccessResult(Messages.BrandDeleted);
+
 	}
 
 	@Override
@@ -84,13 +85,13 @@ public class BrandManager implements BrandService{
 		if (result != null) {
 			return result;
 		}
-		
+
 		Brand brand = modelMapper.map(updateBrandrequest, Brand.class);
-		
+
 		this.brandDao.save(brand);
 		return new SuccessResult(Messages.BrandUpdated);
 	}
-	
+
 	private Result checkBrandNameDuplication(String brandName) {
 
 		if (this.brandDao.existsByBrandName(brandName)) {
@@ -99,7 +100,5 @@ public class BrandManager implements BrandService{
 		return new SuccessResult();
 
 	}
-	
 
-	
 }

@@ -6,7 +6,6 @@ import javax.persistence.Table;
 import javax.validation.constraints.NotNull;
 
 import com.etiya.ReCapProject.entities.abstracts.Customer;
-import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -18,7 +17,6 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @NoArgsConstructor
 @Entity
-@JsonIgnoreProperties({"hibernateLazyInitializer","handler"})
 @Table(name = "corporate_customer")
 public class CorporateCustomer extends Customer {
 	
