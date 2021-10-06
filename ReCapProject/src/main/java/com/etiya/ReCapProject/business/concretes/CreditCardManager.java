@@ -43,7 +43,7 @@ public class CreditCardManager implements CreditCardService {
 
 		List<CreditCardDetailDto> creditCardDetailDtos = creditCards.stream()
 				.map(creditCard -> modelMapper.map(creditCard, CreditCardDetailDto.class)).collect(Collectors.toList());
-		return new SuccessDataResult<List<CreditCardDetailDto>>(creditCardDetailDtos);
+		return new SuccessDataResult<List<CreditCardDetailDto>>(creditCardDetailDtos, Messages.CreditCardsListed);
 	}
 
 	@Override
@@ -51,7 +51,7 @@ public class CreditCardManager implements CreditCardService {
 		CreditCard creditCard = this.creditCardDao.getById(creditCardId);
 		CreditCardDetailDto CreditCardDto = modelMapper.map(creditCard, CreditCardDetailDto.class);
 
-		return new SuccessDataResult<CreditCardDetailDto>(CreditCardDto);
+		return new SuccessDataResult<CreditCardDetailDto>(CreditCardDto, Messages.GetCreditCard);
 	}
 
 	@Override
@@ -106,7 +106,7 @@ public class CreditCardManager implements CreditCardService {
 
 		List<CreditCardDetailDto> creditCardDetailDtos = creditCards.stream()
 				.map(creditCard -> modelMapper.map(creditCard, CreditCardDetailDto.class)).collect(Collectors.toList());
-		return new SuccessDataResult<List<CreditCardDetailDto>>(creditCardDetailDtos);
+		return new SuccessDataResult<List<CreditCardDetailDto>>(creditCardDetailDtos , Messages.CreditCardsOfCustomerListed);
 	}
 
 	@Override
@@ -135,7 +135,7 @@ public class CreditCardManager implements CreditCardService {
 	}
 
 	private Result checkCreditCardCvv(String cvv) {
-		String regex = "^[0-9]{3,3}$";
+		String regex = "^[0-9]{3,4}$";
 
 		Pattern pattern = Pattern.compile(regex);
 

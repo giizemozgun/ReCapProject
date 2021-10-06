@@ -44,7 +44,7 @@ public class CorporateCustomerManager implements CorporateCustomerService{
 		List<CorporateCustomer> corporateCustomers= this.corporateCustomerDao.findAll();
 		List<CorporateCustomerDetailDto> corporateCustomerDetailDto=corporateCustomers.stream().map(corporateCustomer -> modelMapper.map(corporateCustomer, CorporateCustomerDetailDto.class)).collect(Collectors.toList());
 		 
-		return new SuccessDataResult<List<CorporateCustomerDetailDto>>(corporateCustomerDetailDto);
+		return new SuccessDataResult<List<CorporateCustomerDetailDto>>(corporateCustomerDetailDto, Messages.CorporateCustomerListed);
 	}
 
 	@Override
@@ -53,7 +53,7 @@ public class CorporateCustomerManager implements CorporateCustomerService{
 		CorporateCustomer corporateCustomer = this.corporateCustomerDao.getById(id);
 		CorporateCustomerDetailDto corporateCustomerDetailDto = modelMapper.map(corporateCustomer,CorporateCustomerDetailDto.class);
 		
-		return new SuccessDataResult<CorporateCustomerDetailDto>(corporateCustomerDetailDto);
+		return new SuccessDataResult<CorporateCustomerDetailDto>(corporateCustomerDetailDto, Messages.GetCorporateCustomer);
 	}
 
 	@Override

@@ -38,7 +38,7 @@ public class UserManager implements UserService {
 		List<ApplicationUser> applicationUsers= this.userDao.findAll();
 		 
 		 List<ApplicationUserDetailDto> applicationUserDetailDtos =applicationUsers.stream().map(applicationUser -> modelMapper.map(applicationUser, ApplicationUserDetailDto.class)).collect(Collectors.toList());
-		return new SuccessDataResult<List<ApplicationUserDetailDto>>(applicationUserDetailDtos);
+		return new SuccessDataResult<List<ApplicationUserDetailDto>>(applicationUserDetailDtos, Messages.UsersListed);
 	}
 
 	@Override
@@ -46,7 +46,7 @@ public class UserManager implements UserService {
 		ApplicationUser applicationUser = this.userDao.getById(userId);
 		ApplicationUserDetailDto applicationUserDetailDto = modelMapper.map(applicationUser,ApplicationUserDetailDto.class);
 		
-		return new SuccessDataResult<ApplicationUserDetailDto>(applicationUserDetailDto);
+		return new SuccessDataResult<ApplicationUserDetailDto>(applicationUserDetailDto, Messages.GetUser);
 	}
 
 	@Override

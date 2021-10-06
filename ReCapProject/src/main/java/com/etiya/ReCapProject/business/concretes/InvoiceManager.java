@@ -45,7 +45,7 @@ public class InvoiceManager implements InvoiceService {
 		List<Invoice> invoices = this.invoiceDao.findAll();
 		List<InvoiceDetailDto> invoiceDetailDtos = invoices.stream()
 				.map(invoice -> modelMapper.map(invoice, InvoiceDetailDto.class)).collect(Collectors.toList());
-		return new SuccessDataResult<List<InvoiceDetailDto>>(invoiceDetailDtos);
+		return new SuccessDataResult<List<InvoiceDetailDto>>(invoiceDetailDtos, Messages.InvoicesListed);
 	}
 
 	@Override
@@ -53,7 +53,7 @@ public class InvoiceManager implements InvoiceService {
 		Invoice invoice = this.invoiceDao.getById(invoiceId);
 		InvoiceDetailDto invoiceDetailDto = modelMapper.map(invoice, InvoiceDetailDto.class);
 
-		return new SuccessDataResult<InvoiceDetailDto>(invoiceDetailDto);
+		return new SuccessDataResult<InvoiceDetailDto>(invoiceDetailDto, Messages.GetInvoice);
 	}
 
 	@Override
@@ -109,7 +109,7 @@ public class InvoiceManager implements InvoiceService {
 
 		List<InvoiceDetailDto> invoiceDetailDtos = invoices.stream()
 				.map(invoice -> modelMapper.map(invoice, InvoiceDetailDto.class)).collect(Collectors.toList());
-		return new SuccessDataResult<List<InvoiceDetailDto>>(invoiceDetailDtos);
+		return new SuccessDataResult<List<InvoiceDetailDto>>(invoiceDetailDtos, Messages.InvoicesOfCustomerListed);
 	}
 
 	@Override
@@ -120,7 +120,7 @@ public class InvoiceManager implements InvoiceService {
 
 		List<InvoiceDetailDto> invoiceDetailDtos = invoices.stream()
 				.map(invoice -> modelMapper.map(invoice, InvoiceDetailDto.class)).collect(Collectors.toList());
-		return new SuccessDataResult<List<InvoiceDetailDto>>(invoiceDetailDtos);
+		return new SuccessDataResult<List<InvoiceDetailDto>>(invoiceDetailDtos, Messages.BetweenDatesInvoices);
 	}
 
 }

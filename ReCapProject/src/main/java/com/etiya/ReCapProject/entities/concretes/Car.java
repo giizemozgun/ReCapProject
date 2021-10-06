@@ -77,7 +77,7 @@ public class Car {
 	
 	@OneToMany(mappedBy= "car")
 	@JsonIgnore
-	private List<DamageRecord> damagerecords;
+	private List<DamageRecord> damageRecords;
 	
 }
 

@@ -40,7 +40,7 @@ public class DamageRecordManager implements DamageRecordService {
 		List<DamageRecord> damageRecords = this.damageRecordDao.findAll();
 		 
 		List<DamageRecordDetailDto> damageRecordDetailDtos =damageRecords.stream().map(damageRecord -> modelMapper.map(damageRecord, DamageRecordDetailDto.class)).collect(Collectors.toList());
-	        return new SuccessDataResult<List<DamageRecordDetailDto>>(damageRecordDetailDtos);
+	        return new SuccessDataResult<List<DamageRecordDetailDto>>(damageRecordDetailDtos, Messages.DamageRecordsListed);
 	}
 
 	@Override
@@ -48,7 +48,7 @@ public class DamageRecordManager implements DamageRecordService {
 		DamageRecord damageRecord = this.damageRecordDao.getById(id);
 		DamageRecordDetailDto damageRecordDetailDto = modelMapper.map(damageRecord,DamageRecordDetailDto.class);
 		
-		return new SuccessDataResult<DamageRecordDetailDto>(damageRecordDetailDto);
+		return new SuccessDataResult<DamageRecordDetailDto>(damageRecordDetailDto, Messages.GetDamageRecord);
 	}
 
 	@Override

@@ -16,7 +16,7 @@ public class CarReturnedFromMaintenanceRequest {
 	@JsonIgnore
 	private int carId;
 	
-	private int MaintenanceId;
+	private int maintenanceId;
 	
 	
 }

@@ -39,7 +39,7 @@ public class ColorManager implements ColorService{
 		List<Color> colors= this.colorDao.findAll();
 		 
 		 List<ColorDetailDto> colorDetailDtos= colors.stream().map(color -> modelMapper.map(color, ColorDetailDto.class)).collect(Collectors.toList());
-		return new SuccessDataResult<List<ColorDetailDto>>(colorDetailDtos);
+		return new SuccessDataResult<List<ColorDetailDto>>(colorDetailDtos, Messages.ColorsListed);
 	}
 
 	@Override
@@ -47,7 +47,7 @@ public class ColorManager implements ColorService{
 		Color color = this.colorDao.getById(colorId);
 		ColorDetailDto colorDetailDto = modelMapper.map(color,ColorDetailDto.class);
 		
-		return new SuccessDataResult<ColorDetailDto>(colorDetailDto);
+		return new SuccessDataResult<ColorDetailDto>(colorDetailDto, Messages.GetColor);
 	}
 
 	@Override

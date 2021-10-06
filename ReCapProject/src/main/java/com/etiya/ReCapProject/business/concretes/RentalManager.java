@@ -56,17 +56,17 @@ public class RentalManager implements RentalService {
 	private ModelMapper modelMapper;
 
 	@Autowired
-	public RentalManager(RentalDao rentalDao, FindexPointService findexPointService,CarDao carDao,
-			MaintenanceDao maintenanceDao, PosService posService,
-			CorporateCustomerDao corporateCustomerDao, IndividualCustomerDao individualCustomerDao,
-			CreditCardService creditCardService, AdditionalServiceDao additionalServiceDao,ModelMapper modelMapper) {
+	public RentalManager(RentalDao rentalDao, FindexPointService findexPointService, CarDao carDao,
+			MaintenanceDao maintenanceDao, PosService posService, CorporateCustomerDao corporateCustomerDao,
+			IndividualCustomerDao individualCustomerDao, CreditCardService creditCardService,
+			AdditionalServiceDao additionalServiceDao, ModelMapper modelMapper) {
 		super();
 		this.rentalDao = rentalDao;
 		this.findexPointService = findexPointService;
 		this.maintenanceDao = maintenanceDao;
 		this.carDao = carDao;
 		this.posService = posService;
-		this.corporateCustomerDao= corporateCustomerDao;
+		this.corporateCustomerDao = corporateCustomerDao;
 		this.individualCustomerDao = individualCustomerDao;
 		this.creditCardService = creditCardService;
 		this.additionalServiceDao = additionalServiceDao;
@@ -75,26 +75,26 @@ public class RentalManager implements RentalService {
 
 	@Override
 	public DataResult<List<RentalDetailDto>> getAll() {
-		
+
 		modelMapper.getConfiguration().setMatchingStrategy(MatchingStrategies.LOOSE);
-		
-		List<Rental> rentals= this.rentalDao.findAll();
-		List<RentalDetailDto> rentalDetailDtos =rentals.stream().map(rental -> modelMapper.map(rental, RentalDetailDto.class)).collect(Collectors.toList());
-	
-		return new SuccessDataResult<List<RentalDetailDto>>(rentalDetailDtos);
+
+		List<Rental> rentals = this.rentalDao.findAll();
+		List<RentalDetailDto> rentalDetailDtos = rentals.stream()
+				.map(rental -> modelMapper.map(rental, RentalDetailDto.class)).collect(Collectors.toList());
+
+		return new SuccessDataResult<List<RentalDetailDto>>(rentalDetailDtos, Messages.RentalsListed);
 	}
 
 	@Override
 	public DataResult<RentalDetailDto> getById(int id) {
-		
-		modelMapper.getConfiguration().setMatchingStrategy(MatchingStrategies.LOOSE);
-		
-		Rental rental = this.rentalDao.getById(id);
-		RentalDetailDto rentalDetailDto = modelMapper.map(rental,RentalDetailDto.class);
-		
-		return new SuccessDataResult<RentalDetailDto>(rentalDetailDto);
-	}
 
+		modelMapper.getConfiguration().setMatchingStrategy(MatchingStrategies.LOOSE);
+
+		Rental rental = this.rentalDao.getById(id);
+		RentalDetailDto rentalDetailDto = modelMapper.map(rental, RentalDetailDto.class);
+
+		return new SuccessDataResult<RentalDetailDto>(rentalDetailDto, Messages.GetRental);
+	}
 
 	@Override
 	public Result addForIndividualCustomer(CreateRentalRequest createRentalRequest) {
@@ -112,18 +112,20 @@ public class RentalManager implements RentalService {
 		}
 
 		Car car = this.carDao.getById(createRentalRequest.getCarId());
-		
+
 		Rental rental = modelMapper.map(createRentalRequest, Rental.class);
 		rental.setCustomer(customer);
 		rental.setPickUpLocation(car.getCity());
 		rental.setPickUpKm(car.getKm());
 		rental.setTotalAmount(this.calculateTotalAmount(createRentalRequest, 500));
-		rental.setAdditionalServices(this.convertToAdditionalService(createRentalRequest.getAdditionalServiceDtos()));
+		rental.setAdditionalServices(
+				this.convertToAdditionalService(createRentalRequest.getAdditionalServiceForRentalDtos()));
 
 		this.rentalDao.save(rental);
 
 		if (createRentalRequest.isCardSaved()) {
-			this.creditCardService.saveCardInformation(createRentalRequest.getCreditCardDetailDto(), createRentalRequest.getCustomerId());
+			this.creditCardService.saveCardInformation(createRentalRequest.getCreditCardDetailDto(),
+					createRentalRequest.getCustomerId());
 		}
 
 		car.setCity(rental.getReturnLocation());
@@ -150,18 +152,20 @@ public class RentalManager implements RentalService {
 		}
 
 		Car car = this.carDao.getById(createRentalRequest.getCarId());
-		
+
 		Rental rental = modelMapper.map(createRentalRequest, Rental.class);
 		rental.setCustomer(customer);
 		rental.setPickUpLocation(car.getCity());
 		rental.setPickUpKm(car.getKm());
 		rental.setTotalAmount(this.calculateTotalAmount(createRentalRequest, 500));
-		rental.setAdditionalServices(this.convertToAdditionalService(createRentalRequest.getAdditionalServiceDtos()));
+		rental.setAdditionalServices(
+				this.convertToAdditionalService(createRentalRequest.getAdditionalServiceForRentalDtos()));
 
 		this.rentalDao.save(rental);
 
 		if (createRentalRequest.isCardSaved()) {
-			this.creditCardService.saveCardInformation(createRentalRequest.getCreditCardDetailDto(), createRentalRequest.getCustomerId());
+			this.creditCardService.saveCardInformation(createRentalRequest.getCreditCardDetailDto(),
+					createRentalRequest.getCustomerId());
 		}
 
 		car.setCity(rental.getReturnLocation());
@@ -174,7 +178,7 @@ public class RentalManager implements RentalService {
 
 	@Override
 	public Result delete(DeleteRentalRequest deleteRentalRequest) {
-		
+
 		Rental rental = modelMapper.map(deleteRentalRequest, Rental.class);
 
 		this.rentalDao.delete(rental);
@@ -183,18 +187,17 @@ public class RentalManager implements RentalService {
 
 	@Override
 	public Result updateForIndividualCustomer(UpdateRentalRequest updateRentalRequest) {
-		Car car = this.carDao.getById(updateRentalRequest.getCarId());
 
 		IndividualCustomer customer = new IndividualCustomer();
 		customer.setId(updateRentalRequest.getCustomerId());
-		
-		var result = BusinessRules.run(checkReturnFromRental(car.getCarId()),
-				checkFindexPointForIndividualCustomer(customer, updateRentalRequest.getCarId()),
-				checkReturnFromMaintenance(updateRentalRequest.getCarId()));
+
+		var result = BusinessRules.run(checkFindexPointForIndividualCustomer(customer, updateRentalRequest.getCarId()));
 
 		if (result != null) {
 			return result;
 		}
+
+		Car car = this.carDao.getById(updateRentalRequest.getCarId());
 
 		Rental rental = modelMapper.map(updateRentalRequest, Rental.class);
 		rental.setCustomer(customer);
@@ -213,16 +216,16 @@ public class RentalManager implements RentalService {
 
 	@Override
 	public Result updateForCorporateCustomer(UpdateRentalRequest updateRentalRequest) {
-		Car car = this.carDao.getById(updateRentalRequest.getCarId());
 
 		CorporateCustomer customer = modelMapper.map(updateRentalRequest, CorporateCustomer.class);
-	
-		var result = BusinessRules.run(
-				checkFindexPointForCorporateCustomer(customer, updateRentalRequest.getCarId()));
+
+		var result = BusinessRules.run(checkFindexPointForCorporateCustomer(customer, updateRentalRequest.getCarId()));
 
 		if (result != null) {
 			return result;
 		}
+
+		Car car = this.carDao.getById(updateRentalRequest.getCarId());
 
 		Rental rental = modelMapper.map(updateRentalRequest, Rental.class);
 		rental.setCustomer(customer);
@@ -309,9 +312,8 @@ public class RentalManager implements RentalService {
 			totalAmount += cityChangeFee;
 		}
 
-		List<AdditionalServiceForRentalDto> additionalServiceDtos = createRentalRequest.getAdditionalServiceDtos();
-
-		for (AdditionalServiceForRentalDto additionalServiceDto : additionalServiceDtos) {
+		for (AdditionalServiceForRentalDto additionalServiceDto : createRentalRequest
+				.getAdditionalServiceForRentalDtos()) {
 
 			AdditionalService additionalService = this.additionalServiceDao.getById(additionalServiceDto.getId());
 
@@ -334,11 +336,12 @@ public class RentalManager implements RentalService {
 		return new SuccessResult();
 	}
 
-	
-	private List<AdditionalService> convertToAdditionalService(List<AdditionalServiceForRentalDto> additionalServiceDtos) {
+	private List<AdditionalService> convertToAdditionalService(
+
+			List<AdditionalServiceForRentalDto> additionalServiceForRentalDtos) {
 		List<AdditionalService> additionalServices = new ArrayList<AdditionalService>();
 
-		for (AdditionalServiceForRentalDto additionalServicedto : additionalServiceDtos) {
+		for (AdditionalServiceForRentalDto additionalServicedto : additionalServiceForRentalDtos) {
 			additionalServices.add(this.additionalServiceDao.getById(additionalServicedto.getId()));
 		}
 

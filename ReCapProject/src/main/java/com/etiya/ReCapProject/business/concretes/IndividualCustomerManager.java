@@ -46,7 +46,7 @@ public class IndividualCustomerManager implements IndividualCustomerService {
 		List<IndividualCustomerDetailDto> individualCustomerDetailDtos = individualCustomers.stream()
 				.map(individualCustomer -> modelMapper.map(individualCustomer, IndividualCustomerDetailDto.class))
 				.collect(Collectors.toList());
-		return new SuccessDataResult<List<IndividualCustomerDetailDto>>(individualCustomerDetailDtos);
+		return new SuccessDataResult<List<IndividualCustomerDetailDto>>(individualCustomerDetailDtos, Messages.IndividualCustomerListed);
 	}
 
 	@Override
@@ -55,7 +55,7 @@ public class IndividualCustomerManager implements IndividualCustomerService {
 		IndividualCustomerDetailDto individualCustomerDetailDto = modelMapper.map(individualCustomer,
 				IndividualCustomerDetailDto.class);
 
-		return new SuccessDataResult<IndividualCustomerDetailDto>(individualCustomerDetailDto);
+		return new SuccessDataResult<IndividualCustomerDetailDto>(individualCustomerDetailDto, Messages.GetIndividualCustomer);
 	}
 
 	@Override

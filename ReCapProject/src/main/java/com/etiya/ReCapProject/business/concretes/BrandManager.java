@@ -42,7 +42,7 @@ public class BrandManager implements BrandService {
 
 		List<BrandDetailDto> brandDetailDtos = brands.stream()
 				.map(brand -> modelMapper.map(brand, BrandDetailDto.class)).collect(Collectors.toList());
-		return new SuccessDataResult<List<BrandDetailDto>>(brandDetailDtos);
+		return new SuccessDataResult<List<BrandDetailDto>>(brandDetailDtos, Messages.BrandsListed);
 	}
 
 	@Override
@@ -50,7 +50,7 @@ public class BrandManager implements BrandService {
 		Brand brand = this.brandDao.getById(brandId);
 		BrandDetailDto brandDetailDto = modelMapper.map(brand, BrandDetailDto.class);
 
-		return new SuccessDataResult<BrandDetailDto>(brandDetailDto);
+		return new SuccessDataResult<BrandDetailDto>(brandDetailDto, Messages.GetBrand);
 	}
 
 	@Override
