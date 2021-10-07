@@ -20,7 +20,5 @@ public class UpdateAdditionalServiceRequest {
 	private String description;
 	
 	private double dailyPrice;
-
-	private int rentalId;
 	
 }

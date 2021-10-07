@@ -36,10 +36,7 @@ public class AuthManager implements AuthService {
 
 	private Result checkToEmailAndPassword(LoginRequest loginRequest) {
 
-		if (this.userDao.getByEmail(loginRequest.getEmail()) == null) {
-			return new ErrorResult(Messages.IncorrectEntry);
-		}
-		if (!this.userDao.getByEmail(loginRequest.getEmail()).getPassword().equals(loginRequest.getPassword())) {
+		if (this.userDao.getByEmail(loginRequest.getEmail()) == null || !this.userDao.getByEmail(loginRequest.getEmail()).getPassword().equals(loginRequest.getPassword()) ) {
 			return new ErrorResult(Messages.IncorrectEntry);
 		}
 		return new SuccessResult(Messages.Success);
