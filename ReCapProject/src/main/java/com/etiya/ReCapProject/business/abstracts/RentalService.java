@@ -18,7 +18,7 @@ public interface RentalService {
 	Result addForCorporateCustomer(CreateRentalRequest createRentalRequest);
 	Result delete(DeleteRentalRequest deleteRentalRequest);
 	Result updateForCorporateCustomer(UpdateRentalRequest updateRentalRequest);
-	Result updateForIndividualCustomer(UpdateRentalRequest updateRentalRequest);	
+	Result updateForIndividualCustomer(UpdateRentalRequest updateRentalRequest);
 	Result validateCarReturned (CarReturnedRequest carReturnedRequest);
 	
 	

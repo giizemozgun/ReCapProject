@@ -36,7 +36,7 @@ public class CreateRentalRequest {
 	
 	private CreditCardDetailDto creditCardDetailDto;
 	
-	private boolean isCardSaved;
+	private boolean shouldWeSaveCard;
 	
 	private int creditCardId;
 	

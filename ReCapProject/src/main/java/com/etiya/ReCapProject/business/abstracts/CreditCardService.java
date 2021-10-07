@@ -20,4 +20,6 @@ public interface CreditCardService {
 	DataResult<List<CreditCardDetailDto>> getByCustomerId(int customerId);
 	
 	Result saveCardInformation(CreditCardDetailDto creditCardDetailDto, int customerId);
+	
+	Result checkCreditCardFormatAndId(CreditCardDetailDto creditCardDetailDto, int creditCardId);
 }	

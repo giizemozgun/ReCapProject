@@ -25,9 +25,8 @@ public class AuthManager implements AuthService {
 
 	@Override
 	public Result login(LoginRequest loginRequest) {
-		
-		var result = BusinessRules.run(checkToEmail(loginRequest.getEmail()),
-				checkToPassword(loginRequest.getEmail(), loginRequest.getPassword()));
+
+		var result = BusinessRules.run(checkToEmailAndPassword(loginRequest));
 
 		if (result != null) {
 			return result;
@@ -35,23 +34,15 @@ public class AuthManager implements AuthService {
 		return new SuccessResult(Messages.Login);
 	}
 
-	private Result checkToEmail(String email) {
+	private Result checkToEmailAndPassword(LoginRequest loginRequest) {
 
-		if (this.userDao.getByEmail(email) == null) {
+		if (this.userDao.getByEmail(loginRequest.getEmail()) == null) {
+			return new ErrorResult(Messages.IncorrectEntry);
+		}
+		if (!this.userDao.getByEmail(loginRequest.getEmail()).getPassword().equals(loginRequest.getPassword())) {
 			return new ErrorResult(Messages.IncorrectEntry);
 		}
 		return new SuccessResult(Messages.Success);
-
 	}
-	
-	private Result checkToPassword(String email, String password) {
-
-		if (this.userDao.getByEmail(email)  != this.userDao.getByPassword(password))  {
-			return new ErrorResult(Messages.IncorrectEntry);
-		}
-		return new SuccessResult(Messages.Success);
-
-	}
-
 
 }

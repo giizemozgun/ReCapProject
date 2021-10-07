@@ -102,8 +102,9 @@ public class RentalManager implements RentalService {
 		IndividualCustomer customer = this.individualCustomerDao.getById(createRentalRequest.getCustomerId());
 
 		var result = BusinessRules.run(checkReturnFromRental(createRentalRequest.getCarId()),
-				checkFindexPointForIndividualCustomer(customer, createRentalRequest.getCarId()),
 				checkReturnFromMaintenance(createRentalRequest.getCarId()),
+				checkFindexPointForIndividualCustomer(customer, createRentalRequest.getCarId()),
+				this.creditCardService.checkCreditCardFormatAndId(createRentalRequest.getCreditCardDetailDto(), createRentalRequest.getCreditCardId()),
 				isCreditCardLimitExceeded(createRentalRequest.getCreditCardDetailDto(),
 						this.calculateTotalAmount(createRentalRequest, 500)));
 
@@ -114,21 +115,21 @@ public class RentalManager implements RentalService {
 		Car car = this.carDao.getById(createRentalRequest.getCarId());
 
 		Rental rental = modelMapper.map(createRentalRequest, Rental.class);
-		rental.setCustomer(customer);
 		rental.setPickUpLocation(car.getCity());
 		rental.setPickUpKm(car.getKm());
 		rental.setTotalAmount(this.calculateTotalAmount(createRentalRequest, 500));
 		rental.setAdditionalServices(
 				this.convertToAdditionalService(createRentalRequest.getAdditionalServiceForRentalDtos()));
 
-		this.rentalDao.save(rental);
-
-		if (createRentalRequest.isCardSaved()) {
+	
+		if (createRentalRequest.isShouldWeSaveCard()) {
 			this.creditCardService.saveCardInformation(createRentalRequest.getCreditCardDetailDto(),
 					createRentalRequest.getCustomerId());
 		}
+		
+		this.rentalDao.save(rental);
 
-		car.setCity(rental.getReturnLocation());
+		
 		car.setAvailable(false);
 		this.carDao.save(car);
 
@@ -142,8 +143,9 @@ public class RentalManager implements RentalService {
 		CorporateCustomer customer = this.corporateCustomerDao.getById(createRentalRequest.getCustomerId());
 
 		var result = BusinessRules.run(checkReturnFromRental(createRentalRequest.getCarId()),
+				checkReturnFromMaintenance(createRentalRequest.getCarId()), 
 				checkFindexPointForCorporateCustomer(customer, createRentalRequest.getCarId()),
-				checkReturnFromMaintenance(createRentalRequest.getCarId()),
+				this.creditCardService.checkCreditCardFormatAndId(createRentalRequest.getCreditCardDetailDto(),createRentalRequest.getCreditCardId()),
 				isCreditCardLimitExceeded(createRentalRequest.getCreditCardDetailDto(),
 						this.calculateTotalAmount(createRentalRequest, 500)));
 
@@ -154,21 +156,19 @@ public class RentalManager implements RentalService {
 		Car car = this.carDao.getById(createRentalRequest.getCarId());
 
 		Rental rental = modelMapper.map(createRentalRequest, Rental.class);
-		rental.setCustomer(customer);
 		rental.setPickUpLocation(car.getCity());
 		rental.setPickUpKm(car.getKm());
 		rental.setTotalAmount(this.calculateTotalAmount(createRentalRequest, 500));
 		rental.setAdditionalServices(
 				this.convertToAdditionalService(createRentalRequest.getAdditionalServiceForRentalDtos()));
 
-		this.rentalDao.save(rental);
-
-		if (createRentalRequest.isCardSaved()) {
+		if (createRentalRequest.isShouldWeSaveCard()) {
 			this.creditCardService.saveCardInformation(createRentalRequest.getCreditCardDetailDto(),
 					createRentalRequest.getCustomerId());
 		}
+		
+		this.rentalDao.save(rental);
 
-		car.setCity(rental.getReturnLocation());
 		car.setAvailable(false);
 		this.carDao.save(car);
 
@@ -208,7 +208,6 @@ public class RentalManager implements RentalService {
 		rental.setCarReturned(true);
 		this.rentalDao.save(rental);
 
-		car.setCity(rental.getReturnLocation());
 		this.carDao.save(car);
 
 		return new SuccessResult(Messages.RentalUpdated);
@@ -235,8 +234,7 @@ public class RentalManager implements RentalService {
 
 		rental.setCarReturned(true);
 		this.rentalDao.save(rental);
-
-		car.setCity(rental.getReturnLocation());
+		
 		this.carDao.save(car);
 
 		return new SuccessResult(Messages.RentalUpdated);
@@ -251,6 +249,7 @@ public class RentalManager implements RentalService {
 		Car car = this.carDao.getById(rental.getCar().getCarId());
 		car.setAvailable(true);
 		car.setKm(carReturnedRequest.getReturnKm());
+		car.setCity(rental.getReturnLocation());
 
 		rental.setCar(car);
 		this.rentalDao.save(rental);
@@ -308,7 +307,7 @@ public class RentalManager implements RentalService {
 
 		double totalAmount = car.getDailyPrice() * totalRentalDay;
 
-		if (createRentalRequest.getReturnLocation() != car.getCity()) {
+		if (createRentalRequest.getReturnLocation().equals(car.getCity())) {
 			totalAmount += cityChangeFee;
 		}
 

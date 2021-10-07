@@ -106,7 +106,8 @@ public class CreditCardManager implements CreditCardService {
 
 		List<CreditCardDetailDto> creditCardDetailDtos = creditCards.stream()
 				.map(creditCard -> modelMapper.map(creditCard, CreditCardDetailDto.class)).collect(Collectors.toList());
-		return new SuccessDataResult<List<CreditCardDetailDto>>(creditCardDetailDtos , Messages.CreditCardsOfCustomerListed);
+		return new SuccessDataResult<List<CreditCardDetailDto>>(creditCardDetailDtos,
+				Messages.CreditCardsOfCustomerListed);
 	}
 
 	@Override
@@ -158,6 +159,23 @@ public class CreditCardManager implements CreditCardService {
 			return new ErrorResult(Messages.InvalidCreditCard);
 		}
 		return new SuccessResult();
+	}
+
+	@Override
+	public Result checkCreditCardFormatAndId(CreditCardDetailDto creditCardDetailDto, int creditCardId) {
+
+		if(this.creditCardDao.existsByCreditCardId(creditCardId)){
+			return new SuccessResult();
+		}
+		var result = BusinessRules.run(checkCreditCardNumber(creditCardDetailDto.getCardNumber()),
+				checkCreditCardCvv(creditCardDetailDto.getCvv()),
+				checkCreditCardExpiryDate(creditCardDetailDto.getExpiryDate()));
+
+		if (result != null) {
+			return result;
+		}
+		return new SuccessResult();
+
 	}
 
 }

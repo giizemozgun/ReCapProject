@@ -24,14 +24,15 @@ import com.etiya.ReCapProject.entities.requests.corporateCustomer.DeleteCorporat
 import com.etiya.ReCapProject.entities.requests.corporateCustomer.UpdateCorporateCustomerRequest;
 
 @Service
-public class CorporateCustomerManager implements CorporateCustomerService{
-		
+public class CorporateCustomerManager implements CorporateCustomerService {
+
 	private CorporateCustomerDao corporateCustomerDao;
 	private UserDao userDao;
 	private ModelMapper modelMapper;
-	
+
 	@Autowired
-	public CorporateCustomerManager(CorporateCustomerDao corporateCustomerDao,UserDao userDao,ModelMapper modelMapper) {
+	public CorporateCustomerManager(CorporateCustomerDao corporateCustomerDao, UserDao userDao,
+			ModelMapper modelMapper) {
 		super();
 		this.corporateCustomerDao = corporateCustomerDao;
 		this.userDao = userDao;
@@ -40,55 +41,61 @@ public class CorporateCustomerManager implements CorporateCustomerService{
 
 	@Override
 	public DataResult<List<CorporateCustomerDetailDto>> getAll() {
-		
-		List<CorporateCustomer> corporateCustomers= this.corporateCustomerDao.findAll();
-		List<CorporateCustomerDetailDto> corporateCustomerDetailDto=corporateCustomers.stream().map(corporateCustomer -> modelMapper.map(corporateCustomer, CorporateCustomerDetailDto.class)).collect(Collectors.toList());
-		 
-		return new SuccessDataResult<List<CorporateCustomerDetailDto>>(corporateCustomerDetailDto, Messages.CorporateCustomerListed);
+
+		List<CorporateCustomer> corporateCustomers = this.corporateCustomerDao.findAll();
+		List<CorporateCustomerDetailDto> corporateCustomerDetailDto = corporateCustomers.stream()
+				.map(corporateCustomer -> modelMapper.map(corporateCustomer, CorporateCustomerDetailDto.class))
+				.collect(Collectors.toList());
+
+		return new SuccessDataResult<List<CorporateCustomerDetailDto>>(corporateCustomerDetailDto,
+				Messages.CorporateCustomerListed);
 	}
 
 	@Override
 	public DataResult<CorporateCustomerDetailDto> getById(int id) {
-		
+
 		CorporateCustomer corporateCustomer = this.corporateCustomerDao.getById(id);
-		CorporateCustomerDetailDto corporateCustomerDetailDto = modelMapper.map(corporateCustomer,CorporateCustomerDetailDto.class);
-		
-		return new SuccessDataResult<CorporateCustomerDetailDto>(corporateCustomerDetailDto, Messages.GetCorporateCustomer);
+		CorporateCustomerDetailDto corporateCustomerDetailDto = modelMapper.map(corporateCustomer,
+				CorporateCustomerDetailDto.class);
+
+		return new SuccessDataResult<CorporateCustomerDetailDto>(corporateCustomerDetailDto,
+				Messages.GetCorporateCustomer);
 	}
 
 	@Override
 	public Result add(CreateCorporateCustomerRequest createCorporateCustomerRequest) {
-		
+
 		var result = BusinessRules.run(checkToEmailForRegister(createCorporateCustomerRequest.getEmail()),
 				checkToPasswordForRegister(createCorporateCustomerRequest.getPassword()));
 
 		if (result != null) {
 			return result;
 		}
-		
+
 		CorporateCustomer corporateCustomer = modelMapper.map(createCorporateCustomerRequest, CorporateCustomer.class);
-		
+
 		this.corporateCustomerDao.save(corporateCustomer);
 		return new SuccessResult(Messages.CustomerAdded);
 	}
 
 	@Override
 	public Result delete(DeleteCorporateCustomerRequest deleteCorporateCustomerRequest) {
-	
+
 		CorporateCustomer corporateCustomer = modelMapper.map(deleteCorporateCustomerRequest, CorporateCustomer.class);
-		
+
 		this.corporateCustomerDao.delete(corporateCustomer);
 		return new SuccessResult(Messages.CustomerDeleted);
 	}
 
 	@Override
 	public Result update(UpdateCorporateCustomerRequest updateCorporateCustomerRequest) {
-		
+
 		CorporateCustomer corporateCustomer = modelMapper.map(updateCorporateCustomerRequest, CorporateCustomer.class);
-			
+
 		this.corporateCustomerDao.save(corporateCustomer);
 		return new SuccessResult(Messages.CustomerUpdated);
 	}
+
 	private Result checkToEmailForRegister(String email) {
 
 		if (this.userDao.existsByEmail(email)) {
@@ -97,14 +104,14 @@ public class CorporateCustomerManager implements CorporateCustomerService{
 		return new SuccessResult();
 
 	}
+
 	private Result checkToPasswordForRegister(String password) {
 
-		if (this.userDao.existsByPassword(password))  {
+		if (this.userDao.existsByPassword(password)) {
 			return new ErrorResult(Messages.ERROR);
 		}
 		return new SuccessResult();
 
 	}
-	
-	
+
 }

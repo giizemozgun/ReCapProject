@@ -11,4 +11,6 @@ public interface CreditCardDao extends JpaRepository<CreditCard, Integer> {
 
 	List<CreditCard> getByCustomer_id(int customerId);
 	
+	boolean existsByCreditCardId(int creditCardId);
+	
 }
